@@ -6,6 +6,9 @@
     "icons": {
       "16": "images/favicon16.png"
     },
+    "action":{
+		"default_title":"ri"
+	},
     "side_panel": {
       "default_path": "html/index.html"
     },
