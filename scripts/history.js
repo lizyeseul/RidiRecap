@@ -1,18 +1,20 @@
-
-function insertRefList(li) {
-	var dt = {"order_no": li[0]};
-	addData("order_list",dt,dt.order_no);
-}
-
 function setList(sectionElement) {
-	var listItemList = sectionElement.querySelector(".buy_list_wrap").querySelectorAll("li.list_item a");
+	var listItemList = [];
 	var refList = [];
-	for(var i=0; i<listItemList.length; i++){
-		var temp = listItemList[i].getAttribute("href");
-		temp = temp.replace(history_url+"/","");
-		refList.push(temp);
+	var attr = "href";
+	if(copyRidi.globals.isPc == true) {
+		attr = "data-href";
+		listItemList = $(sectionElement).find(".buy_history_table tbody tr");
 	}
-	insertRefList(refList);
+	else {
+		listItemList = sectionElement.querySelector(".buy_list_wrap").querySelectorAll("li.list_item a");
+	}
+
+	for(var i=0; i<listItemList.length; i++){
+		var temp = listItemList[i].getAttribute(attr);
+		temp = temp.replace(GD.history_url+"/","");
+		addData("order_list",{"order_no": temp},temp);
+	}
 }
 
 function setRidiGlobalVal() {
@@ -49,9 +51,10 @@ function setRidiGlobalVal() {
 		}
 	}
 	
-	
-//		var sectionElement = htmlDOM.querySelector("#"+GD.section_id);
-//		setList(sectionElement);
+	if(copyRidi.Auth == true) {
+		var sectionElement = $(GD.historyDOM).find("#"+GD.section_id);
+		setList(sectionElement);
+	}
 }
 
 function getRidiHistoryHTML() {
