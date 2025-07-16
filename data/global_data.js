@@ -3,6 +3,7 @@ var GD = {
 	"account_url": "/account/myridi",
 	"history_url": "/order/history",
 	"section_id": "page_buy_history",
+	"webViewerBaseUrl": '//view.ridibooks.com/books/',
 	"isLogin": false
 };
 var DB = {

@@ -52,3 +52,28 @@ var RR = {
 			.replace(/,\s*}/g, '}')
 	}
 };
+// 단일 변수 (string 등) 추출
+function extractVar(script, varName) {
+    const regex = new RegExp(`var\\s+${varName}\\s*=\\s*['"]([^'"]+)['"]`, 'm');
+    const match = script.match(regex);
+    return match ? match[1] : null;
+}
+
+// 객체형 변수 추출
+function extractObject(script, varName) {
+    const regex = new RegExp(`var\\s+${varName}\\s*=\\s*(\\{[\\s\\S]*?\\});`);
+    const match = script.match(regex);
+    if (match && match[1]) {
+        try {
+            return JSON.parse(match[1]
+                .replace(/(\r\n|\n|\r)/gm, '')             // 줄바꿈 제거
+                .replace(/,(\s*})/g, '$1')                 // 마지막 콤마 제거
+                .replace(/([a-zA-Z0-9_]+):/g, '"$1":')     // 키에 따옴표 추가
+                .replace(/'/g, '"')                        // 작은따옴표를 큰따옴표로
+            );
+        } catch (e) {
+            console.error('JSON 파싱 오류:', e);
+        }
+    }
+    return null;
+}
