@@ -1,3 +1,280 @@
 - util.toDate
 - moment lib 추가
 - util getDateInfo param 날짜 return 요일이랑 주차 정보
+
+order/history
+결제내역 화면
+> order_list store
+> book store에 있는지 확인, 없으면 book 대기열 추가
+> book 대기열 for, series store 있는지 확인, 없으면 추가
+= 크롤링 해온 데이터는 주문정보 기준, 사용할 데이터는 book 기준이므로 변환 작업
+
+/books/{book_id}
+책 정보
+var book, var bookDetail 파싱 (header레벨)
+var seriesBookListJson 파일(detail레벨)
+> 천편 넘어가면 만줄가까이 됨... 정규식 자세하게 짜서 업데이트 되는 항목(ex user_book)만 골라서 DB 최신화
+ 
+
+
+
+성인인증
+https://ridibooks.com/api/global/auth-variables
+{
+    "auth": {
+        "loggedUser": {
+            "id": "lys0star",
+            "idx": 4543796,
+            "email": "lys0star@naver.com",
+            "isVerifiedAdult": true,
+            "adultVerification": {
+                "message": "성인인증이 완료되었습니다.",
+                "status": "VERIFIED"
+            }
+        }
+    },
+    "variables": {
+        "variables": {
+            "deviceType": "desktop",
+            "operatingSystem": "window",
+            "isDevelopment": false,
+            "app": null,
+            "requestId": "1752718360771+dhwh1"
+        }
+    }
+}
+
+
+https://ridibooks.com/api/wait-free/875177449
+{
+    "series_id": "875103701",
+    "rent_days": 3,
+    "interval_hours": 24,
+    "unavailable_recent_count": 10,
+    "rent_volume": 1,
+    "available_max_volume": 1262
+}
+
+카테고리
+https://library-api.ridibooks.com/items/categories?t=1752736877617
+
+디바이스
+https://account.ridibooks.com/api/user-devices/app
+
+postData(‘https://ridibooks.com/api/web-viewer/generate’, { book_id: ‘5536000001’ })
+.then(jsonResponse => {
+if (jsonResponse) {
+// Handle the JSON response data
+console.log(‘Received JSON:’, jsonResponse);
+}
+});
+
+
+구매목록
+POST
+https://library-api.ridibooks.com/items?t=1752736660351
+body
+{b_ids: ["2008055545","2008055513","2008055545"]}
+service_type 구매:normal, 대여:rent, 미구매:return목록에 없음
+
+
+https://book-api.ridibooks.com/books?b_ids=5211000550,5211000548,5211000547
+
+unit_id 기준으로 book_id 목록 조회
+https://library-api.ridibooks.com/books/units/7543057/order?offset=0&limit=500&order_type=unit_order&order_by=asc
+{
+    "items": [
+        {
+            "b_ids": [
+                "2008055419"
+            ],
+            "order": 11
+        },
+        {
+            "b_ids": [
+                "2008055420"
+            ],
+            "order": 12
+        }
+    }
+}
+
+
+별점
+https://ridibooks.com/api/ratings?b_ids=2008055510&t=1752731837605
+{
+    "rating_summaries": [
+        {
+            "book_id": "2008055510",
+            "rating1_count": 1,
+            "rating2_count": 4,
+            "rating3_count": 16,
+            "rating4_count": 52,
+            "rating5_count": 670,
+            "buyer_rating_count": 743,
+            "buyer_rating_score": 4.9,
+            "total_rating_count": 1588,
+            "total_rating_score": 4.9,
+            "buyer_review_count": 685,
+            "total_review_count": 1431
+        }
+    ]
+}
+
+구매목록
+https://library-api.ridibooks.com/items/search/?offset=0&limit=48&keyword=%EB%8D%B0%EB%B7%94&t=1752737858312 //검색
+https://library-api.ridibooks.com/items/main/?offset=0&limit=500&order_type=purchase_date&order_by=desc
+{
+    "items": [
+        {
+            "b_id": "5163001315",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-16T22:22:17+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 3270382,
+            "unit_count": 123,
+            "unit_title": "패션(PASSION)",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "4761000206",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-12T23:08:43+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 5390849,
+            "unit_count": 68,
+            "unit_title": "너의 스탯이 보여!",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "5211000549",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-12T18:15:24+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 5366465,
+            "unit_count": 534,
+            "unit_title": "이세계 착각 헌터",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "5289000054",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-12T17:42:50+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 6727265,
+            "unit_count": 50,
+            "unit_title": "이세계 착각 헌터",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "2008055510",
+            "service_type": "rent",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-03T14:50:02+09:00",
+            "expire_date": "2025-10-01T14:48:52+09:00",
+            "remain_time": "75일 22시간 남음",
+            "unit_id": 7543057,
+            "unit_count": 105,
+            "unit_title": "던전을 그리는 화가",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "3306000068",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-06-24T12:23:16+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 3778645,
+            "unit_count": 2,
+            "unit_title": "Harry Potter",
+            "unit_type": "shelf",
+            "unit_type_int": 4
+        },
+        {
+            "b_id": "2057281646",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2024-11-13T09:07:30+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 6800074,
+            "unit_count": 28,
+            "unit_title": "데뷔 못 하면 죽는 병 걸림",
+            "unit_type": "series",
+            "unit_type_int": 2
+        }
+    }
+}
+
+unit > 헤더정보인가?
+https://library-api.ridibooks.com/items/search/6800074?offset=0&limit=1&order_type=purchase_date&order_by=desc&t=1752737885958
+{
+    "items": [
+        {
+            "b_id": "2057281646",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "is_ridiselect": false,
+            "ownership_text": "",
+            "purchase_date": "2024-11-13T09:07:30+09:00",
+            "remain_time": "",
+            "service_type": "normal"
+        }
+    ],
+    "unit": {
+        "id": 6800074,
+        "ownership_text": "",
+        "title": "데뷔 못 하면 죽는 병 걸림",
+        "type": "series",
+        "type_int": 2
+    },
+    "server_info": {
+        "server_date": "2025-07-17T16:38:06+09:00"
+    }
+}
+
+총 권수 검색
+TODO 연재중인 작품의 경우 update 체크가능
+https://library-api.ridibooks.com/items/search/6800074/count?order_type=purchase_date&order_by=desc&t=1752737885959
+
+
+여기에 데이터 만드는 함수 다 있는거같은데 gpt한테 불어보면 min 풀어주나 그러기엔 양이 좀 많긴 하다
+https://static.ridicdn.net/books-frontend/p/8786d0/_next/static/chunks/pages/_app-1d8cbe1e975b91f3.js
+
+
+            e.Z = {
+                ACCOUNT_BASE_URL: "https://account.ridibooks.com/",
+                API_BASE_URL: "https://api.ridibooks.com/",
+                BASE_URL: "https://library.ridibooks.com/",
+                BOOK_API_BASE_URL: "https://book-api.ridibooks.com/",
+                READING_DATA_API_BASE_URL: "https://reading-data-api.ridibooks.com/",
+                ENVIRONMENT: "production",
+                HELP_BASE_URL: "https://ridihelp.ridibooks.com/support",
+                LIBRARY_API_BASE_URL: "https://library-api.ridibooks.com",
+                POLICY_BASE_URL: "https://policy.ridi.com",
+                RIDI_LOGOUT_URL: "https://ridibooks.com/account/logout?return_url=https%3A%2F%2Fridibooks.com%2Flibrary%2Flogin",
+                RIDI_OAUTH2_CLIENT_ID: "ePgbKKRyPvdAFzTvFg2DvrS7GenfstHdkQ2uvFNd",
+                RIDI_READING_NOTE_URL: "https://ridibooks.com/reading-note/timeline",
+                RIDI_REVIEW_URL: "https://ridibooks.com/review",
+                RIDI_STATUS_URL: "https://sorry.ridibooks.com/status",
+                RIDI_TOKEN_AUTHORIZE_URL: "https://account.ridibooks.com/ridi/authorize",
+                SELECT_BASE_URL: "https://select.ridibooks.com/",
+                SENTRY_DSN: "https://0100a981cf6840ceac1a206051a199ba@o2127.ingest.sentry.io/1335489",
+                SENTRY_ENV: "production",
+                STORE_API_BASE_URL: "https://ridibooks.com/",
+                STORE_BASE_URL: "https://ridibooks.com/",
+                VIEWER_API_BASE_URL: "https://ridibooks.com/"
+            }
