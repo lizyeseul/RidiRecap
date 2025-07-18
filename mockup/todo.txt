@@ -255,6 +255,9 @@ https://library-api.ridibooks.com/items/search/6800074/count?order_type=purchase
 https://static.ridicdn.net/books-frontend/p/8786d0/_next/static/chunks/pages/_app-1d8cbe1e975b91f3.js
 
 
+제일 하고싶은게 구매내역 검색 기능인데 구매정보 리턴되는 api를 도저히 못 찾겠다... 젤 중요한 놈이 크롤링이네 이거 브라우저로 감당 가능한건가
+
+
             e.Z = {
                 ACCOUNT_BASE_URL: "https://account.ridibooks.com/",
                 API_BASE_URL: "https://api.ridibooks.com/",
@@ -278,3 +281,4 @@ https://static.ridicdn.net/books-frontend/p/8786d0/_next/static/chunks/pages/_ap
                 STORE_BASE_URL: "https://ridibooks.com/",
                 VIEWER_API_BASE_URL: "https://ridibooks.com/"
             }
+            
