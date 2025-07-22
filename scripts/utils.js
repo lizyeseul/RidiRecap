@@ -14,6 +14,14 @@ var RR = {
 	isArray: function(object) {
 		return Array.isArray(object);
 	},
+	
+	toNumber: function(s) {
+		if(UT.isString(s)) {
+			s = s.replace(/[\,]/g, "");
+		}
+		return isNaN(s) ? 0 : Number(s);
+	},
+	
 	isEmpty: function(object) {
 		return object === null
 			 || "undefined" === typeof object

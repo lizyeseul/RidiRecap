@@ -1,6 +1,7 @@
+<!--
 //목록
-//------------
-/*  마지막 페이지 번호 추출
+//------------ 마지막 페이지 번호 추출
+-->
 <section id="page_buy_history">
 	<table class="rui_table buy_history_table">
 		<colgroup>
@@ -79,8 +80,8 @@
 			</ul>
 		</div>
 	</div>
-*/
 
+<script>
 //class="btn_prev" 없으면 첫페이지
 //class="btn_next" 없으면 마지막페이지
 //https://ridibooks.com/order/history?page=999
@@ -92,6 +93,7 @@ var lastPageCnt = $(".page_this a").length
 //https://ridibooks.com/order/history?page=lastPageNum
 //한페이지에 15개, 마지막페이지는 몇 개 남을지 모름
 
+// table order_history_hd
 for(var i=1;i<=lastPageNum;i++){
 	//https://ridibooks.com/order/history?page=curPage
 	var curPage = i;
@@ -102,26 +104,34 @@ for(var i=1;i<=lastPageNum;i++){
 		
 		var tdList = $(a[idx]).find("td");
 		for(var td;;) {
+			//TODO order_dttm > toDate 처리
 			var order_dttm = td[0].innerText;
 		}
 		
-		//order_dt key 등록
+		//TODO DB에 order_dt key 등록
 		//{"2020060206698032" {"order_no": "2020060206698032", "order_dttm": 2020.06.01. 00:51, "order_dt":"20200601"}}
+		
+		//주문 seq
 		var order_seq = (15 - idx+1) + (lastPageNum-curPage-1)*15 + (lastPageNum!=curPage)?15:0 + (lastPageNum!=curPage)?lastPageCnt:0;
-		//append 2020060206698032 value {order_seq: order_seq}
+		//add value 2020060206698032 : {"order_seq": order_seq}
+
+		//총 결제금액
+		var tempTotalAmt = $(a[idx]).find(".main_value span").innerText;
+		var totalAmt = UT.getNumber(tempTotalAmt);
+		//add value 2020060206698032 : {"total_amt": totalAmt}
 	}
+	//HD{order_key: order_no, order_dttm, order_dt, order_seq, total_amt}
 }
+</script>
 
 
 
 
 
-
-
+<!--
 //상세
 //------------
-/*
-
+-->
 <table class="buy_history_detail_table">
 	<colgroup>
 		<col style="width:22%;">
@@ -264,16 +274,59 @@ for(var i=1;i<=lastPageNum;i++){
 		</tr>
 	</tbody>
 
-*/
+<script>
+//TODO 테이블 update할 떄 mod_dt 정보 utils에서 기본으로 추가
 
+//table order_history_dt
+var order_no = "2020111249193079"
 var bookList = $(".book_title");
+var bookIdList = [];
+for(var b in bookList) {
+	var book = {};
+	var bookE = $(b).find("a");
+	var book_id = bookE.attr("href").replace("/books/");
+	bookIdList.append(book_id);
+	book.book_id = book_id;
+	
+	var priceE = $(b).find(".price");
+	var price = 0;
+	if(UT.isNotEmpty(priceE)) {
+		//TODO string에서 숫자만 추출해서 number return하는 함수 util 추가
+		var n = priceE.innerText.match(/[0-9]+/g);
+		if(UT.isNotEmpty(n) && n.length>0) {
+			var nn = UT.toNumber(n.join(""));
+			if(UT.isNumber(nn)) price = nn;
+		}
+	}
+
+	var dt_id = order_no+"_"+book_id; //2020111249193079_2378013896
+	//order_history_dt add value 2020111249193079_2378013896 : {"order_no": order_no, "book_id":book_id, "price":price}
+
+	//book 테이블에서 book_id 검색 후 있는 데이터일 경우 book_nm, book_seq 같은 정보 추가
+}
+//order_history_hd add value 2020111249193079 : {"book_id_list": bookIdList}
+
+//book 정보 update
+//테이블 book_origin
+//    https://book-api.ridibooks.com/books?b_ids=bookIdList.join(",")
+var bookInfoResultList = [];
+for(var b in bookInfoResultList) {
+	if(book_origin.exist(b.id)) delete book_origin(b.id)
+// 	book_origin.add({b.id:b})
+}
 
 
+//HD{order_key: order_no, order_dttm, order_dt, order_seq, total_amt, book_id_list}
+//DT{order_book_key: order_no, book_id, price}
 
 
-
-
-
-
-
-
+/*TODO 크롤링된 데이터 돌면서 필요한 형태로 변환
+ *주문정보 HD+DT 
+for(order_history_dt) {
+	var dtItem = {order_book_key: order_no, book_id, price}
+	var hdItem = get("order_history_hd", order_no)
+	dtItem.concat(hdItem)
+}
+order_seq: {order_book_key[key], order_no[key], book_id[key], price, order_dttm, order_dt[key], total_amt}
+ */
+</script>
