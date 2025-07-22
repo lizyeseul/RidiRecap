@@ -1,9 +1,9 @@
-var RR = {
+var UTIL = {
 	isObject: function(object) {
 		return object !== null && "object" === typeof object;
 	},
 	isDate: function(object) {
-		return RR.isObject(object) && typeof object.getTime === "function";
+		return UTIL.isObject(object) && typeof object.getTime === "function";
 	},
 	isFunction: function(object) {
 		return "function" === typeof object;
@@ -25,20 +25,23 @@ var RR = {
 	isEmpty: function(object) {
 		return object === null
 			 || "undefined" === typeof object
-			 || (RR.isObject(object) && !Object.keys(object).length && !RR.isDate(object))
-			 || (RR.isString(object) && object.trim() === "")
-			 || (RR.isArray(object) && object.length === 0);
+			 || (UTIL.isObject(object) && !Object.keys(object).length && !UTIL.isDate(object))
+			 || (UTIL.isString(object) && object.trim() === "")
+			 || (UTIL.isArray(object) && object.length === 0);
 	},
 	isNotEmpty: function(obj) {
-		return !RR.isEmpty(obj);
+		return !UTIL.isEmpty(obj);
 	},
 
-	request: function(callUrl, body, okFn, failFn) {
+	request: function(callUrl, body, okFn, failFn, options) {
+		var optionObj = options || {};
+		optionObj.isResultJson = optionObj.isResultJson || false;
 		chrome.runtime.sendMessage(
 			{
 				type: 'BG_REQUEST',
 				url: callUrl,
-				body: body
+				body: body,
+				option: optionObj
 			},
 			function (response) {
 				if (response?.success) {

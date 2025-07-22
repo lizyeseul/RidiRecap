@@ -1,11 +1,22 @@
 function checkLogin() {
-	RR.request(GD.base_url + GD.account_url, null, function(res) {
-		GD.isLogin = true;
-		window.location.href = "after_login.html"
+	GD.isLogin = false;
+	$("#login_try_result")[0].innerText = "ing...";
+	UTIL.request(URL.base + URL.auth, null, function(res) {
+		var auth = res.auth || {};
+		if(auth.loggedUser != null) {
+			GD.isLogin = true;
+			window.location.href = "after_login.html"
+		}
+		else {
+			failLogin();
+		}
 	}, function(e) {
-		console.log("fail");
-		GD.isLogin = false;
-	})
+		failLogin();
+	}, {isResultJson: true});
+}
+function failLogin() {
+	GD.isLogin = false;
+	$("#login_try_result")[0].innerText = "fail";
 }
 
 $(document).ready(function() {

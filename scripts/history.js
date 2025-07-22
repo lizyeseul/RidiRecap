@@ -12,7 +12,7 @@ function setList(sectionElement) {
 
 	for(var i=0; i<listItemList.length; i++){
 		var temp = listItemList[i].getAttribute(attr);
-		temp = temp.replace(GD.history_url+"/","");
+		temp = temp.replace(URL.history+"/","");
 		addData("order_list",{"order_no": temp},temp);
 	}
 }
@@ -29,13 +29,13 @@ function setRidiGlobalVal() {
 	});
 	
 	if(targetStr) {
-		if(RR.isEmpty(targetStr)) return;
+		if(UTIL.isEmpty(targetStr)) return;
 		
 		var code = targetStr[0].innerText;
 		var match = code.match(/Ridi\.globals\s*=\s*({[\s\S]*?});/);
 		if(match){
 			var jsonLike = match[1];
-			copyRidi.globals = JSON.parse(RR.jsObjectToJson(jsonLike));
+			copyRidi.globals = JSON.parse(UTIL.jsObjectToJson(jsonLike));
 		}
 		
 		match = code.match(/Ridi\.Auth\s*=\s*([\s\S]*?);/);
@@ -58,7 +58,7 @@ function setRidiGlobalVal() {
 }
 
 function getRidiHistoryHTML() {
-	RR.request(GD.base_url+GD.history_url, null, function(res) {
+	UTIL.request(URL.base+URL.history, null, function(res) {
 		var htmlDOM = parser.parseFromString(res, "text/html");
 		GD.historyDOM = htmlDOM;
 		setRidiGlobalVal();

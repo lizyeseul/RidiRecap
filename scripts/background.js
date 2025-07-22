@@ -1,5 +1,6 @@
 var BG = {
-	request: function(callUrl, body, sendResponse) {
+	request: function(callUrl, body, sendResponse, option) {
+		option = option || {};
 		var mtd = (body != null && typeof body != 'undefined') ? "POST" : "GET";
 		fetch(callUrl, {
 			method: mtd,
@@ -11,8 +12,14 @@ var BG = {
 			body: mtd === "POST" ? body : undefined
 		})
 		.then(async (res) => {
-			const text = await res.text(); 
-			sendResponse({ success: true, data: text });
+			if(option.isResultJson) {
+				const result = await res.json(); 
+				sendResponse({ success: true, data: result });
+			}
+			else {
+				const json = await res.text(); 
+				sendResponse({ success: true, data: result });
+			}
 		})
 		.catch((err) => {
 			sendResponse({ success: false, error: err.toString() });
@@ -21,7 +28,7 @@ var BG = {
 };
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'BG_REQUEST') {
-	BG.request(message.url, message.body, sendResponse);
+	BG.request(message.url, message.body, sendResponse, message.option);
   }
 	return true; // 비동기 sendResponse를 위한 필수 리턴
 });
