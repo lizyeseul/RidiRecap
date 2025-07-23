@@ -12,13 +12,17 @@ var BG = {
 			body: mtd === "POST" ? body : undefined
 		})
 		.then(async (res) => {
-			if(option.isResultJson) {
-				const result = await res.json(); 
-				sendResponse({ success: true, data: result });
-			}
-			else {
-				const json = await res.text(); 
-				sendResponse({ success: true, data: result });
+			try {
+				if(option.isResultJson) {
+					const result = await res.json(); 
+					sendResponse({ success: true, data: result });
+				}
+				else {
+					const json = await res.text(); 
+					sendResponse({ success: true, data: json });
+				}
+			} catch (parseErr) {
+				sendResponse({ success: false, error: "Response parsing error: " + parseErr.toString() });
 			}
 		})
 		.catch((err) => {
@@ -26,19 +30,28 @@ var BG = {
 		});
 	}
 };
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'BG_REQUEST') {
-	BG.request(message.url, message.body, sendResponse, message.option);
+	try {
+		BG.request(message.url, message.body, sendResponse, message.option);
+	} catch (e) {
+		sendResponse({ success: false, error: "BG.request failed: " + e.toString() });
+	}
   }
 	return true; // 비동기 sendResponse를 위한 필수 리턴
 });
 
-chrome.action.onClicked.addListener((tab) => {
-	chrome.sidePanel.setOptions({
-		tabId: tab.id,
-		path:"html/index.html",
-		enabled: true
-	},()=>{
-		chrome.sidePanel.open({tabId: tab.id});
-	})
-})
+// chrome.action.onClicked.addListener(async(tab) => {
+// 	try {
+// 		await chrome.sidePanel.setOptions({
+// 			tabId: tab.id,
+// 			path:"html/index.html",
+// 			enabled: true
+// 		}, function() {
+// 			chrome.sidePanel.open({tabId: tab.id});
+// 		})
+// 	} catch (e) {
+// 		console.error("Exception in sidePanel setup:", e);
+// 	}
+// })
