@@ -33,25 +33,27 @@ var UTIL = {
 		return !UTIL.isEmpty(obj);
 	},
 
-	request: function(callUrl, body, okFn, failFn, options) {
+	request: function(callUrl, body, options) {
 		var optionObj = options || {};
 		optionObj.isResultJson = optionObj.isResultJson || false;
-		chrome.runtime.sendMessage(
-			{
-				type: 'BG_REQUEST',
-				url: callUrl,
-				body: body,
-				option: optionObj
-			},
-			function (response) {
-				if (response?.success) {
-					okFn(response.data);
+		return new Promise((resolve, reject) => {
+			chrome.runtime.sendMessage(
+				{
+					type: 'BG_REQUEST',
+					url: callUrl,
+					body: body,
+					option: optionObj
+				},
+				function (response) {
+					if (response?.success) {
+						resolve(response.data);
+					}
+					else {
+						reject(response.error);
+					}
 				}
-				else {
-					failFn(response.error);
-				}
-			}
-		);
+			);
+		});
 	},
 
 	jsObjectToJson: function(str) {

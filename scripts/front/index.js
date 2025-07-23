@@ -1,21 +1,20 @@
-function checkLogin() {
-	GD.isLogin = false;
+async function checkLogin() {
 	$("#login_try_result")[0].innerText = "ing...";
-	UTIL.request(URL.base + URL.auth, null, function(res) {
+	localStorage.removeItem("copyRidi");
+	try {
+		const res = await UTIL.request(URL.base + URL.auth, null, { isResultJson: true });
 		var auth = res.auth || {};
 		if(auth.loggedUser != null) {
-			GD.isLogin = true;
 			window.location.href = "after_login.html"
 		}
 		else {
 			failLogin();
 		}
-	}, function(e) {
+	} catch (e) {
 		failLogin();
-	}, {isResultJson: true});
+	}
 }
 function failLogin() {
-	GD.isLogin = false;
 	$("#login_try_result")[0].innerText = "fail";
 }
 
