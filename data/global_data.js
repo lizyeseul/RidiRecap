@@ -1,5 +1,7 @@
 var GD = {
-	"section_id": "page_buy_history",
+	"lastPageNum": 999,	//결제내역 마지막 페이지 번호
+	"lastPageCnt": 15,	//결제내역 마지막 페이지의 목록 아이템 수
+	
 	"webViewerBaseUrl": '//view.ridibooks.com/books/',
 	"isLogin": false
 };

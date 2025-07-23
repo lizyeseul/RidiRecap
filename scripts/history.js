@@ -1,6 +1,58 @@
+async function getRidiHistoryHTML() {
+	await updateLastPageInfo();
+	
+	//updateLastPageInfo 테스트 후 주석 해제
+//	for(var pageIdx=GD.lastPageNum; pageIdx>=1; pageIdx--) {
+//		await parseHistory(pageIdx);
+//	}
+}
+
+function updateLastPageInfo() {
+	UTIL.request(URL.base+URL.history+"?page=999", null, function(res) {
+		var htmlDOM = parser.parseFromString(res, "text/html");
+//		GD.historyDOM = htmlDOM;
+//class="btn_prev" 없으면 첫페이지
+//class="btn_next" 없으면 마지막페이지
+		if(UTIL.isEmpty($(htmlDOM).find(".btn_next"))) {
+			var itemList = $(htmlDOM).find(".page_this a");
+			if(UTIL.isNotEmpty(itemList)) {
+				GD.lastPageNum = $(".page_this a")[0].innerText;
+				GD.lastPageCnt = $(".page_this a").length;
+			}
+		}
+		resolve(true);
+	}, function(e) {
+		console.log("fail");
+	});
+}
+
+function parseHistory(pageIdx) {
+	UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, function(res) {
+		var htmlDOM = parser.parseFromString(res, "text/html");
+		GD.historyDOM = htmlDOM;
+		
+		if(pageIdx >= GD.lastPageNum) {
+//class="btn_prev" 없으면 첫페이지
+//class="btn_next" 없으면 마지막페이지
+			if(UTIL.isEmpty($(htmlDOM).find(".btn_next"))) {
+				var itemList = $(htmlDOM).find(".page_this a");
+				if(UTIL.isNotEmpty(itemList)) {
+					GD.lastPageNum = $(".page_this a")[0].innerText;
+					GD.lastPageCnt = $(".page_this a").length;
+				}
+			}
+		}
+
+		var sectionElement = $(htmlDOM).find("#page_buy_history");
+		setList(sectionElement);
+//		setRidiGlobalVal();
+	}, function(e) {
+		console.log("fail");
+	});
+}
+
 function setList(sectionElement) {
 	var listItemList = [];
-	var refList = [];
 	var attr = "href";
 	if(copyRidi.globals.isPc == true) {
 		attr = "data-href";
@@ -13,11 +65,12 @@ function setList(sectionElement) {
 	for(var i=0; i<listItemList.length; i++){
 		var temp = listItemList[i].getAttribute(attr);
 		temp = temp.replace(URL.history+"/","");
-		addData("order_list",{"order_no": temp},temp);
+		setData("order_list",{"order_no": temp},temp);
 	}
 }
 
 function setRidiGlobalVal() {
+	//250723 미사용
 	var scripts = $(GD.historyDOM).find("script");
 	var targetStr = null;
 	scripts.each(function() {
@@ -50,19 +103,4 @@ function setRidiGlobalVal() {
 			copyRidi.Platform = temp;
 		}
 	}
-	
-	if(copyRidi.Auth == true) {
-		var sectionElement = $(GD.historyDOM).find("#"+GD.section_id);
-		setList(sectionElement);
-	}
-}
-
-function getRidiHistoryHTML() {
-	UTIL.request(URL.base+URL.history, null, function(res) {
-		var htmlDOM = parser.parseFromString(res, "text/html");
-		GD.historyDOM = htmlDOM;
-		setRidiGlobalVal();
-	}, function(e) {
-		console.log("fail");
-	});
 }
