@@ -14,12 +14,23 @@ var UTIL = {
 	isArray: function(object) {
 		return Array.isArray(object);
 	},
+	isNumber: function(object) {
+		return "number" === typeof object;
+	},
 	
 	toNumber: function(s) {
-		if(UT.isString(s)) {
+		if(UTIL.isString(s)) {
 			s = s.replace(/[\,]/g, "");
 		}
 		return isNaN(s) ? 0 : Number(s);
+	},
+	getNumber: function(s) {
+		var n = s.match(/[0-9]+/g);
+		if(UTIL.isNotEmpty(n) && n.length>0) {
+			var nn = UTIL.toNumber(n.join(""));
+			if(UTIL.isNumber(nn)) return nn;
+		}
+		return null;
 	},
 	
 	isEmpty: function(object) {
