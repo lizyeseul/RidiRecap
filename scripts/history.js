@@ -10,16 +10,16 @@ async function getRidiHistoryHTML() {
 	
 	//updateLastPageInfo 테스트 후 주석 해제
 	var lastPageNum = sessionStorage.getItem("lastPageNum");
-//	await parseHistory(lastPageNum);
-//	await parseHistory(1);
-//	for(var pageIdx=lastPageNum; pageIdx>=1; pageIdx--) {	//TODO 주석해제, 전체 데이터 refresh버전
+	await parseHistory(lastPageNum);
+	await parseHistory(1);
 
 //TODO DB에 없는 order_seq만 업데이트하는 로직 필요
+//	for(var pageIdx=1; pageIdx<=lastPageNum; pageIdx++) {	//TODO 주석해제, 전체 데이터 refresh버전
 //	for(var pageIdx=2; pageIdx>=1; pageIdx--) {	//TODO 테스트용
-	for(var pageIdx=lastPageNum; pageIdx>=lastPageNum-1; pageIdx--) {	//TODO 테스트용
-		$("#parse_log")[0].innerText = pageIdx;
-		await parseHistory(pageIdx);
-	}
+//	for(var pageIdx=lastPageNum; pageIdx>=lastPageNum-1; pageIdx--) {	//TODO 테스트용
+//		$("#parse_log")[0].innerText = pageIdx;
+//		await parseHistory(pageIdx);
+//	}
 	$("#parse_log")[0].innerText = "end";
 }
 /*
@@ -31,7 +31,6 @@ async function updatePageInfo() {
 		const res = await UTIL.request(URL.base+URL.history+"?page=999", null, null);
 		var htmlDOM = parser.parseFromString(res, "text/html");
 		//class="btn_next" 없으면 마지막페이지
-		//class="btn_prev" 없으면 첫페이지
 		sessionStorage.setItem("lastPageNum", 999);
 		if($(htmlDOM).find(".btn_next").length == 0) {
 			var itemList = $(htmlDOM).find(".page_this a");
@@ -41,11 +40,12 @@ async function updatePageInfo() {
 			}
 		}
 		
+		//class="btn_prev" 없으면 첫페이지
 		sessionStorage.setItem("lastPageCnt", 1);
 		const res2 = await UTIL.request(URL.base+URL.history+"?page="+sessionStorage.getItem("lastPageNum"), null, null);
 		var htmlDOM2 = parser.parseFromString(res2, "text/html");
 		sessionStorage.setItem("lastPageCnt", 1);
-		if($(htmlDOM2).find(".btn_prev").length == 0) {
+		if($(htmlDOM2).find(".btn_next").length == 0) {
 			sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
 		}
 	}
