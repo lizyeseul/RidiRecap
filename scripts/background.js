@@ -42,16 +42,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	return true; // 비동기 sendResponse를 위한 필수 리턴
 });
 
-// chrome.action.onClicked.addListener(async(tab) => {
-// 	try {
-// 		await chrome.sidePanel.setOptions({
-// 			tabId: tab.id,
-// 			path:"html/index.html",
-// 			enabled: true
-// 		}, function() {
-// 			chrome.sidePanel.open({tabId: tab.id});
-// 		})
-// 	} catch (e) {
-// 		console.error("Exception in sidePanel setup:", e);
-// 	}
-// })
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+.catch((error) => console.error(error));
