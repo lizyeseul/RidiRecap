@@ -45,11 +45,11 @@ function setData(tbNm, data, key) {
 			store.add(data, key);
 		}
 	}
-	store.onerror = (e) => {console.error("store 요청 오류: "+e.target.error)};
-	cursorRequest.onerror = (e) => {console.error("커서 요청 오류: "+e.target.error)};
+	store.onerror = (e) => {console.error("store 요청 오류-setData: "+e.target.error)};
+	cursorRequest.onerror = (e) => {console.error("커서 요청 오류-setData: "+e.target.error)};
 }
 
-function searchMaxOnIdx(tbNm, idxNm) {
+function getMaxOnIdx(tbNm, idxNm) {
 	return new Promise((resolve, reject) => {
 		var store = getObjectStore(tbNm,"readonly");
 		var index = store.index(idxNm);
@@ -64,6 +64,41 @@ function searchMaxOnIdx(tbNm, idxNm) {
 				resolve(null);
 			}
 		}
-		cursorReq.onerror = (e) => {console.error("커서 요청 오류: "+e.target.error)};
+		cursorReq.onerror = (e) => {console.error("커서 요청 오류-getMaxOnIdx: "+e.target.error)};
+	});
+}
+
+function getUniqueValue(tbNm, idxNm, idxVal) {
+	return new Promise((resolve, reject) => {
+		getValueByIdx(tbNm, idxNm, idxVal, 1)
+		.then((results) => {
+			resolve(results[0] || null);
+		})
+		.catch(reject);
+	});
+}
+function getValueByIdx(tbNm, idxNm, idxVal, limit) {
+	limit = limit || -1;
+	return new Promise((resolve, reject) => {
+		var store = getObjectStore(tbNm,"readonly");
+		var index = store.index(idxNm);
+
+		var results = [];
+		var cursorReq = index.openCursor(IDBKeyRange.only(idxVal));
+		cursorReq.onsuccess = (e) => {
+			var cursor = e.target.result;
+			if (cursor) {
+				results.push(cursor.value);
+				if(limit != -1 && results.length >= limit) {
+					resolve(results);
+					return;
+				}
+				cursor.continue();
+			}
+			else {
+				resolve(results);
+			}
+		};
+		cursorReq.onerror = (e) => {console.error("커서 요청 오류-getValueByIdx: "+e.target.error)};
 	});
 }

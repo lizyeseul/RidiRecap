@@ -1,28 +1,23 @@
 /*
-getRidiHistoryHTML
+syncOrderList
 결제내역 화면 전체 반복하면서 저장
-
-250724 테스트용으로 마지막페이지만 파싱
 */
-async function getRidiHistoryHTML() {
-	$("#parse_log")[0].innerText = "start";
-	await updatePageInfo();
+async function syncOrderList() {
+	$("#parse_log")[0].innerText = "sync order list start";
+	// await updatePageInfo();
 	
-	//updateLastPageInfo 테스트 후 주석 해제
 	var lastPageNum = sessionStorage.getItem("lastPageNum");
-//	await parseHistory(lastPageNum);
-//	await parseHistory(1);
 
-//	for(var pageIdx=1; pageIdx<=lastPageNum; pageIdx++) {	//TODO 주석해제, 전체 데이터 refresh버전
+	for(var pageIdx=1; pageIdx<=lastPageNum; pageIdx++) {	//TODO 주석해제, 전체 데이터 refresh버전
 //	for(var pageIdx=2; pageIdx>=1; pageIdx--) {	//TODO 테스트용
-	for(var pageIdx=lastPageNum; pageIdx>=lastPageNum-1; pageIdx--) {	//TODO 테스트용
-		$("#parse_log")[0].innerText = pageIdx;
-		var isContinue = await parseHistory(pageIdx);
+//	for(var pageIdx=lastPageNum; pageIdx>=lastPageNum-1; pageIdx--) {	//TODO 테스트용
+		$("#parse_log")[0].innerText = pageIdx + "/" + lastPageNum;
+		var isContinue = await parseHistoryListPage(pageIdx);
 		if(!isContinue) {
 			break;
 		}
 	}
-	$("#parse_log")[0].innerText = "end";
+	$("#parse_log")[0].innerText = "sync order list end";
 }
 /*
 updatePageInfo
@@ -51,31 +46,30 @@ async function updatePageInfo() {
 			sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
 		}
 		
-		var maxOrderSeq = await searchMaxOnIdx("o_order_header","order_seq");
-		sessionStorage.setItem("maxOrderSeq", maxOrderSeq);
+		var maxOrderSeq = await getMaxOnIdx("o_order_header","order_seq");
+		sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
 	}
 	catch(e) {
 		console.error("updateLastPageInfo 오류:", e);
 	}
 }
-
 /*
-parseHistory
+parseHistoryListPage
 param pageIdx 크롤링할 결제내역 페이지 번호
 */
-async function parseHistory(pageIdx) {
+async function parseHistoryListPage(pageIdx) {
 	try {
 		const res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
 		var htmlDOM = parser.parseFromString(res, "text/html");
 		var sectionElement = $(htmlDOM).find("#page_buy_history");
-		return setList(UTIL.toNumber(pageIdx), sectionElement);
+		return parseHistoryListItem(UTIL.toNumber(pageIdx), sectionElement);
 	}
 	catch(e) {
-		console.error("parseHistory 오류:", e);
+		console.error("parseHistoryListPage 오류:", e);
 	}
 }
 
-function setList(curPage, sectionElement) {
+function parseHistoryListItem(curPage, sectionElement) {
 	var orderItemList = [];
 	var attr = "href";
 	var copyRidi = JSON.parse(localStorage.getItem("copyRidi"));
@@ -88,7 +82,7 @@ function setList(curPage, sectionElement) {
 		orderItemList = sectionElement.querySelector(".buy_list_wrap").querySelectorAll("li.list_item a");
 	}
 
-	var maxOrderSeq = UTIL.toNumber(sessionStorage.getItem("maxOrderSeq"));
+	var maxOrderSeq = UTIL.toNumber(sessionStorage.getItem("maxOrderSeq")) || -1;
 	
 	for(var i=0; i<orderItemList.length; i++) {
 		var orderItem = orderItemList[i];
@@ -128,6 +122,53 @@ function setList(curPage, sectionElement) {
 			return false;
 		}
 	}
+	return true;
+}
+
+/*
+syncOrderDetail
+결제내역 화면 전체 반복하면서 저장
+*/
+async function syncOrderDetail() {
+	$("#parse_log")[0].innerText = "sync order detail start";
+	
+	var maxOrderSeq = UTIL.toNumber(sessionStorage.getItem("maxOrderSeq")) || -1;
+	if(maxOrderSeq < 0) {
+		$("#parse_log")[0].innerText = "no order detail to sync";
+		return;
+	}
+	var orderItem = await getUniqueValue("o_order_header", "order_seq", maxOrderSeq);	//TEST 제일 마지막 주문번호 파싱
+	if(UTIL.isNotEmpty(orderItem)) {
+		await parseHistoryDetailPage(orderItem.order_no);
+	}
+
+	$("#parse_log")[0].innerText = "sync order detail end";
+}
+/*
+parseHistoryDetailPage
+param pageIdx 크롤링할 주문내역 페이지 번호
+*/
+async function parseHistoryDetailPage(orderNo) {
+	try {
+		const res = await UTIL.request(URL.base+URL.history+"/"+orderNo, null, null);
+		var htmlDOM = parser.parseFromString(res, "text/html");
+		var sectionElement = $(htmlDOM).find("#buy_history_detail_table");
+		return parseHistoryDetailItem(orderNo, sectionElement);
+	}
+	catch(e) {
+		console.error("parseHistoryDetailPage 오류:", e);
+	}
+}
+function parseHistoryDetailItem(orderNo, sectionElement) {
+	var orderInfoTable = $(sectionElement).find(".book_title");
+
+	// for(var i=0; i<orderItemList.length; i++) {
+		// var orderItem = orderItemList[i];
+		var orderDetailValue = {};
+		
+		setData("o_order_detail", orderDetailValue, orderNo);
+		
+	// }
 	return true;
 }
 
