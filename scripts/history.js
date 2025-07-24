@@ -10,16 +10,18 @@ async function getRidiHistoryHTML() {
 	
 	//updateLastPageInfo 테스트 후 주석 해제
 	var lastPageNum = sessionStorage.getItem("lastPageNum");
-	await parseHistory(lastPageNum);
-	await parseHistory(1);
+//	await parseHistory(lastPageNum);
+//	await parseHistory(1);
 
-//TODO DB에 없는 order_seq만 업데이트하는 로직 필요
 //	for(var pageIdx=1; pageIdx<=lastPageNum; pageIdx++) {	//TODO 주석해제, 전체 데이터 refresh버전
 //	for(var pageIdx=2; pageIdx>=1; pageIdx--) {	//TODO 테스트용
-//	for(var pageIdx=lastPageNum; pageIdx>=lastPageNum-1; pageIdx--) {	//TODO 테스트용
-//		$("#parse_log")[0].innerText = pageIdx;
-//		await parseHistory(pageIdx);
-//	}
+	for(var pageIdx=lastPageNum; pageIdx>=lastPageNum-1; pageIdx--) {	//TODO 테스트용
+		$("#parse_log")[0].innerText = pageIdx;
+		var isContinue = await parseHistory(pageIdx);
+		if(!isContinue) {
+			break;
+		}
+	}
 	$("#parse_log")[0].innerText = "end";
 }
 /*
@@ -48,6 +50,9 @@ async function updatePageInfo() {
 		if($(htmlDOM2).find(".btn_next").length == 0) {
 			sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
 		}
+		
+		var maxOrderSeq = await searchMaxOnIdx("o_order_header","order_seq");
+		sessionStorage.setItem("maxOrderSeq", maxOrderSeq);
 	}
 	catch(e) {
 		console.error("updateLastPageInfo 오류:", e);
@@ -63,7 +68,7 @@ async function parseHistory(pageIdx) {
 		const res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
 		var htmlDOM = parser.parseFromString(res, "text/html");
 		var sectionElement = $(htmlDOM).find("#page_buy_history");
-		setList(UTIL.toNumber(pageIdx), sectionElement);
+		return setList(UTIL.toNumber(pageIdx), sectionElement);
 	}
 	catch(e) {
 		console.error("parseHistory 오류:", e);
@@ -83,6 +88,8 @@ function setList(curPage, sectionElement) {
 		orderItemList = sectionElement.querySelector(".buy_list_wrap").querySelectorAll("li.list_item a");
 	}
 
+	var maxOrderSeq = UTIL.toNumber(sessionStorage.getItem("maxOrderSeq"));
+	
 	for(var i=0; i<orderItemList.length; i++) {
 		var orderItem = orderItemList[i];
 		var orderValue = {};
@@ -116,7 +123,12 @@ function setList(curPage, sectionElement) {
 		orderValue.last_update_dttm = moment().toDate();
 		
 		setData("o_order_header", orderValue, orderNo);
+		
+		if(orderSeq <= maxOrderSeq) {
+			return false;
+		}
 	}
+	return true;
 }
 
 async function setRidiGlobalVal() {

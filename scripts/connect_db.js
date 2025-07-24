@@ -48,3 +48,22 @@ function setData(tbNm, data, key) {
 	store.onerror = (e) => {console.error("store 요청 오류: "+e.target.error)};
 	cursorRequest.onerror = (e) => {console.error("커서 요청 오류: "+e.target.error)};
 }
+
+function searchMaxOnIdx(tbNm, idxNm) {
+	return new Promise((resolve, reject) => {
+		var store = getObjectStore(tbNm,"readonly");
+		var index = store.index(idxNm);
+		
+		var cursorReq = index.openCursor(null, "prev");
+		cursorReq.onsuccess = (e) => {
+			var cursor = e.target.result;
+			if(cursor) {
+				resolve(cursor.value[idxNm]);
+			}
+			else {
+				resolve(null);
+			}
+		}
+		cursorReq.onerror = (e) => {console.error("커서 요청 오류: "+e.target.error)};
+	});
+}
