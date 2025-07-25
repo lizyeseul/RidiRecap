@@ -13,11 +13,11 @@ function initDB() {
 			os.createIndex("order_dt", "order_dt", {unique: false});
 			os.createIndex("order_seq", "order_seq", {unique: true});
 		}
-		if(!dbConnect.objectStoreNames.contains("o_order_detail")) {
-			os = dbConnect.createObjectStore("o_order_detail", {autoIncrement: false});
-			os.createIndex("order_no", "order_no", {unique: false});
-			os.createIndex("book_id", "book_id", {unique: false});
-		}
+//		if(!dbConnect.objectStoreNames.contains("o_order_detail")) {
+//			os = dbConnect.createObjectStore("o_order_detail", {autoIncrement: false});
+//			os.createIndex("order_no", "order_no", {unique: false});
+//			os.createIndex("book_id", "book_id", {unique: false});
+//		}
 	}
 }
 function getObjectStore(store_nm, mode) {

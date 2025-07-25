@@ -136,11 +136,11 @@ async function syncOrderDetail() {
 	for(var i=maxOrderSeq; i>=maxOrderSeq-10; i--) {	//TEST
 		var orderItem = await getUniqueValue("o_order_header", "order_seq", i);
 		if(UTIL.isNotEmpty(orderItem)) {
-			var isExist = UTIL.isNotEmpty(await getValueByIdx("o_order_detail", "order_no", orderItem.order_no));
-			if(isExist) {
-				$("#parse_log")[0].innerText = "sync order detail end1";
-				return;
-			}
+//			var isExist = UTIL.isNotEmpty(await getValueByIdx("o_order_detail", "order_no", orderItem.order_no));
+//			if(isExist) {
+//				$("#parse_log")[0].innerText = "sync order detail end1";
+//				return;
+//			}
 			$("#parse_log")[0].innerText = "detail: "+(maxOrderSeq-i) + "/" + maxOrderSeq;
 			await parseHistoryDetailPage(orderItem.order_no);
 		}
@@ -163,32 +163,26 @@ async function parseHistoryDetailPage(orderNo) {
 		var bookTd = UTIL.findNextTdByThTxt(sectionElement, "구분");
 		var bookList = $(bookTd).find(".book_title");
 		bookList.each(function() {
-			var bookValue = {};
-			bookValue.order_no = orderNo;
-			
 			//책 ID
 			var bookE = $(this).find("a");
 			var bookId = bookE.attr("href").replace("/books/","");
-			bookValue.book_id = bookId;
-			bookIdList.push(bookId);
 			
 			//구매금액
 			var priceStr = $(this).find(".price").text();
 			var price = UTIL.getNumber(priceStr);
-			bookValue.price = price || 0;
 			
-			//TODO book 테이블에서 book_id 검색 후 있는 데이터일 경우 book_nm, book_seq 같은 정보 추가
-			setData("o_order_detail", orderNo+"_"+bookId, bookValue);
+			bookIdList.push({[bookId]: price});
+			//TODO book 테이블에서 book_id 검색 후 없으면 need update flag Y로 insert
 		});
 		
 		var orderHeaderItem = {book_id_list: bookIdList};
 		//금액관련
-		orderHeaderItem.total_amt = UTIL.findNextTdByThTxt(sectionElement, "주문 금액").find("span.museo_sans").text();
-		orderHeaderItem.cupon_discount = UTIL.findNextTdByThTxt(sectionElement, "쿠폰 할인").find("span.museo_sans").text();
-		orderHeaderItem.used_ridicash = UTIL.findNextTdByThTxt(sectionElement, "리디캐시 사용액").find("span.museo_sans").text();
-		orderHeaderItem.used_ridipoint = UTIL.findNextTdByThTxt(sectionElement, "리디포인트 사용액").find("span.museo_sans").text();
-		orderHeaderItem.limited_ridipoint = UTIL.findNextTdByThTxt(sectionElement, "리디포인트 사용액").find("span.museo_sans").text();
-		orderHeaderItem.pg_amt = UTIL.findNextTdByThTxt(sectionElement, "PG 결제 금액").find("span.museo_sans").text();
+		orderHeaderItem.amt_total = UTIL.findNextTdByThTxt(sectionElement, "주문 금액").find("span.museo_sans").text();
+		orderHeaderItem.amt_discount_cupon = UTIL.findNextTdByThTxt(sectionElement, "쿠폰 할인").find("span.museo_sans").text();
+		orderHeaderItem.amt_cash = UTIL.findNextTdByThTxt(sectionElement, "리디캐시 사용액").find("span.museo_sans").text();
+		orderHeaderItem.amt_point = UTIL.findNextTdByThTxt(sectionElement, "리디포인트 사용액").find("span.museo_sans").text();
+//		orderHeaderItem.amt_point_limited = UTIL.findNextTdByThTxt(sectionElement, "리디포인트 사용액").find("span.museo_sans").text();
+		orderHeaderItem.amt_pg = UTIL.findNextTdByThTxt(sectionElement, "PG 결제 금액").find("span.museo_sans").text();
 		orderHeaderItem.pay_way = UTIL.findNextTdByThTxt(sectionElement, "결제 수단").text();
 		orderHeaderItem.reward_ridipoint = UTIL.findNextTdByThTxt(sectionElement, "적립 리디포인트").find("span.museo_sans").text();
 		
