@@ -7,9 +7,9 @@ var BG = {
 			headers: { 
 				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Whale/4.32.315.22 Safari/537.36',
 				'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
-				'Content-Type': 'application/x-www-form-urlencoded'
+				"Content-Type": (option.isResultJson)?"application/json":'application/x-www-form-urlencoded'
 			},
-			body: mtd === "POST" ? body : undefined
+			body: mtd === "POST" ? JSON.stringify(body) : undefined
 		})
 		.then(async (res) => {
 			try {

@@ -45,6 +45,7 @@ https://ridibooks.com/api/global/auth-variables
 }
 
 
+available_max_volume 값이 총 화 수랑 비슷하긴 한데 같진 않은듯? series_id 에 같은 작품의 book_id 뭘 넣어도 같은 return 돌아옴
 https://ridibooks.com/api/wait-free/875177449
 {
     "series_id": "875103701",
@@ -253,7 +254,7 @@ https://book-api.ridibooks.com/books?b_ids=5211000550,5211000548,5211000547
             "web_viewer": true
         }
     }
-}
+]
 
 POST
 https://library-api.ridibooks.com/books/units?t=1753170563793
@@ -440,32 +441,6 @@ https://library-api.ridibooks.com/items/main/?offset=0&limit=500&order_type=purc
     }
 }
 
-unit > 헤더정보인가?
-https://library-api.ridibooks.com/items/search/6800074?offset=0&limit=1&order_type=purchase_date&order_by=desc&t=1752737885958
-{
-    "items": [
-        {
-            "b_id": "2057281646",
-            "expire_date": "9999-12-31T23:59:59+09:00",
-            "is_ridiselect": false,
-            "ownership_text": "",
-            "purchase_date": "2024-11-13T09:07:30+09:00",
-            "remain_time": "",
-            "service_type": "normal"
-        }
-    ],
-    "unit": {
-        "id": 6800074,
-        "ownership_text": "",
-        "title": "데뷔 못 하면 죽는 병 걸림",
-        "type": "series",
-        "type_int": 2
-    },
-    "server_info": {
-        "server_date": "2025-07-17T16:38:06+09:00"
-    }
-}
-
 총 권수 검색
 TODO 연재중인 작품의 경우 update 체크가능
 https://library-api.ridibooks.com/items/search/6800074/count?order_type=purchase_date&order_by=desc&t=1752737885959
@@ -500,6 +475,65 @@ return
 
 https://library-api.ridibooks.com/items/main/?offset=0&limit=500&order_type=purchase_date&order_by=desc
 서재에 있는 unit list 추출
+{
+    "items": [
+        {
+            "b_id": "5211000554",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-23T18:18:29+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 5366465,
+            "unit_count": 539,
+            "unit_title": "이세계 착각 헌터",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "4761000207",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-20T01:25:46+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 5390849,
+            "unit_count": 69,
+            "unit_title": "너의 스탯이 보여!",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "5289000055",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-19T07:33:58+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 6727265,
+            "unit_count": 51,
+            "unit_title": "이세계 착각 헌터",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+        {
+            "b_id": "5163001315",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-16T22:22:17+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 3270382,
+            "unit_count": 123,
+            "unit_title": "패션(PASSION)",
+            "unit_type": "series",
+            "unit_type_int": 2
+        }
+    ],
+    "server_info": {
+        "server_date": "2025-07-25T15:55:42+09:00"
+    }
+}
 
 
 
