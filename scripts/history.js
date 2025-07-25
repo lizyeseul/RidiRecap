@@ -158,7 +158,7 @@ async function parseHistoryDetailPage(orderNo) {
 		var htmlDOM = parser.parseFromString(res, "text/html");
 		var sectionElement = $(htmlDOM).find(".buy_history_detail_table");
 		
-		var bookIdList = [];
+		var bookIdList = {};
 		//책 목록
 		var bookTd = UTIL.findNextTdByThTxt(sectionElement, "구분");
 		var bookList = $(bookTd).find(".book_title");
@@ -171,7 +171,8 @@ async function parseHistoryDetailPage(orderNo) {
 			var priceStr = $(this).find(".price").text();
 			var price = UTIL.getNumber(priceStr);
 			
-			bookIdList.push({[bookId]: price});
+			bookIdList[bookId] = price;
+			
 			//TODO book 테이블에서 book_id 검색 후 없으면 need update flag Y로 insert
 		});
 		
