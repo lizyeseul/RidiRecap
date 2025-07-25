@@ -2,16 +2,11 @@ var dbConnect;
 
 function initDB() {
 	var request = indexedDB.open(DB.name, DB.version);
-	request.onerror = (e) => {console.log("err")};
+	request.onerror = (e) => { console.log("err") };
 	request.onsuccess = (e) => { dbConnect = e.target.result; }
 	request.onupgradeneeded = (e) => {
 		dbConnect = e.target.result;
 		var os;
-		if(!dbConnect.objectStoreNames.contains("order_list")) {
-			os = dbConnect.createObjectStore("order_list", {autoIncrement: false});
-			os.createIndex("order_no", "order_no", {unique: false});
-		}
-
 		if(!dbConnect.objectStoreNames.contains("o_order_header")) {
 			os = dbConnect.createObjectStore("o_order_header", {autoIncrement: false});
 			os.createIndex("order_no", "order_no", {unique: true});
@@ -31,11 +26,12 @@ function getObjectStore(store_nm, mode) {
 	return dbConnect.transaction(store_nm, mode).objectStore(store_nm);
 }
 
-function setData(tbNm, data, key) {
+function setData(tbNm, key, data) {
 	var store = getObjectStore(tbNm,"readwrite");
 	var cursorRequest = store.openCursor(key);
 	cursorRequest.onsuccess = function(e) {
 		var cursor = e.target.result;
+		data.last_update_dttm = moment().toDate();
 		if(cursor) {
 //			console.info("update",data);
 			cursor.update(data);
@@ -48,6 +44,26 @@ function setData(tbNm, data, key) {
 	store.onerror = (e) => {console.error("store 요청 오류-setData: "+e.target.error)};
 	cursorRequest.onerror = (e) => {console.error("커서 요청 오류-setData: "+e.target.error)};
 }
+function updateData(tbNm, key, data) {
+	var store = getObjectStore(tbNm,"readwrite");
+	var cursorRequest = store.openCursor(key);
+	cursorRequest.onsuccess = function(e) {
+		var cursor = e.target.result;
+		data.last_update_dttm = moment().toDate();
+		if(cursor) {
+			var value = cursor.value;
+//			console.info("update",data);
+			cursor.update(Object.assign(value, data));
+		}
+		else {
+//			console.info("insert",key,data);
+			store.add(data, key);
+		}
+	}
+	store.onerror = (e) => {console.error("store 요청 오류-setData: "+e.target.error)};
+	cursorRequest.onerror = (e) => {console.error("커서 요청 오류-setData: "+e.target.error)};
+}
+
 
 function getMaxOnIdx(tbNm, idxNm) {
 	return new Promise((resolve, reject) => {

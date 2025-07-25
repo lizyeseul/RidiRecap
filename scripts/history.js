@@ -62,67 +62,62 @@ async function parseHistoryListPage(pageIdx) {
 		const res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
 		var htmlDOM = parser.parseFromString(res, "text/html");
 		var sectionElement = $(htmlDOM).find("#page_buy_history");
-		return parseHistoryListItem(UTIL.toNumber(pageIdx), sectionElement);
+//		return parseHistoryListItem(UTIL.toNumber(pageIdx), sectionElement);
+		var orderItemList = [];
+		var attr = "href";
+		var copyRidi = JSON.parse(localStorage.getItem("copyRidi"));
+		if(copyRidi.globals.isPc == true) {
+			attr = "data-href";
+			orderItemList = $(sectionElement).find(".buy_history_table tbody tr.js_rui_detail_link");
+		}
+		else {
+			//TODO 테스트 전, PC/모바일 세팅 방법 모르겠음
+			orderItemList = sectionElement.querySelector(".buy_list_wrap").querySelectorAll("li.list_item a");
+		}
+	
+		var maxOrderSeq = UTIL.toNumber(sessionStorage.getItem("maxOrderSeq")) || -1;
+		
+		for(var i=0; i<orderItemList.length; i++) {
+			var orderItem = orderItemList[i];
+			var orderValue = {};
+	
+			//주문번호
+			var orderNo = orderItem.getAttribute(attr);
+			orderNo = orderNo.replace(URL.history+"/","");
+			orderValue.order_no = orderNo;
+			
+			//주문시간
+			var tdList = $(orderItem).find("td");
+			var orderDttm = tdList[0].innerText;
+			var dtStr = orderDttm.match(/\d{4}\.\d{2}\.\d{2}/).toString();
+			var tmStr = orderDttm.match(/\d{2}:\d{2}/).toString();
+			orderValue.order_dttm = moment(dtStr+" "+tmStr, "YYYY.MM.DD HH:mm").toDate();
+			orderValue.order_dt = dtStr.replaceAll(".","");
+			
+			//주문 seq
+			var lastPageNum = UTIL.toNumber(sessionStorage.getItem("lastPageNum"));
+			var lastPageCnt = UTIL.toNumber(sessionStorage.getItem("lastPageCnt"));
+			var curPage = UTIL.toNumber(pageIdx);
+			var midPageCnt = 15 * Math.max(0, lastPageNum - curPage -1);
+			var orderSeq = (midPageCnt + lastPageCnt + ((lastPageNum!=curPage)?15:0) - i);
+			orderValue.order_seq = orderSeq;
+			
+			//총 결제금액
+			var totalAmtStr = $(orderItem).find(".main_value span")[0].innerText;
+			var totalAmt = UTIL.getNumber(totalAmtStr);
+			orderValue.total_amt = totalAmt;
+			
+			setData("o_order_header", orderNo, orderValue);
+			
+			if(orderSeq <= maxOrderSeq) {
+				return false;
+			}
+		}
+		return true;
 	}
 	catch(e) {
 		console.error("parseHistoryListPage 오류:", e);
 	}
-}
-
-function parseHistoryListItem(curPage, sectionElement) {
-	var orderItemList = [];
-	var attr = "href";
-	var copyRidi = JSON.parse(localStorage.getItem("copyRidi"));
-	if(copyRidi.globals.isPc == true) {
-		attr = "data-href";
-		orderItemList = $(sectionElement).find(".buy_history_table tbody tr.js_rui_detail_link");
-	}
-	else {
-		//TODO 테스트 전, PC/모바일 세팅 방법 모르겠음
-		orderItemList = sectionElement.querySelector(".buy_list_wrap").querySelectorAll("li.list_item a");
-	}
-
-	var maxOrderSeq = UTIL.toNumber(sessionStorage.getItem("maxOrderSeq")) || -1;
-	
-	for(var i=0; i<orderItemList.length; i++) {
-		var orderItem = orderItemList[i];
-		var orderValue = {};
-
-		//주문번호
-		var orderNo = orderItem.getAttribute(attr);
-		orderNo = orderNo.replace(URL.history+"/","");
-		orderValue.order_no = orderNo;
-		
-		//주문시간
-		var tdList = $(orderItem).find("td");
-		var orderDttm = tdList[0].innerText;
-		var dtStr = orderDttm.match(/\d{4}\.\d{2}\.\d{2}/).toString();
-		var tmStr = orderDttm.match(/\d{2}:\d{2}/).toString();
-		orderValue.order_dttm = moment(dtStr+" "+tmStr, "YYYY.MM.DD HH:mm").toDate();
-		orderValue.order_dt = dtStr.replaceAll(".","");
-		
-		//주문 seq
-		var lastPageNum = UTIL.toNumber(sessionStorage.getItem("lastPageNum"));
-		var lastPageCnt = UTIL.toNumber(sessionStorage.getItem("lastPageCnt"));
-		var midPageCnt = 15 * Math.max(0, lastPageNum - curPage -1);
-		var orderSeq = (midPageCnt + lastPageCnt + ((lastPageNum!=curPage)?15:0) - i);
-		orderValue.order_seq = orderSeq;
-		
-		//총 결제금액
-		var totalAmtStr = $(orderItem).find(".main_value span")[0].innerText;
-		var totalAmt = UTIL.getNumber(totalAmtStr);
-		orderValue.total_amt = totalAmt;
-		
-		//마지막 업데이트 시각
-		orderValue.last_update_dttm = moment().toDate();
-		
-		setData("o_order_header", orderValue, orderNo);
-		
-		if(orderSeq <= maxOrderSeq) {
-			return false;
-		}
-	}
-	return true;
 }
 
 /*
@@ -137,9 +132,18 @@ async function syncOrderDetail() {
 		$("#parse_log")[0].innerText = "no order detail to sync";
 		return;
 	}
-	var orderItem = await getUniqueValue("o_order_header", "order_seq", maxOrderSeq);	//TEST 제일 마지막 주문번호 파싱
-	if(UTIL.isNotEmpty(orderItem)) {
-		await parseHistoryDetailPage(orderItem.order_no);
+//	for(var i=maxOrderSeq; i>=1; i--) {	//TODO yslee 개수가 많아서 분할하든 비동기로 바꾸든 해야할 듯
+	for(var i=maxOrderSeq; i>=maxOrderSeq-10; i--) {	//TEST
+		var orderItem = await getUniqueValue("o_order_header", "order_seq", i);
+		if(UTIL.isNotEmpty(orderItem)) {
+			var isExist = UTIL.isNotEmpty(await getValueByIdx("o_order_detail", "order_no", orderItem.order_no));
+			if(isExist) {
+				$("#parse_log")[0].innerText = "sync order detail end1";
+				return;
+			}
+			$("#parse_log")[0].innerText = "detail: "+(maxOrderSeq-i) + "/" + maxOrderSeq;
+			await parseHistoryDetailPage(orderItem.order_no);
+		}
 	}
 
 	$("#parse_log")[0].innerText = "sync order detail end";
@@ -152,26 +156,49 @@ async function parseHistoryDetailPage(orderNo) {
 	try {
 		const res = await UTIL.request(URL.base+URL.history+"/"+orderNo, null, null);
 		var htmlDOM = parser.parseFromString(res, "text/html");
-		var sectionElement = $(htmlDOM).find("#buy_history_detail_table");
-		return parseHistoryDetailItem(orderNo, sectionElement);
+		var sectionElement = $(htmlDOM).find(".buy_history_detail_table");
+		
+		var bookIdList = [];
+		//책 목록
+		var bookTd = UTIL.findNextTdByThTxt(sectionElement, "구분");
+		var bookList = $(bookTd).find(".book_title");
+		bookList.each(function() {
+			var bookValue = {};
+			bookValue.order_no = orderNo;
+			
+			//책 ID
+			var bookE = $(this).find("a");
+			var bookId = bookE.attr("href").replace("/books/","");
+			bookValue.book_id = bookId;
+			bookIdList.push(bookId);
+			
+			//구매금액
+			var priceStr = $(this).find(".price").text();
+			var price = UTIL.getNumber(priceStr);
+			bookValue.price = price || 0;
+			
+			//TODO book 테이블에서 book_id 검색 후 있는 데이터일 경우 book_nm, book_seq 같은 정보 추가
+			setData("o_order_detail", orderNo+"_"+bookId, bookValue);
+		});
+		
+		var orderHeaderItem = {book_id_list: bookIdList};
+		//금액관련
+		orderHeaderItem.total_amt = UTIL.findNextTdByThTxt(sectionElement, "주문 금액").find("span.museo_sans").text();
+		orderHeaderItem.cupon_discount = UTIL.findNextTdByThTxt(sectionElement, "쿠폰 할인").find("span.museo_sans").text();
+		orderHeaderItem.used_ridicash = UTIL.findNextTdByThTxt(sectionElement, "리디캐시 사용액").find("span.museo_sans").text();
+		orderHeaderItem.used_ridipoint = UTIL.findNextTdByThTxt(sectionElement, "리디포인트 사용액").find("span.museo_sans").text();
+		orderHeaderItem.limited_ridipoint = UTIL.findNextTdByThTxt(sectionElement, "리디포인트 사용액").find("span.museo_sans").text();
+		orderHeaderItem.pg_amt = UTIL.findNextTdByThTxt(sectionElement, "PG 결제 금액").find("span.museo_sans").text();
+		orderHeaderItem.pay_way = UTIL.findNextTdByThTxt(sectionElement, "결제 수단").text();
+		orderHeaderItem.reward_ridipoint = UTIL.findNextTdByThTxt(sectionElement, "적립 리디포인트").find("span.museo_sans").text();
+		
+		updateData("o_order_header", orderNo, orderHeaderItem);
+		return true;
 	}
 	catch(e) {
 		console.error("parseHistoryDetailPage 오류:", e);
 	}
 }
-function parseHistoryDetailItem(orderNo, sectionElement) {
-	var orderInfoTable = $(sectionElement).find(".book_title");
-
-	// for(var i=0; i<orderItemList.length; i++) {
-		// var orderItem = orderItemList[i];
-		var orderDetailValue = {};
-		
-		setData("o_order_detail", orderDetailValue, orderNo);
-		
-	// }
-	return true;
-}
-
 async function setRidiGlobalVal() {
 	try {
 		localStorage.removeItem("copyRidi");

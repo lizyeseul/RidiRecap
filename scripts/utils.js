@@ -43,7 +43,7 @@ var UTIL = {
 	isNotEmpty: function(obj) {
 		return !UTIL.isEmpty(obj);
 	},
-
+	
 	request: function(callUrl, body, options) {
 		var optionObj = options || {};
 		optionObj.isResultJson = optionObj.isResultJson || false;
@@ -65,6 +65,11 @@ var UTIL = {
 				}
 			);
 		});
+	},
+	
+	
+	findNextTdByThTxt: function(bodyE, thTxt) {
+		return $(bodyE).find("th").filter(function() {return $(this).text().trim() === thTxt;}).next("td");
 	},
 
 	jsObjectToJson: function(str) {

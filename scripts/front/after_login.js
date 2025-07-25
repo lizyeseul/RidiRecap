@@ -1,7 +1,9 @@
 $(document).ready(function() {
     initDB();
     setRidiGlobalVal();
+    updatePageInfo();
     $(document).on("click", "#init_page_info", () => updatePageInfo())
+    $(document).on("click", "#init_db", () => initDB())
     $(document).on("click", "#load_order_list", () => syncOrderList())
     $(document).on("click", "#load_detail_list", () => syncOrderDetail())
     // $(document).on("click", "#load_index", () => {
