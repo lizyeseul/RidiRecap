@@ -23,6 +23,8 @@
 	},
 	"permissions": ["sidePanel", "webRequest"],
 	"host_permissions": [
-		"https://ridibooks.com/*"
+		"https://ridibooks.com/*",
+		"https://library-api.ridibooks.com/*",
+		"https://book-api.ridibooks.com/*"
 	]
 }
