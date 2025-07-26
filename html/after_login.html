@@ -19,6 +19,14 @@
 	<button id="init_page_info">
 		초기값 세팅
 	</button>
+	<!-- <button id="load_index">
+		홈으로
+	</button> -->
+	
+	<br><hr><br>
+
+	<input type="number" id="order_text_cnt" min="0"/>
+	<br>
 	<button id="load_order_list">
 		결제내역 목록 동기화
 	</button>
@@ -26,15 +34,20 @@
 		결제내역 상세 동기화
 	</button>
 	<div id="parse_log"></div>
-	<!-- <button id="load_index">
-		홈으로
-	</button> -->
 	
 	<br><hr><br>
+
+	<button id="load_book_list">
+		책 동기화
+	</button>
+	
+	<br><hr><br>
+
 	<button id="test">
 		테스트
 	</button>
 </html>
 
-<script src="/scripts/history.js"></script>
+<script src="/scripts/sync/sync_order.js"></script>
+<script src="/scripts/sync/sync_book.js"></script>
 <script src="/scripts/front/after_login.js"></script>

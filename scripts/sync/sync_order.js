@@ -4,20 +4,36 @@ syncOrderList
 */
 async function syncOrderList() {
 	$("#parse_log")[0].innerText = "sync order list start";
-	// await updatePageInfo();
 	
 	var lastPageNum = sessionStorage.getItem("lastPageNum");
+	var testCnt = UTIL.toNumber($("#order_text_cnt").val()) || -1;
 
-	for(var pageIdx=1; pageIdx<=lastPageNum; pageIdx++) {	//TODO 주석해제, 전체 데이터 refresh버전
-//	for(var pageIdx=2; pageIdx>=1; pageIdx--) {	//TODO 테스트용
-//	for(var pageIdx=lastPageNum; pageIdx>=lastPageNum-1; pageIdx--) {	//TODO 테스트용
-		$("#parse_log")[0].innerText = pageIdx + "/" + lastPageNum;
-		var isContinue = await parseHistoryListPage(pageIdx);
-		if(!isContinue) {
-			break;
+	if(UTIL.isNotEmpty(testCnt) && testCnt > 0) {
+		testCnt = (lastPageNum < testCnt) ? lastPageNum : testCnt;
+		var delList = await getValueByIdx("o_order_header", "order_seq", { direction: "prev", limit: testCnt*15 });
+		for(var i=0; i<delList.length; i++) {
+			console.log("delete order: ", delList[i].order_no);
+			await deleteHistoryListPage(delList[i].order_no);
+		}
+
+		for(var pageIdx=1; pageIdx<=testCnt; pageIdx++) {
+			$("#parse_log")[0].innerText = pageIdx + "/" + testCnt;
+			await parseHistoryListPage(pageIdx, true);
+		}
+	}
+	else {
+		for(var pageIdx=1; pageIdx<=lastPageNum; pageIdx++) {
+			$("#parse_log")[0].innerText = pageIdx + "/" + lastPageNum;
+			var isContinue = await parseHistoryListPage(pageIdx, false);
+			if(!isContinue) {
+				break;
+			}
 		}
 	}
 	$("#parse_log")[0].innerText = "sync order list end";
+}
+async function deleteHistoryListPage(orderNo) {
+	deleteData("o_order_header", orderNo);
 }
 /*
 updatePageInfo
@@ -57,7 +73,7 @@ async function updatePageInfo() {
 parseHistoryListPage
 param pageIdx 크롤링할 결제내역 페이지 번호
 */
-async function parseHistoryListPage(pageIdx) {
+async function parseHistoryListPage(pageIdx, isTest) {
 	try {
 		const res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
 		var htmlDOM = parser.parseFromString(res, "text/html");
@@ -109,7 +125,7 @@ async function parseHistoryListPage(pageIdx) {
 			
 			setData("o_order_header", orderNo, orderValue);
 			
-			if(orderSeq <= maxOrderSeq) {
+			if(orderSeq <= maxOrderSeq && !isTest) {
 				return false;
 			}
 		}
@@ -136,11 +152,6 @@ async function syncOrderDetail() {
 	for(var i=maxOrderSeq; i>=maxOrderSeq-10; i--) {	//TEST
 		var orderItem = await getUniqueValue("o_order_header", "order_seq", i);
 		if(UTIL.isNotEmpty(orderItem)) {
-//			var isExist = UTIL.isNotEmpty(await getValueByIdx("o_order_detail", "order_no", orderItem.order_no));
-//			if(isExist) {
-//				$("#parse_log")[0].innerText = "sync order detail end1";
-//				return;
-//			}
 			$("#parse_log")[0].innerText = "detail: "+(maxOrderSeq-i) + "/" + maxOrderSeq;
 			await parseHistoryDetailPage(orderItem.order_no);
 		}
