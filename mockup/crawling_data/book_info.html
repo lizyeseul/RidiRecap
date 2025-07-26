@@ -1,47 +1,39 @@
 <script>
-//2008055509 던그화 대여
-//2008055409 던그화 구매
+/*
+//https://book-api.ridibooks.com/books?b_ids=2008055514,2008055513,2008055510
+구매정보 없는 book 기본 정보
 
-/*{
-	"875103703": {
-		"book_id": "875103703",
-		"book_title": "백작가의 망나니가 되었다 3화",
-		"series_id": "875103701",
-		"volume": "3",
-		"series_unit": "화",
-		"genre": "fantasy",
-		"is_series": "1",
-		"is_series_complete": "0",
-		"open_date": "2018-10-02 00:01:14",
-		"is_adult_only": false,
-		"user_book": {
-			"b_id": "875116496",
-			"u_id": "lys0star",
-			"service_type": "normal",
-			"status": "NEW",
-			"is_readable": true,
-			"reg_date": null,
-			"rental_period": null,
-			"remaining_rental_period": "7979년 276일 남음",
-			"expired": false,
-			"expire_date": "9999-12-31 23:59:59"
-		},
-		"num_chars": 3893,
-		"thumbnail": "//img.ridicdn.net/thumbnail/875103703",
-		"order_info": {
-			"order_no": "2025070353525065",
-			"order_dt": "2025.07.03",
-			"order_dttm": "2025.07.03 14:52",
-			"order_amt": 100
-		}
-	}
-}*/
+https://library-api.ridibooks.com/items
+BODY {b_ids: ["2008055545","2008055513","2008055545"]}
+구매정보 정보
+*/
 
+/*
+book id
+book nm
+series id
+unit id <lib-api
+unit nm
+volumne 화 수
+썸넬 url
+구매 금액<order
+결제 방식
+주문번호(latest) 
+구매일시(latest)
+구매 방식(대여/구매)<lib-api service_type
+만료일시<lib-api
+만료여부<만료일시로 계산, 데이터 저장보다는 조회때마다 계산
+장르
+글자수? 용량?
 
-
-
-
-
+작가/출판사
+전체회차수
+완결/연재 <book-api series.property.is_completed
+구매화수/미구매화수
+태그?
+대표썸넬=최신화 표지
+썸넬목록
+*/
 
 
 

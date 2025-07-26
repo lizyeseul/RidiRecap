@@ -1,0 +1,75 @@
+{
+    "items": [
+        {
+            "b_id": "2008055510",
+            "display_order": 102,
+            "display_title": "던전을 그리는 화가",
+            "display_type": "series",
+            "display_unit_id": 7543057,
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "hidden": false,
+            "is_deleted": false,
+            "purchase_date": "2025-07-03T14:50:02+09:00",
+            "remain_time": "",
+            "search_order": 102,
+            "search_title": "던전을 그리는 화가",
+            "search_type": "series",
+            "search_unit_id": 7543057,
+            "service_type": "normal"
+        },
+        {
+            "b_id": "2008055513",
+            "display_order": 105,
+            "display_title": "던전을 그리는 화가",
+            "display_type": "series",
+            "display_unit_id": 7543057,
+            "expire_date": "2025-10-01T14:48:52+09:00",
+            "hidden": false,
+            "is_deleted": false,
+            "purchase_date": "2025-07-03T14:48:52+09:00",
+            "remain_time": "66일 21시간 남음",
+            "search_order": 105,
+            "search_title": "던전을 그리는 화가",
+            "search_type": "series",
+            "search_unit_id": 7543057,
+            "service_type": "rent"
+        },
+        {
+            "b_id": "875145874",
+            "display_order": 799,
+            "display_title": "백작가의 망나니가 되었다",
+            "display_type": "series",
+            "display_unit_id": 1829772,
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "hidden": false,
+            "is_deleted": false,
+            "purchase_date": "2025-04-14T22:42:00+09:00",
+            "remain_time": "",
+            "search_order": 799,
+            "search_title": "백작가의 망나니가 되었다",
+            "search_type": "series",
+            "search_unit_id": 1829772,
+            "service_type": "normal"
+        },
+        {
+            "b_id": "875145890",
+            "display_order": 800,
+            "display_title": "백작가의 망나니가 되었다",
+            "display_type": "series",
+            "display_unit_id": 1829772,
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "hidden": false,
+            "is_deleted": false,
+            "purchase_date": "2025-04-14T22:42:00+09:00",
+            "remain_time": "",
+            "search_order": 800,
+            "search_title": "백작가의 망나니가 되었다",
+            "search_type": "series",
+            "search_unit_id": 1829772,
+            "service_type": "normal"
+        }
+    ],
+    "server_info": {
+        "server_date": "2025-07-26T17:27:13+09:00"
+    }
+}

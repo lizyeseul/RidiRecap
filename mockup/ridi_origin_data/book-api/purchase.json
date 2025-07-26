@@ -1,0 +1,125 @@
+    {
+        "id": "2008055510",
+        "title": {
+            "main": "던전을 그리는 화가 102화"
+        },
+        "thumbnail": {
+            "small": "https://img.ridicdn.net/cover/2008055510/small#1",
+            "large": "https://img.ridicdn.net/cover/2008055510/large#1",
+            "xxlarge": "https://img.ridicdn.net/cover/2008055510/xxlarge#1"
+        },
+        "authors": [
+            {
+                "id": 157145,
+                "name": "취미글주의",
+                "role": "author"
+            }
+        ],
+        "categories": [
+            {
+                "id": 1753,
+                "name": "현대 판타지",
+                "genre": "fantasy",
+                "sub_genre": "fantasy_serial",
+                "is_series_category": true,
+                "ancestor_ids": [
+                    1750,
+                    0
+                ]
+            }
+        ],
+        "price_info": {
+            "buy": {
+                "regular_price": 100,
+                "price": 100,
+                "discount_percentage": 0
+            }
+        },
+        "series": {
+            "id": "2008055409",
+            "volume": 102,
+            "property": {
+                "is_comic_hd": false,
+                "is_completed": true,
+                "is_serial": true,
+                "is_serial_complete": true,
+                "is_wait_free": true,
+                "last_volume_id": "2008055833",
+                "opened_book_count": 425,
+                "opened_last_volume_id": "2008055833",
+                "title": "던전을 그리는 화가",
+                "total_book_count": 425,
+                "unit": "화",
+                "prev_books": {
+                    "2008055509": {
+                        "b_id": "2008055509",
+                        "is_opened": true,
+                        "use_free_serial_schedule": false
+                    }
+                },
+                "next_books": {
+                    "2008055511": {
+                        "b_id": "2008055511",
+                        "is_opened": true,
+                        "use_free_serial_schedule": false
+                    }
+                }
+            },
+            "price_info": {
+                "buy": {
+                    "total_book_count": 425,
+                    "free_book_count": 25,
+                    "regular_price": 40000,
+                    "price": 40000,
+                    "discount_percentage": 0
+                }
+            }
+        },
+        "file": {
+            "size": 401,
+            "is_comic_hd": false,
+            "is_drm_free": false,
+            "is_webtoon": false,
+            "variants": [
+                {
+                    "quality": "recommended",
+                    "size": 401
+                }
+            ],
+            "format": "epub",
+            "is_comic": false,
+            "is_manga": false,
+            "character_count": 4736
+        },
+        "property": {
+            "is_adult_only": false,
+            "is_magazine": false,
+            "is_new_book": false,
+            "is_novel": false,
+            "is_open": true,
+            "is_somedeal": false,
+            "is_trial": false,
+            "is_wait_free": true,
+            "review_display_id": "2008055409",
+            "use_free_serial_schedule": false,
+            "preview_rate": 0
+        },
+        "publish": {
+            "ebook_publish": "2025-07-03T00:00:00+09:00",
+            "ridibooks_publish": "2025-07-03T03:00:39+09:00",
+            "ridibooks_register": "2025-06-25T17:21:48+09:00"
+        },
+        "publisher": {
+            "id": 2008,
+            "name": "A·LIST",
+            "cp_name": "브리드_E/P"
+        },
+        "support": {
+            "android": true,
+            "ios": true,
+            "paper": true,
+            "mac": true,
+            "windows": true,
+            "web_viewer": true
+        }
+    }
