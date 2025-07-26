@@ -176,7 +176,7 @@ async function parseHistoryDetailPage(orderNo) {
 			//TODO book 테이블에서 book_id 검색 후 없으면 need update flag Y로 insert
 		});
 		
-		var orderHeaderItem = {book_id_list: bookIdList};
+		var orderHeaderItem = {book_list: bookIdList};
 		//금액관련
 		orderHeaderItem.amt_total = UTIL.findNextTdByThTxt(sectionElement, "주문 금액").find("span.museo_sans").text();
 		orderHeaderItem.amt_discount_cupon = UTIL.findNextTdByThTxt(sectionElement, "쿠폰 할인").find("span.museo_sans").text();
@@ -186,7 +186,14 @@ async function parseHistoryDetailPage(orderNo) {
 		orderHeaderItem.amt_pg = UTIL.findNextTdByThTxt(sectionElement, "PG 결제 금액").find("span.museo_sans").text();
 		orderHeaderItem.pay_way = UTIL.findNextTdByThTxt(sectionElement, "결제 수단").text();
 		orderHeaderItem.reward_ridipoint = UTIL.findNextTdByThTxt(sectionElement, "적립 리디포인트").find("span.museo_sans").text();
-		
+
+		orderHeaderItem.amt_total = UTIL.getNumber(orderHeaderItem.amt_total);
+		orderHeaderItem.amt_discount_cupon = UTIL.getNumber(orderHeaderItem.amt_discount_cupon);
+		orderHeaderItem.amt_cash = UTIL.getNumber(orderHeaderItem.amt_cash);
+		orderHeaderItem.amt_point = UTIL.getNumber(orderHeaderItem.amt_point);
+		orderHeaderItem.amt_pg = UTIL.getNumber(orderHeaderItem.amt_pg);
+		orderHeaderItem.reward_ridipoint = UTIL.getNumber(orderHeaderItem.reward_ridipoint);
+
 		updateData("o_order_header", orderNo, orderHeaderItem);
 		return true;
 	}
