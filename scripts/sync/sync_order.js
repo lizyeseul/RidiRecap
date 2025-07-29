@@ -148,7 +148,7 @@ async function syncOrderDetail() {
 		$("#parse_log")[0].innerText = "no order detail to sync";
 		return;
 	}
-//	for(var i=maxOrderSeq; i>=1; i--) {	//TODO yslee 개수가 많아서 분할하든 비동기로 바꾸든 해야할 듯
+//	for(var i=maxOrderSeq; i>=1; i--) {	//TODO yslee 개수가 많아서 분할하든 비동기로 바꾸든 해야할 듯, 15개 동시에 쏘고 리턴 모아서 처리 가능한가?
 	for(var i=maxOrderSeq; i>=maxOrderSeq-10; i--) {	//TEST
 		var orderItem = await getUniqueValue("o_order_header", "order_seq", i);
 		if(UTIL.isNotEmpty(orderItem)) {

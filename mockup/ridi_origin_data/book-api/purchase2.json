@@ -1,0 +1,370 @@
+[
+    {
+        "id": "425422929",
+        "title": {
+            "main": "어두운 바다의 등불이 되어 420화"
+        },
+        "thumbnail": {
+            "small": "https://img.ridicdn.net/cover/425422929/small#1",
+            "large": "https://img.ridicdn.net/cover/425422929/large#1",
+            "xxlarge": "https://img.ridicdn.net/cover/425422929/xxlarge#1"
+        },
+        "authors": [
+            {
+                "id": 125604,
+                "name": "연산호",
+                "role": "author"
+            }
+        ],
+        "categories": [
+            {
+                "id": 1753,
+                "name": "현대 판타지",
+                "genre": "fantasy",
+                "sub_genre": "fantasy_serial",
+                "is_series_category": true,
+                "ancestor_ids": [
+                    1750,
+                    0
+                ]
+            }
+        ],
+        "price_info": {
+            "buy": {
+                "regular_price": 100,
+                "price": 100,
+                "discount_percentage": 0
+            }
+        },
+        "series": {
+            "id": "425270925",
+            "volume": 420,
+            "property": {
+                "is_comic_hd": false,
+                "is_completed": true,
+                "is_serial": true,
+                "is_serial_complete": true,
+                "is_wait_free": true,
+                "last_volume_id": "425423178",
+                "opened_book_count": 422,
+                "opened_last_volume_id": "425423178",
+                "title": "어두운 바다의 등불이 되어",
+                "total_book_count": 422,
+                "unit": "화",
+                "prev_books": {
+                    "425422809": {
+                        "b_id": "425422809",
+                        "is_opened": true,
+                        "use_free_serial_schedule": false
+                    }
+                },
+                "next_books": {
+                    "425423071": {
+                        "b_id": "425423071",
+                        "is_opened": true,
+                        "use_free_serial_schedule": false
+                    }
+                }
+            },
+            "price_info": {
+                "buy": {
+                    "total_book_count": 422,
+                    "free_book_count": 26,
+                    "regular_price": 39600,
+                    "price": 39600,
+                    "discount_percentage": 0
+                }
+            }
+        },
+        "file": {
+            "size": 695,
+            "is_comic_hd": false,
+            "is_drm_free": false,
+            "is_webtoon": false,
+            "variants": [
+                {
+                    "quality": "recommended",
+                    "size": 695
+                }
+            ],
+            "format": "epub",
+            "is_comic": false,
+            "is_manga": false,
+            "character_count": 4798
+        },
+        "property": {
+            "is_adult_only": false,
+            "is_magazine": false,
+            "is_new_book": false,
+            "is_novel": false,
+            "is_open": true,
+            "is_somedeal": false,
+            "is_trial": false,
+            "is_wait_free": false,
+            "review_display_id": "425270925",
+            "use_free_serial_schedule": false,
+            "preview_rate": 0
+        },
+        "publish": {
+            "ebook_publish": "2024-03-18T00:00:00+09:00",
+            "ridibooks_publish": "2024-03-18T18:02:16+09:00",
+            "ridibooks_register": "2024-03-18T17:58:53+09:00"
+        },
+        "publisher": {
+            "id": 425,
+            "name": "문피아",
+            "cp_name": "문피아_E/P"
+        },
+        "support": {
+            "android": true,
+            "ios": true,
+            "paper": true,
+            "mac": true,
+            "windows": true,
+            "web_viewer": true
+        }
+    },
+    {
+        "id": "425423071",
+        "title": {
+            "main": "어두운 바다의 등불이 되어 421화"
+        },
+        "thumbnail": {
+            "small": "https://img.ridicdn.net/cover/425423071/small#1",
+            "large": "https://img.ridicdn.net/cover/425423071/large#1",
+            "xxlarge": "https://img.ridicdn.net/cover/425423071/xxlarge#1"
+        },
+        "authors": [
+            {
+                "id": 125604,
+                "name": "연산호",
+                "role": "author"
+            }
+        ],
+        "categories": [
+            {
+                "id": 1753,
+                "name": "현대 판타지",
+                "genre": "fantasy",
+                "sub_genre": "fantasy_serial",
+                "is_series_category": true,
+                "ancestor_ids": [
+                    1750,
+                    0
+                ]
+            }
+        ],
+        "price_info": {
+            "buy": {
+                "regular_price": 100,
+                "price": 100,
+                "discount_percentage": 0
+            }
+        },
+        "series": {
+            "id": "425270925",
+            "volume": 421,
+            "property": {
+                "is_comic_hd": false,
+                "is_completed": true,
+                "is_serial": true,
+                "is_serial_complete": true,
+                "is_wait_free": true,
+                "last_volume_id": "425423178",
+                "opened_book_count": 422,
+                "opened_last_volume_id": "425423178",
+                "title": "어두운 바다의 등불이 되어",
+                "total_book_count": 422,
+                "unit": "화",
+                "prev_books": {
+                    "425422929": {
+                        "b_id": "425422929",
+                        "is_opened": true,
+                        "use_free_serial_schedule": false
+                    }
+                },
+                "next_books": {
+                    "425423178": {
+                        "b_id": "425423178",
+                        "is_opened": true,
+                        "use_free_serial_schedule": false
+                    }
+                }
+            },
+            "price_info": {
+                "buy": {
+                    "total_book_count": 422,
+                    "free_book_count": 26,
+                    "regular_price": 39600,
+                    "price": 39600,
+                    "discount_percentage": 0
+                }
+            }
+        },
+        "file": {
+            "size": 695,
+            "is_comic_hd": false,
+            "is_drm_free": false,
+            "is_webtoon": false,
+            "variants": [
+                {
+                    "quality": "recommended",
+                    "size": 695
+                }
+            ],
+            "format": "epub",
+            "is_comic": false,
+            "is_manga": false,
+            "character_count": 4872
+        },
+        "property": {
+            "is_adult_only": false,
+            "is_magazine": false,
+            "is_new_book": false,
+            "is_novel": false,
+            "is_open": true,
+            "is_somedeal": false,
+            "is_trial": false,
+            "is_wait_free": false,
+            "review_display_id": "425270925",
+            "use_free_serial_schedule": false,
+            "preview_rate": 0
+        },
+        "publish": {
+            "ebook_publish": "2024-03-20T00:00:00+09:00",
+            "ridibooks_publish": "2024-03-20T18:03:48+09:00",
+            "ridibooks_register": "2024-03-20T18:00:01+09:00"
+        },
+        "publisher": {
+            "id": 425,
+            "name": "문피아",
+            "cp_name": "문피아_E/P"
+        },
+        "support": {
+            "android": true,
+            "ios": true,
+            "paper": true,
+            "mac": true,
+            "windows": true,
+            "web_viewer": true
+        }
+    },
+    {
+        "id": "425423178",
+        "title": {
+            "main": "어두운 바다의 등불이 되어 422화 (완결)"
+        },
+        "thumbnail": {
+            "small": "https://img.ridicdn.net/cover/425423178/small#1",
+            "large": "https://img.ridicdn.net/cover/425423178/large#1",
+            "xxlarge": "https://img.ridicdn.net/cover/425423178/xxlarge#1"
+        },
+        "authors": [
+            {
+                "id": 125604,
+                "name": "연산호",
+                "role": "author"
+            }
+        ],
+        "categories": [
+            {
+                "id": 1753,
+                "name": "현대 판타지",
+                "genre": "fantasy",
+                "sub_genre": "fantasy_serial",
+                "is_series_category": true,
+                "ancestor_ids": [
+                    1750,
+                    0
+                ]
+            }
+        ],
+        "price_info": {
+            "buy": {
+                "regular_price": 100,
+                "price": 100,
+                "discount_percentage": 0
+            }
+        },
+        "series": {
+            "id": "425270925",
+            "volume": 422,
+            "property": {
+                "is_comic_hd": false,
+                "is_completed": true,
+                "is_serial": true,
+                "is_serial_complete": true,
+                "is_wait_free": true,
+                "last_volume_id": "425423178",
+                "opened_book_count": 422,
+                "opened_last_volume_id": "425423178",
+                "title": "어두운 바다의 등불이 되어",
+                "total_book_count": 422,
+                "unit": "화",
+                "prev_books": {
+                    "425423071": {
+                        "b_id": "425423071",
+                        "is_opened": true,
+                        "use_free_serial_schedule": false
+                    }
+                }
+            },
+            "price_info": {
+                "buy": {
+                    "total_book_count": 422,
+                    "free_book_count": 26,
+                    "regular_price": 39600,
+                    "price": 39600,
+                    "discount_percentage": 0
+                }
+            }
+        },
+        "file": {
+            "size": 699,
+            "is_comic_hd": false,
+            "is_drm_free": false,
+            "is_webtoon": false,
+            "variants": [
+                {
+                    "quality": "recommended",
+                    "size": 699
+                }
+            ],
+            "format": "epub",
+            "is_comic": false,
+            "is_manga": false,
+            "character_count": 8756
+        },
+        "property": {
+            "is_adult_only": false,
+            "is_magazine": false,
+            "is_new_book": false,
+            "is_novel": false,
+            "is_open": true,
+            "is_somedeal": false,
+            "is_trial": false,
+            "is_wait_free": false,
+            "review_display_id": "425270925",
+            "use_free_serial_schedule": false,
+            "preview_rate": 0
+        },
+        "publish": {
+            "ebook_publish": "2024-03-22T00:00:00+09:00",
+            "ridibooks_publish": "2024-03-22T18:05:09+09:00",
+            "ridibooks_register": "2024-03-22T18:00:17+09:00"
+        },
+        "publisher": {
+            "id": 425,
+            "name": "문피아",
+            "cp_name": "문피아_E/P"
+        },
+        "support": {
+            "android": true,
+            "ios": true,
+            "paper": true,
+            "mac": true,
+            "windows": true,
+            "web_viewer": true
+        }
+    }
+]

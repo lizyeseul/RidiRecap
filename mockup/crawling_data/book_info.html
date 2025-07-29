@@ -29,25 +29,185 @@ volumne 화 수
 작가/출판사
 전체회차수
 완결/연재 <book-api series.property.is_completed
-구매화수/미구매화수
+구매화수 service_type purchase or rent /미구매화수 service_type none
 태그?
 대표썸넬=최신화 표지
 썸넬목록
+
+TODO 연재일정보
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
+
+
+
+1.구매한 작품 목록
+https://library-api.ridibooks.com/items/main/?offset=0&limit=500
+var res = {
+    "items": [
+        {
+            "b_id": "5211000556",
+            "service_type": "normal",
+            "is_ridiselect": false,
+            "purchase_date": "2025-07-29T12:54:53+09:00",
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "remain_time": "",
+            "unit_id": 5366465,
+            "unit_count": 541,
+            "unit_title": "이세계 착각 헌터",
+            "unit_type": "series",
+            "unit_type_int": 2
+        },
+    ],
+    "server_info": {
+        "server_date": "2025-07-29T15:36:44+09:00"
+    }
+};
+
+TB unit
+{
+	[key-unique] unit_id: res.items[i].unit_id,
+	unit_count: res.items[i].unit_count,
+	unit_title: res.items[i].unit_title,
+	unit_type: res.items[i].unit_type,	//뭔지 모르겠음 book series shelf
+	unit_type_int: res.items[i].unit_type_int,	//뭔지 모르겠음 3 book, 2 series, 4 shelf | book은 단권이긴한듯
+	//2 섭파 3396974
+	//3 19 5542669
+	//4 해리포터 3778645
+	
+	need_update_yn: (if new)?"Y":"N",
+	last_update_unit: res.server_info.server_date
+}
+
+key 기준으로 unit테이블 insert or last_update만 update
+
+
+
+2. unit별 b_id 목록
+테이블unit에서 need_update_yn Y인 unit목록 조회 var unit = []
+https://library-api.ridibooks.com/books/units/{unit[i].unit_id}/order?offset=0&limit={unit[i].unit_count+10}&order_type=unit_order&order_by=asc
+
+https://library-api.ridibooks.com/books/units/3396974/order?offset=0&limit=500&order_type=unit_order&order_by=asc
+var res = {
+    "items": [
+        {
+            "b_ids": [
+                "2008055409"	//출판정보 바뀌면 여러개 리턴됨 다른 정보 바뀌었을때도 그럴거같은데 데이터 확인은 못 함
+            ],
+            "order": 1
+        }
+    ],
+    "total_count": 425
+}
+
+TB book
+{
+	[key-unique] book_id: res.items[i].book_ids[end],
+	[key] unit_id: unit[i].unit_id,
+	order: res.items[i].order,
+	need_update_yn: (if new)?"Y":"N",
+}
+
+
+3. book 정보
+테이블 book에서 need_update_yn Y인 book목록 조회, unit_id도 검색조건에 거는게 나을듯
+var book = []
+
+대충 50 100개 묶어서 전송
+https://book-api.ridibooks.com/books?b_ids={book.join(',')}
+
+https://book-api.ridibooks.com/books?b_ids=425422929,425423071,425423178
+var res = ridi_origin_data/book-api/purchase2.json
+
+for(var i=0 ~ res.length)
+var b = res[i]
+b.id = book_id = merge key
+TB book
+{
+	[key-unique] book_id: book_id,
+	[key] unit_id: unit_id,
+	order: order,
+	//위 3개 update X
+	
+	need_update_yn: "N",
+	
+	series_id: b.series.id,
+	
+	title: b.title.main,
+	thumbnail: b.thumbnail,
+	authors: b.authors,
+	categories: b.categories,
+	
+	prev_books: b.series.property.prev_books,	//nullable
+	next_books: b.series.property.next_books,	//nullable
+
+	price_info: b.price_info.buy,
+	
+	file_size: b.file.size,
+	character_count: b.file.character_count,
+	
+	publish: b.publish
+}
+위 book unit_id 기준으로 TB unit에 need_update_yn Y인 경우/*기준변경필요*/ unit 테이블 업데이트
+unit정보일거같은데 book에 담겨온 정보들은 일단 volume 1번 데이터 기준으로 저장
+TB unit
+{
+	series_id: b.series.id,
+	volume: b.series.volume,	//order랑 비슷한 정보?
+	[key] is_completed: b.series.property.is_completed,	//update 가능성
+	is_serial: b.series.property.is_serial,
+	is_serial_complete: b.series.property.is_serial_complete,	//update 가능성
+	opened_last_volume_id: b.series.opened_last_volume_id,	//update 가능성
+	title: b.series.property.title,
+	total_book_count: b.series.property.total_book_count,	//update 가능성
+	unit: b.series.property.unit,
+	
+	is_webtoon: b.file.is_webtoon,
+	property: b.property,
+	publisher: b.publisher,
+	
+	service_type: "none"//미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
+}
+
+4. book 구매정보
+https://library-api.ridibooks.com/items
+body {b_ids: ["5211000509",...]}
+service_type 구매:normal, 대여:rent, 미구매:return목록에 없음
+3번이랑 같은 for안에서 반복?
+var res = {
+    "items": [
+        {
+            "b_id": "5211000509",
+            "display_order": 494,
+            "display_title": "이세계 착각 헌터",
+            "display_type": "series",
+            "display_unit_id": 5366465,
+            "expire_date": "9999-12-31T23:59:59+09:00",
+            "hidden": false,
+            "is_deleted": false,
+            "purchase_date": "2025-04-14T18:34:52+09:00",
+            "remain_time": "",
+            "search_order": 494,
+            "search_title": "이세계 착각 헌터",
+            "search_type": "series",
+            "search_unit_id": 5366465,
+            "service_type": "normal"
+        }
+    ],
+    "server_info": {
+        "server_date": "2025-07-29T17:13:02+09:00"
+    }
+}
+
+b_id 기즌 업뎃
+TB book {
+	expire_date: res.items[i].expire_date,
+	hidden: res.items[i].hidden,
+	is_deleted: res.items[i].is_deleted,
+	purchase_date: res.items[i].purchase_date,
+	remain_time: res.items[i].remain_time,
+	service_type: res.items[i].service_type
+	
+	last_purchase_info_update: res.server_info.server_date
+}

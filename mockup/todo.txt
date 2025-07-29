@@ -537,6 +537,8 @@ https://library-api.ridibooks.com/items/main/?offset=0&limit=500&order_type=purc
 
 
 
+https://ridibooks.com/books/5211000556?_rdt_sid=library_detail&_rdt_idx=0
+위 페이지에서 <script id="ISLANDS__PreparedData" type="application/json"> 파싱하면 얻을 정보 많긴 함 근데서 서재 만개가 넘어가는데 언제 파싱하고 앉았음
 
 
 
