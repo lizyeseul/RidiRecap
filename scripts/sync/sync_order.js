@@ -10,7 +10,7 @@ async function syncOrderList() {
 
 	if(UTIL.isNotEmpty(testCnt) && testCnt > 0) {
 		testCnt = (lastPageNum < testCnt) ? lastPageNum : testCnt;
-		var delList = await getValueByIdx("o_order_header", "order_seq", { direction: "prev", limit: testCnt*15 });
+		var delList = await getValueByIdx("store_order", "order_seq", { direction: "prev", limit: testCnt*15 });
 		for(var i=0; i<delList.length; i++) {
 			console.log("delete order: ", delList[i].order_no);
 			await deleteHistoryListPage(delList[i].order_no);
@@ -33,7 +33,7 @@ async function syncOrderList() {
 	$("#parse_log")[0].innerText = "sync order list end";
 }
 async function deleteHistoryListPage(orderNo) {
-	deleteData("o_order_header", orderNo);
+	deleteData("store_order", orderNo);
 }
 /*
 updatePageInfo
@@ -62,7 +62,7 @@ async function updatePageInfo() {
 			sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
 		}
 		
-		var maxOrderSeq = await getMaxOnIdx("o_order_header","order_seq");
+		var maxOrderSeq = await getMaxOnIdx("store_order","order_seq");
 		sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
 	}
 	catch(e) {
@@ -123,7 +123,7 @@ async function parseHistoryListPage(pageIdx, isTest) {
 			var totalAmt = UTIL.getNumber(totalAmtStr);
 			orderValue.total_amt = totalAmt;
 			
-			setData("o_order_header", orderNo, orderValue);
+			updateData("store_order", orderNo, orderValue, "reset");
 			
 			if(orderSeq <= maxOrderSeq && !isTest) {
 				return false;
@@ -150,7 +150,7 @@ async function syncOrderDetail() {
 	}
 //	for(var i=maxOrderSeq; i>=1; i--) {	//TODO yslee 개수가 많아서 분할하든 비동기로 바꾸든 해야할 듯, 15개 동시에 쏘고 리턴 모아서 처리 가능한가?
 	for(var i=maxOrderSeq; i>=maxOrderSeq-10; i--) {	//TEST
-		var orderItem = await getUniqueValue("o_order_header", "order_seq", i);
+		var orderItem = await getUniqueValue("store_order", "order_seq", i);
 		if(UTIL.isNotEmpty(orderItem)) {
 			$("#parse_log")[0].innerText = "detail: "+(maxOrderSeq-i) + "/" + maxOrderSeq;
 			await parseHistoryDetailPage(orderItem.order_no);
@@ -205,7 +205,7 @@ async function parseHistoryDetailPage(orderNo) {
 		orderHeaderItem.amt_pg = UTIL.getNumber(orderHeaderItem.amt_pg);
 		orderHeaderItem.reward_ridipoint = UTIL.getNumber(orderHeaderItem.reward_ridipoint);
 
-		updateData("o_order_header", orderNo, orderHeaderItem);
+		updateData("store_order", orderNo, orderHeaderItem, "update");
 		return true;
 	}
 	catch(e) {

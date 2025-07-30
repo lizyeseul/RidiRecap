@@ -155,7 +155,7 @@ TB unit
 {
 	series_id: b.series.id,
 	volume: b.series.volume,	//order랑 비슷한 정보?
-	[key] is_completed: b.series.property.is_completed,	//update 가능성
+	is_completed: b.series.property.is_completed,	//update 가능성
 	is_serial: b.series.property.is_serial,
 	is_serial_complete: b.series.property.is_serial_complete,	//update 가능성
 	opened_last_volume_id: b.series.opened_last_volume_id,	//update 가능성
@@ -211,3 +211,9 @@ TB book {
 	
 	last_purchase_info_update: res.server_info.server_date
 }
+
+
+//여기까지가 book정보 크롤링
+필요한 구매정보 형태는 order 테이블이랑 따로 합쳐서 관리
+
+대여 여러번하거나 대여 후 소장한 경우 주문내역 어떻게 되는지 확인해야하는데

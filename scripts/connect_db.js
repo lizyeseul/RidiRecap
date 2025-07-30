@@ -7,17 +7,30 @@ function initDB() {
 	request.onupgradeneeded = (e) => {
 		dbConnect = e.target.result;
 		var os;
-		if(!dbConnect.objectStoreNames.contains("o_order_header")) {
-			os = dbConnect.createObjectStore("o_order_header", {autoIncrement: false});
+		if(!dbConnect.objectStoreNames.contains("store_order")) {
+			os = dbConnect.createObjectStore("store_order", {autoIncrement: false});
 			os.createIndex("order_no", "order_no", {unique: true});
 			os.createIndex("order_dt", "order_dt", {unique: false});
 			os.createIndex("order_seq", "order_seq", {unique: true});
 		}
-//		if(!dbConnect.objectStoreNames.contains("o_order_detail")) {
-//			os = dbConnect.createObjectStore("o_order_detail", {autoIncrement: false});
-//			os.createIndex("order_no", "order_no", {unique: false});
-//			os.createIndex("book_id", "book_id", {unique: false});
-//		}
+		if(!dbConnect.objectStoreNames.contains("store_unit")) {
+			os = dbConnect.createObjectStore("store_unit", {autoIncrement: false});
+			os.createIndex("unit_id", "book_id", {unique: true});
+		}
+		if(!dbConnect.objectStoreNames.contains("store_book")) {
+			os = dbConnect.createObjectStore("store_book", {autoIncrement: false});
+			os.createIndex("book_id", "book_id", {unique: true});
+			os.createIndex("unit_id", "book_id", {unique: false});
+		}
+		if(!dbConnect.objectStoreNames.contains("store_purchase")) {
+			os = dbConnect.createObjectStore("store_purchase", {autoIncrement: true});
+			os.createIndex("order_no", "order_no", {unique: false});
+			os.createIndex("unit_id", "book_id", {unique: false});
+			os.createIndex("book_id", "book_id", {unique: false});
+			os.createIndex("order_dt", "order_dt", {unique: false});
+			os.createIndex("is_completed", "is_completed", {unique: false});
+			os.createIndex("service_type", "service_type", {unique: false});
+		}
 	}
 }
 function getObjectStore(store_nm, mode) {
@@ -90,42 +103,32 @@ function getMaxOnIdx(tbNm, idxNm) {
 	});
 }
 
-function setData(tbNm, key, data) {
+/**
+@param mode string 'reset':기존 value 무시하고 data로 set, 'update':기존 value에 data assign
+*/
+function updateData(tbNm, key, data, mode) {
+	mode = mode || "reset";
 	var store = getObjectStore(tbNm,"readwrite");
 	var cursorRequest = store.openCursor(key);
 	cursorRequest.onsuccess = function(e) {
 		var cursor = e.target.result;
 		data.last_update_dttm = moment().toDate();
 		if(cursor) {
-			// console.info("update",data);
-			cursor.update(data);
+			var updateData = data;
+			if(mode == "update") {
+				var cursorValue = cursor.value;
+				data = Object.assign(cursorValue, data);
+			}
+			console.debug("update: ",key,data);
+			cursor.update(updateData);
 		}
 		else {
-			// console.info("insert",key,data);
+			console.debug("insert: ",key,data);
 			store.add(data, key);
 		}
 	}
-	store.onerror = (e) => {console.error("store 요청 오류-setData: "+e.target.error)};
-	cursorRequest.onerror = (e) => {console.error("커서 요청 오류-setData: "+e.target.error)};
-}
-function updateData(tbNm, key, data) {
-	var store = getObjectStore(tbNm,"readwrite");
-	var cursorRequest = store.openCursor(key);
-	cursorRequest.onsuccess = function(e) {
-		var cursor = e.target.result;
-		data.last_update_dttm = moment().toDate();
-		if(cursor) {
-			var value = cursor.value;
-			// console.info("update",data);
-			cursor.update(Object.assign(value, data));
-		}
-		else {
-			// console.info("insert",key,data);
-			store.add(data, key);
-		}
-	}
-	store.onerror = (e) => {console.error("store 요청 오류-setData: "+e.target.error)};
-	cursorRequest.onerror = (e) => {console.error("커서 요청 오류-setData: "+e.target.error)};
+	store.onerror = (e) => {console.error("store 요청 오류-updateData: "+e.target.error)};
+	cursorRequest.onerror = (e) => {console.error("커서 요청 오류-updateData: "+e.target.error)};
 }
 
 function deleteData(tbNm, key) {
@@ -134,7 +137,7 @@ function deleteData(tbNm, key) {
 	cursorRequest.onsuccess = function(e) {
 		var cursor = e.target.result;
 		if(cursor) {
-			// console.info("delete",key);
+			console.debug("delete: ",key);
 			cursor.delete();
 		}
 	}

@@ -1,5 +1,6 @@
 var BG = {
 	request: function(callUrl, body, sendResponse, option) {
+		console.debug("callUrl: ", callUrl);
 		option = option || {};
 		var mtd = (body != null && typeof body != 'undefined') ? "POST" : "GET";
 		fetch(callUrl, {
@@ -16,10 +17,12 @@ var BG = {
 			try {
 				if(option.isResultJson) {
 					const result = await res.json(); 
+					console.debug("result: ",result);
 					sendResponse({ success: true, data: result });
 				}
 				else {
 					const json = await res.text(); 
+					console.debug("json: ",json);
 					sendResponse({ success: true, data: json });
 				}
 			} catch (parseErr) {
