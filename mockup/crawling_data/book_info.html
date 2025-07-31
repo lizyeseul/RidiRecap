@@ -105,7 +105,6 @@ TB book
 {
 	[key-unique] book_id: res.items[i].book_ids[end],
 	[key] unit_id: unit[i].unit_id,
-	order: res.items[i].order,
 	need_update_yn: (if new)?"Y":"N",
 }
 
@@ -127,7 +126,7 @@ TB book
 {
 	[key-unique] book_id: book_id,
 	[key] unit_id: unit_id,
-	order: order,
+	volume: b.series.volume,
 	//위 3개 update X
 	
 	need_update_yn: "N",
@@ -139,6 +138,7 @@ TB book
 	authors: b.authors,
 	categories: b.categories,
 	
+	volume: b.series.volume,	//order랑 비슷한 정보?
 	prev_books: b.series.property.prev_books,	//nullable
 	next_books: b.series.property.next_books,	//nullable
 
@@ -154,7 +154,6 @@ unit정보일거같은데 book에 담겨온 정보들은 일단 volume 1번 데�
 TB unit
 {
 	series_id: b.series.id,
-	volume: b.series.volume,	//order랑 비슷한 정보?
 	is_completed: b.series.property.is_completed,	//update 가능성
 	is_serial: b.series.property.is_serial,
 	is_serial_complete: b.series.property.is_serial_complete,	//update 가능성

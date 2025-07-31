@@ -15,17 +15,17 @@ function initDB() {
 		}
 		if(!dbConnect.objectStoreNames.contains("store_unit")) {
 			os = dbConnect.createObjectStore("store_unit", {autoIncrement: false});
-			os.createIndex("unit_id", "book_id", {unique: true});
+			os.createIndex("unit_id", "unit_id", {unique: true});
 		}
 		if(!dbConnect.objectStoreNames.contains("store_book")) {
 			os = dbConnect.createObjectStore("store_book", {autoIncrement: false});
 			os.createIndex("book_id", "book_id", {unique: true});
-			os.createIndex("unit_id", "book_id", {unique: false});
+			os.createIndex("unit_id", "unit_id", {unique: false});
 		}
 		if(!dbConnect.objectStoreNames.contains("store_purchase")) {
 			os = dbConnect.createObjectStore("store_purchase", {autoIncrement: true});
 			os.createIndex("order_no", "order_no", {unique: false});
-			os.createIndex("unit_id", "book_id", {unique: false});
+			os.createIndex("unit_id", "unit_id", {unique: false});
 			os.createIndex("book_id", "book_id", {unique: false});
 			os.createIndex("order_dt", "order_dt", {unique: false});
 			os.createIndex("is_completed", "is_completed", {unique: false});
@@ -117,9 +117,9 @@ function updateData(tbNm, key, data, mode) {
 			var updateData = data;
 			if(mode == "update") {
 				var cursorValue = cursor.value;
-				data = Object.assign(cursorValue, data);
+				updateData = Object.assign(cursorValue, data);
 			}
-			console.debug("update: ",key,data);
+			console.debug("update: ",key,updateData);
 			cursor.update(updateData);
 		}
 		else {

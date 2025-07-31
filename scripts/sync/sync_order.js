@@ -12,7 +12,7 @@ async function syncOrderList() {
 		testCnt = (lastPageNum < testCnt) ? lastPageNum : testCnt;
 		var delList = await getValueByIdx("store_order", "order_seq", { direction: "prev", limit: testCnt*15 });
 		for(var i=0; i<delList.length; i++) {
-			console.log("delete order: ", delList[i].order_no);
+			console.debug("delete order: ", delList[i].order_no);
 			await deleteHistoryListPage(delList[i].order_no);
 		}
 
@@ -126,9 +126,13 @@ async function parseHistoryListPage(pageIdx, isTest) {
 			updateData("store_order", orderNo, orderValue, "reset");
 			
 			if(orderSeq <= maxOrderSeq && !isTest) {
+				var maxOrderSeq = await getMaxOnIdx("store_order","order_seq");
+				sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
 				return false;
 			}
 		}
+		var maxOrderSeq = await getMaxOnIdx("store_order","order_seq");
+		sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
 		return true;
 	}
 	catch(e) {
