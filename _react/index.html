@@ -10,7 +10,13 @@
 	</body>
 	<script>
 		const root = document.getElementById("root");
-		const span = React.createElement("span", {id: "test-span"}, "Hello world");
-		ReactDOM.render(span, root);
+		const h3 = React.createElement("h3", {
+			onMouseEnter: () => alert("Mouse entered!")
+		}, "Hello world");
+		const btn = React.createElement("button", {
+			onClick: () => alert("Button clicked!")
+		}, "Click Me");
+		const container = React.createElement("div", null, [h3, btn]);
+		ReactDOM.render(container, root);
 	</script>
 </html>
