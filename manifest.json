@@ -9,12 +9,6 @@
 	"action":{
 		"default_title":"ri"
 	},
-	"__sidebar_action": {
-		"default_page": "html/index.html",
-		"default_icon": {
-			"16": "images/favicon16.png"
-		}
-	},
 	"side_panel": {
 		"default_path": "html/index.html"
 	},
