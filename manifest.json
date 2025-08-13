@@ -7,7 +7,7 @@
 		"16": "images/favicon16.png"
 	},
 	"action":{
-		"default_title":"ri"
+		"default_title":"ri_test"
 	},
 	"__sidebar_action": {
 		"default_page": "html/index.html",
