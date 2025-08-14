@@ -1,21 +1,15 @@
 const { useEffect, useState } = React;
 
-//import AfterLogin from "./components/App.js"
+import AfterLogin from "./components/App.js"
 
 function InitPage({onSetIsLogin}) {
 	const [isCheckingLogin, setIsCheckingLogin] = useState(false);
-	function checkLogin() {
-//		localStorage.removeItem("copyRidi");
+	async function checkLogin() {
+		localStorage.removeItem("copyRidi");
 		setIsCheckingLogin(true);
-		setTimeout( () => {
-			setIsCheckingLogin(false);
-			if(false) {
-				onSetIsLogin(true);
-			}
-			else {
-				onSetIsLogin(false);
-			}
-		}, 1000);
+		const res = await UTIL.request(URL.base + URL.auth, null, { isResultJson: true });
+		var auth = res.auth || {};
+		onSetIsLogin(auth.loggedUser != null);
 	}
 	useEffect(() => {
 		checkLogin();
@@ -35,9 +29,7 @@ function Container() {
 	const onSetIsLogin = (e) => { setIsLogin(e) };
 	return (
 		<div>
-			<script src="../sciprts/static.js"/>
-			<script src="../sciprts/utils.js"/>
-			{isLogin ? null : <InitPage onSetIsLogin={onSetIsLogin}/>}
+			{isLogin ? <AfterLogin/> : <InitPage onSetIsLogin={onSetIsLogin}/>}
 		</div>
 	);
 }

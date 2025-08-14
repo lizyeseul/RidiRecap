@@ -1,25 +1,22 @@
 const {
   useEffect,
   useState
-} = React; //import AfterLogin from "./components/App.js"
+} = React;
+import AfterLogin from "./components/App.js";
 
 function InitPage({
   onSetIsLogin
 }) {
   const [isCheckingLogin, setIsCheckingLogin] = useState(false);
 
-  function checkLogin() {
-    //		localStorage.removeItem("copyRidi");
+  async function checkLogin() {
+    localStorage.removeItem("copyRidi");
     setIsCheckingLogin(true);
-    setTimeout(() => {
-      setIsCheckingLogin(false);
-
-      if (false) {
-        onSetIsLogin(true);
-      } else {
-        onSetIsLogin(false);
-      }
-    }, 1000);
+    const res = await UTIL.request(URL.base + URL.auth, null, {
+      isResultJson: true
+    });
+    var auth = res.auth || {};
+    onSetIsLogin(auth.loggedUser != null);
   }
 
   useEffect(() => {
@@ -37,11 +34,7 @@ function Container() {
     setIsLogin(e);
   };
 
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("script", {
-    src: "../sciprts/static.js"
-  }), /*#__PURE__*/React.createElement("script", {
-    src: "../sciprts/utils.js"
-  }), isLogin ? null : /*#__PURE__*/React.createElement(InitPage, {
+  return /*#__PURE__*/React.createElement("div", null, isLogin ? /*#__PURE__*/React.createElement(AfterLogin, null) : /*#__PURE__*/React.createElement(InitPage, {
     onSetIsLogin: onSetIsLogin
   }));
 }
