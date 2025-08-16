@@ -1,2 +1,4 @@
 /.project
 /.settings
+.vscode
+.vscode/tasks.json
