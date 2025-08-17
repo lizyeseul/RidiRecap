@@ -33,6 +33,7 @@ function initDB() {
 		}
 	}
 }
+export default initDB;
 function getObjectStore(store_nm, mode) {
 	//TODO transaction oncomplete dbConnect.close 추가
 	//TODO transaction 끊겼을 때 재연결하는 로직 필요

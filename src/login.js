@@ -18,7 +18,7 @@ function InitPage() {
 	}, []);
 	useEffect(() => {
 		if(isLogin) {
-			history.push("/App");
+			history.push("/Home");
 		}
 	}, [isLogin]);
 	return (

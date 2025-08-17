@@ -26,9 +26,8 @@ function InitPage() {
     checkLogin();
   }, []);
   useEffect(() => {
-
     if (isLogin) {
-      history.push("/App");
+      history.push("/Home");
     }
   }, [isLogin]);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, isCheckingLogin ? 'checking...' : 'end check'), /*#__PURE__*/React.createElement("button", {
