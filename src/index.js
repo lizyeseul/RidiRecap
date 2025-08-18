@@ -1,7 +1,6 @@
 const { HashRouter: Router, Switch, Route } = ReactRouterDOM;
 
 import InitPage from "./login.js"
-import AfterLogin from "./components/App.js"
 import Home from "./components/Home.js"
 
 function Container() {
@@ -10,9 +9,6 @@ function Container() {
 			<Switch>
 				<Route exact path="/">
 					<InitPage/>
-				</Route>
-				<Route exact path="/App">
-					<AfterLogin/>
 				</Route>
 				<Route exact path="/Home">
 					<Home/>

@@ -1,5 +1,5 @@
-const { HashRouter: Router, Switch, Route, useHistory } = ReactRouterDOM;
-const { useEffect, useState } = React;
+const { Switch, Route, useHistory } = ReactRouterDOM;
+const { useEffect } = React;
 
 import Order from "./Order.js"
 import DB from "../../scripts/connect_db.js"
