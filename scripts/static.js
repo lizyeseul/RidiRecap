@@ -1,4 +1,4 @@
-var URL = {
+const URL = {
 	"base": "https://ridibooks.com",
 	
 	"account": "/account/myridi",
@@ -7,16 +7,7 @@ var URL = {
 	
 	"LIBRARY_BASE": "https://library-api.ridibooks.com"
 };
-var DB = {
-	name: "RIDI TEST",
-	version: 1
-};
 const parser = new DOMParser();
-
-var historyDOM;
-var copyRidi = {};
-
-
 //            e.Z = {
 //                ACCOUNT_BASE_URL: "https://account.ridibooks.com/",
 //                API_BASE_URL: "https://api.ridibooks.com/",

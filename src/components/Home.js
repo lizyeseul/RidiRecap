@@ -2,16 +2,23 @@ const { HashRouter: Router, Switch, Route, useHistory } = ReactRouterDOM;
 const { useEffect, useState } = React;
 
 import Order from "./Order.js"
-import initDB from "../../scripts/connect_db.js"
+import DB from "../../scripts/connect_db.js"
+import SESSION from "../../scripts/session.js"
 
 function Home() {
 	const history = useHistory();
 	useEffect(() => {
-		initDB();
+		DB.initDB();
+		SESSION.setRidiGlobalVal();
+		SESSION.updatePageInfo();
 	}, []);
 	return (
 		<div>
-			<button onClick={() => history.push("/Home/order")}order></button>
+			<button onClick={DB.initDB}>DB 연결</button>
+			<button onClick={SESSION.setRidiGlobalVal}>리디 전역변수 세팅</button>
+			<button onClick={SESSION.updatePageInfo}>초기값 세팅</button>
+			<hr/>
+			<button onClick={() => history.push("/Home/order")}>order</button>
 			<Switch>
 				<Route exact path="/Home/order">
 					<Order/>
