@@ -1,3 +1,5 @@
+import DB from "../../scripts/connect_db.js";
+
 class order {
 	//서비스 만드는 게 목적이면 이런거는 나중에 해도 되는데 사실 온전한 서비스 만드려면 어느정도 뼈대를 잡아야 하는데 이런거는 준비과정이 너무 길고 고민도 오래걸리고 뭐가 적절한지 판단할 지식도 없고 아아악
 	constructor(data) {
@@ -48,7 +50,7 @@ class order {
 		return true;
 	}
 }
-
+export {order as C_order};
 //function p(c) {
 //	const s = c.schema;
 //	Object.entries(s).forEach(([f,d]) => {
