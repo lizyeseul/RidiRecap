@@ -31,7 +31,7 @@ var SYNC_ORDER = {
 			}
 			else {
 				//TODO 테스트 전, PC/모바일 세팅 방법 모르겠음
-				orderItemList = sectionElement.querySelector(".buy_list_wrap").querySelectorAll("li.list_item a");
+				orderItemList = $(sectionElement).find(".buy_list_wrap li.list_item a");
 			}
 		
 			for(var i=0; i<orderItemList.length; i++) {
@@ -64,7 +64,7 @@ var SYNC_ORDER = {
 				var totalAmt = UTIL.getNumber(totalAmtStr);
 				orderValue.total_amt = totalAmt;
 				
-				await DB.updateData("store_order", orderNo, orderValue, "reset");
+				DB.updateData("store_order", orderNo, orderValue, "reset");
 			}
 			var maxOrderSeq = await DB.getMaxOnIdx("store_order","order_seq");
 			sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);

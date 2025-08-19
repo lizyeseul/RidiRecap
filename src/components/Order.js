@@ -8,7 +8,7 @@ function Order() {
 	const [toPage, setToPage] = useState(lastPageNum);
 	const [isSync, setIsSync] = useState(false);
 	const [ingPage, setIngPage] = useState(null);
-	function syncOrder(formData) {
+	function syncOrder() {
 		setIsSync(true);
 		SYNC_ORDER.syncOrderList(fromPage, toPage, setIngPage);
 		setIsSync(false);
@@ -18,11 +18,11 @@ function Order() {
 			<span>lastPageNum: {lastPageNum}</span>
 			<span>{isSync? 'sync: '+ingPage : 'end'}</span>
 			<br/>
-			<form onSubmit={syncOrder}>
+			<div>
 				<input type="number"	name="fromPage"	value={fromPage}	onChange={(e) => setFromPage(e.target.value)}/>
 				<input type="number"	name="toPage"	value={toPage}		onChange={(e) => setToPage(e.target.value)}/>
-				<button type="submit">sync order</button>
-			</form>
+				<button onClick={syncOrder}>sync order</button>
+			</div>
 		</div>
 	);
 }
