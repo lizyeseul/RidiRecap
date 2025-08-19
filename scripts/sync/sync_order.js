@@ -3,7 +3,7 @@ var SYNC_ORDER = {
 	syncOrderList: async function(fromPage, toPage, setIngPage) {
 		for(var pageIdx=fromPage; pageIdx<=toPage; pageIdx++) {
 			setIngPage(pageIdx);
-			await parseHistoryListPage(pageIdx, false);
+			await this.parseHistoryListPage(pageIdx, false);
 			/*
 			var isContinue = 
 			if(orderSeq <= maxOrderSeq && !isTest) {
@@ -64,7 +64,7 @@ var SYNC_ORDER = {
 				var totalAmt = UTIL.getNumber(totalAmtStr);
 				orderValue.total_amt = totalAmt;
 				
-				updateData("store_order", orderNo, orderValue, "reset");
+				await DB.updateData("store_order", orderNo, orderValue, "reset");
 			}
 			var maxOrderSeq = await DB.getMaxOnIdx("store_order","order_seq");
 			sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
@@ -79,7 +79,7 @@ export default SYNC_ORDER;
 syncOrderList
 결제내역 화면 전체 반복하면서 저장
 */
-async function syncOrderList() {
+async function syncOrderList_old() {
 	$("#parse_log")[0].innerText = "sync order list start";
 	
 	var lastPageNum = sessionStorage.getItem("lastPageNum");
@@ -116,7 +116,7 @@ async function deleteHistoryListPage(orderNo) {
 parseHistoryListPage
 param pageIdx 크롤링할 결제내역 페이지 번호
 */
-async function parseHistoryListPage(pageIdx, isTest) {
+async function parseHistoryListPage_old(pageIdx, isTest) {
 	try {
 		const res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
 		var htmlDOM = parser.parseFromString(res, "text/html");

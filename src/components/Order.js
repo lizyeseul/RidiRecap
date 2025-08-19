@@ -18,7 +18,7 @@ function Order() {
 			<span>lastPageNum: {lastPageNum}</span>
 			<span>{isSync? 'sync: '+ingPage : 'end'}</span>
 			<br/>
-			<form action={syncOrder}>
+			<form onSubmit={syncOrder}>
 				<input type="number"	name="fromPage"	value={fromPage}	onChange={(e) => setFromPage(e.target.value)}/>
 				<input type="number"	name="toPage"	value={toPage}		onChange={(e) => setToPage(e.target.value)}/>
 				<button type="submit">sync order</button>
