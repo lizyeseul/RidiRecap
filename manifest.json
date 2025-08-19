@@ -6,11 +6,9 @@
 	"icons": {
 		"16": "images/favicon16.png"
 	},
-	"action":{
-		"default_title":"ri"
-	},
-	"side_panel": {
-		"default_path": "html/index.html"
+	"sidebar_action": {
+		"default_title":"ri",
+		"default_panel": "html/index.html"
 	},
 	"background": {
 		"service_worker": "scripts/background.js"

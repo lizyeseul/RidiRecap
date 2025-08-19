@@ -2,7 +2,7 @@
 	"name": "RidiRecap",
 	"version": "0.1.0",
 	"scripts": {
-		"build:components": "babel src --out-dir dist --extensions .js,.jsx --presets @babel/preset-react"
+		"build:components": "babel src --out-dir dist --extensions .js,.jsx --presets @babel/preset-react --watch"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.14.5",

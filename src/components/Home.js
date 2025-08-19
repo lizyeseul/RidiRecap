@@ -1,4 +1,4 @@
-const { Switch, Route, useHistory } = ReactRouterDOM;
+const { Switch, Route, useHistory, useRouteMatch } = ReactRouterDOM;
 const { useEffect } = React;
 
 import Order from "./Order.js"
@@ -7,6 +7,7 @@ import SESSION from "../../scripts/session.js"
 
 function Home() {
 	const history = useHistory();
+	const { path, url } = useRouteMatch();
 	useEffect(() => {
 		DB.initDB();
 		SESSION.setRidiGlobalVal();
@@ -18,9 +19,11 @@ function Home() {
 			<button onClick={SESSION.setRidiGlobalVal}>리디 전역변수 세팅</button>
 			<button onClick={SESSION.updatePageInfo}>초기값 세팅</button>
 			<hr/>
-			<button onClick={() => history.push("/Home/order")}>order</button>
 			<Switch>
-				<Route exact path="/Home/order">
+				<Route exact path={path}>
+					<button onClick={() => history.push(`${url}/order`)}>order</button>
+				</Route>
+				<Route exact path={`${path}/order`}>
 					<Order/>
 				</Route>
 			</Switch>

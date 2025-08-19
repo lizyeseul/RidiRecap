@@ -10,7 +10,7 @@ function Container() {
 				<Route exact path="/">
 					<InitPage/>
 				</Route>
-				<Route exact path="/Home">
+				<Route path="/Home">
 					<Home/>
 				</Route>
 			</Switch>
