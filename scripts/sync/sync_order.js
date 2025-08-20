@@ -1,5 +1,15 @@
 import DB from "../../scripts/connect_db.js";
 var SYNC_ORDER = {
+	syncOrder: async function(fromPage, toPage, setIngPageLabel) {
+		setIngPageLabel(fromPage*15-14, toPage*15,fromPage*15-14);
+		for(var pageIdx=fromPage; pageIdx<=toPage; pageIdx++) {
+			var orderNoList = await this.parseHistoryListPage(pageIdx, false);
+			for(var i=0; i<orderNoList.length; i++) {
+				setIngPageLabel(fromPage*15-14, toPage*15, pageIdx*15-14+i);
+				await this.parseHistoryDetailPage(orderNoList[i]);
+			}
+		}
+	},
 	syncOrderList: async function(fromPage, toPage, setIngPage) {
 		for(var pageIdx=fromPage; pageIdx<=toPage; pageIdx++) {
 			setIngPage((pageIdx-fromPage) + "/" + (toPage-fromPage));
@@ -36,7 +46,7 @@ var SYNC_ORDER = {
 				//TODO 테스트 전, PC/모바일 세팅 방법 모르겠음
 				orderItemList = $(sectionElement).find(".buy_list_wrap li.list_item a");
 			}
-		
+			var orderNoList = [];
 			for(var i=0; i<orderItemList.length; i++) {
 				var orderItem = orderItemList[i];
 				var orderValue = {};
@@ -45,6 +55,7 @@ var SYNC_ORDER = {
 				var orderNo = orderItem.getAttribute(attr);
 				orderNo = orderNo.replace(URL.history+"/","");
 				orderValue.order_no = orderNo;
+				orderNoList.push(orderNo);
 				
 				//주문시간
 				var tdList = $(orderItem).find("td");
@@ -71,6 +82,8 @@ var SYNC_ORDER = {
 			}
 			var maxOrderSeq = await DB.getMaxOnIdx("store_order","order_seq");
 			sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
+			
+			return orderNoList;
 		}
 		catch(e) {
 			console.error("parseHistoryListPage 오류:", e);

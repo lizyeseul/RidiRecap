@@ -11,9 +11,27 @@ function Order() {
 	const [isSync, setIsSync] = useState(false);
 	const [ingPage, setIngPage] = useState(null);
 	
+	function setIngPageLabel(from, to, cur) {
+		var start = cur - from + 1;
+		var end = to - from + 1;
+		setIngPage(start + "/" + end);
+	}
+	
 	const [orderInfo, setOrderInfo] = useState([]);
 	
 	async function syncOrder() {
+		setIsSync(true);
+		var from = UTIL.toNumber(fromPage);
+		var to = UTIL.toNumber(toPage);
+		if(from > to) {
+			var temp = from;
+			from = to;
+			to = temp;
+		}
+		await SYNC_ORDER.syncOrder(from, to, setIngPageLabel);
+		setIsSync(false);
+	}
+	async function syncOrderList() {
 		setIsSync(true);
 		await SYNC_ORDER.syncOrderList(fromPage, toPage, setIngPage);
 		setIsSync(false);
@@ -44,7 +62,8 @@ function Order() {
 			<div>
 				<input type="number"	name="fromPage"	value={fromPage}	onChange={(e) => setFromPage(e.target.value)}/>
 				<input type="number"	name="toPage"	value={toPage}		onChange={(e) => setToPage(e.target.value)}/>
-				<button onClick={syncOrder} disabled={isSync}>sync order</button>
+				<button onClick={syncOrder} disabled={isSync}>주문 동기화</button>
+				<button onClick={syncOrderList} disabled={isSync}>sync order</button>
 				<button onClick={syncOrderDetail} disabled={isSync}>sync order detail</button>
 				<button onClick={findRecentOrder} disabled={isSync}>조회(15개)</button>
 			</div>
