@@ -13,14 +13,14 @@ function Order() {
 	
 	const [orderInfo, setOrderInfo] = useState([]);
 	
-	function syncOrder() {
+	async function syncOrder() {
 		setIsSync(true);
-		SYNC_ORDER.syncOrderList(fromPage, toPage, setIngPage);
+		await SYNC_ORDER.syncOrderList(fromPage, toPage, setIngPage);
 		setIsSync(false);
 	}
-	function syncOrderDetail() {
+	async function syncOrderDetail() {
 		setIsSync(true);
-		SYNC_ORDER.syncOrderDetail(fromPage, toPage, setIngPage);
+		await SYNC_ORDER.syncOrderDetail(fromPage, toPage, setIngPage);
 		setIsSync(false);
 	}
 	async function findRecentOrder() {
@@ -30,7 +30,6 @@ function Order() {
 		setIsSync(false);
 	}
 	function OrderInfoRow({orderInfo}) {
-		console.log(orderInfo);
 		return (
 			<li>
 				{orderInfo.order_no} : {orderInfo.order_dt}, {orderInfo.total_amt}

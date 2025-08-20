@@ -2,7 +2,7 @@ import DB from "../../scripts/connect_db.js";
 var SYNC_ORDER = {
 	syncOrderList: async function(fromPage, toPage, setIngPage) {
 		for(var pageIdx=fromPage; pageIdx<=toPage; pageIdx++) {
-			setIngPage(pageIdx);
+			setIngPage((pageIdx-fromPage) + "/" + (toPage-fromPage));
 			await this.parseHistoryListPage(pageIdx, false);
 			/*
 			var isContinue = 
@@ -89,7 +89,7 @@ var SYNC_ORDER = {
 		*/
 	//	for(var i=maxOrderSeq; i>=1; i--) {	//TODO yslee 개수가 많아서 분할하든 비동기로 바꾸든 해야할 듯, 15개 동시에 쏘고 리턴 모아서 처리 가능한가?
 		for(var i=fromSeq; i<=toSeq; i++) {
-			setIngPage(i);
+			setIngPage((i-fromSeq) + "/" + (toSeq-fromSeq));
 			var orderItem = await DB.getUniqueValue("store_order", "order_seq", i);
 			if(UTIL.isNotEmpty(orderItem)) {
 				await this.parseHistoryDetailPage(orderItem.order_no);

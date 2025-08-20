@@ -3,7 +3,6 @@ const {
 } = React;
 import SYNC_ORDER from "../../scripts/sync/sync_order.js";
 import DB from "../../scripts/connect_db.js";
-
 function Order() {
   const [lastPageNum, setLastPageNum] = useState(sessionStorage.getItem("lastPageNum"));
   const [maxOrderSeq, setMaxOrderSeq] = useState(sessionStorage.getItem("maxOrderSeq"));
@@ -12,19 +11,16 @@ function Order() {
   const [isSync, setIsSync] = useState(false);
   const [ingPage, setIngPage] = useState(null);
   const [orderInfo, setOrderInfo] = useState([]);
-
-  function syncOrder() {
+  async function syncOrder() {
     setIsSync(true);
-    SYNC_ORDER.syncOrderList(fromPage, toPage, setIngPage);
+    await SYNC_ORDER.syncOrderList(fromPage, toPage, setIngPage);
     setIsSync(false);
   }
-
-  function syncOrderDetail() {
+  async function syncOrderDetail() {
     setIsSync(true);
-    SYNC_ORDER.syncOrderDetail(fromPage, toPage, setIngPage);
+    await SYNC_ORDER.syncOrderDetail(fromPage, toPage, setIngPage);
     setIsSync(false);
   }
-
   async function findRecentOrder() {
     setIsSync(true);
     var tempList = await DB.getValueByIdx("store_order", "order_seq", {
@@ -34,14 +30,11 @@ function Order() {
     setOrderInfo(tempList);
     setIsSync(false);
   }
-
   function OrderInfoRow({
     orderInfo
   }) {
-    console.log(orderInfo);
     return /*#__PURE__*/React.createElement("li", null, orderInfo.order_no, " : ", orderInfo.order_dt, ", ", orderInfo.total_amt);
   }
-
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "lastPageNum: ", lastPageNum), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, "maxOrderSeq: ", maxOrderSeq), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, isSync ? 'sync: ' + ingPage : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
     type: "number",
     name: "fromPage",
@@ -65,5 +58,4 @@ function Order() {
     orderInfo: o
   }))));
 }
-
 export default Order;
