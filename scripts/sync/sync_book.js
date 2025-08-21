@@ -41,12 +41,13 @@ var SYNC_BOOK = {
 				for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
 					var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
 					var items = booksRes.items;
-					var bookIds = "";
+					var bookIds = [];
 					items.forEach(function(obj) {
-						bookIds += obj.b_ids[obj.b_ids.length-1]+",";
+						bookIds.push(obj.b_ids[obj.b_ids.length-1]);
 					});
 					bookIds = bookIds.substr(0,bookIds.length-1);
-					var bookInfosRes = await UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds, null, { isResultJson: true });
+					var bookInfosRes = await UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true });
+					var bookPurchaseInfosRes = await UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true });
 		
 					if(offset==startOffset) {
 						var b0 = bookInfosRes[0];
@@ -72,6 +73,9 @@ var SYNC_BOOK = {
 					}
 					
 					bookInfosRes.forEach(async function(bookInfo) {
+						await SYNC_BOOK.upsertBookInfo(unitId, bookInfo);
+					});
+					bookPurchaseInfosRes.forEach(async function(bookInfo) {
 						await SYNC_BOOK.upsertBookInfo(unitId, bookInfo);
 					});
 				}
