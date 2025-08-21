@@ -5,7 +5,8 @@ const URL = {
 	"history": "/order/history",
 	"auth": '/api/global/auth-variables',
 	
-	"LIBRARY_BASE": "https://library-api.ridibooks.com"
+	"LIBRARY_BASE": "https://library-api.ridibooks.com/",
+	"BOOK_API_BASE": "https://book-api.ridibooks.com/"
 };
 const parser = new DOMParser();
 //            e.Z = {

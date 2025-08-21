@@ -25,11 +25,17 @@ function Book() {
 		await SYNC_BOOK.updateLib();
 		setIsSync(false);
 	}
+	async function updateBook() {
+		setIsSync(true);
+		await SYNC_BOOK.updateBook();
+		setIsSync(false);
+	}
 	return (
 		<div>
 			<span>{isSync? 'sync: ' : 'end'}</span><br/>
 			<div>
 				<button onClick={updateLib} disabled={isSync}>책 목록 update</button>
+				<button onClick={updateBook} disabled={isSync}>책 상세 update</button>
 				<button onClick={findLibList} disabled={isSync}>목록 조회</button>
 			</div>
 			<hr/>

@@ -32,7 +32,7 @@ var SYNC_ORDER = {
 	*/
 	parseHistoryListPage: async function(pageIdx) {
 		try {
-			const res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
+			var res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
 			var htmlDOM = parser.parseFromString(res, "text/html");
 			var sectionElement = $(htmlDOM).find("#page_buy_history");
 			var orderItemList = [];
@@ -114,7 +114,7 @@ var SYNC_ORDER = {
 	*/
 	parseHistoryDetailPage: async function(orderNo) {
 		try {
-			const res = await UTIL.request(URL.base+URL.history+"/"+orderNo, null, null);
+			var res = await UTIL.request(URL.base+URL.history+"/"+orderNo, null, null);
 			var htmlDOM = parser.parseFromString(res, "text/html");
 			var sectionElement = $(htmlDOM).find(".buy_history_detail_table");
 			

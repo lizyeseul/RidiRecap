@@ -121,11 +121,11 @@ var DB = {
 					var cursorValue = cursor.value;
 					updateData = Object.assign(cursorValue, data);
 				}
-				console.debug("update: ",key,updateData);
+				console.debug("update: ",tbNm,key,updateData);
 				cursor.update(updateData);
 			}
 			else {
-				console.debug("insert: ",key,data);
+				console.debug("insert: ",tbNm,key,data);
 				store.add(data, key);
 			}
 		}

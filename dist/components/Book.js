@@ -29,10 +29,19 @@ function Book() {
     setIsSync(false);
   }
 
+  async function updateBook() {
+    setIsSync(true);
+    await SYNC_BOOK.updateBook();
+    setIsSync(false);
+  }
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync: ' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
     disabled: isSync
   }, "\uCC45 \uBAA9\uB85D update"), /*#__PURE__*/React.createElement("button", {
+    onClick: updateBook,
+    disabled: isSync
+  }, "\uCC45 \uC0C1\uC138 update"), /*#__PURE__*/React.createElement("button", {
     onClick: findLibList,
     disabled: isSync
   }, "\uBAA9\uB85D \uC870\uD68C")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("ul", null, bookInfo.map(o => /*#__PURE__*/React.createElement(BookInfoRow, {

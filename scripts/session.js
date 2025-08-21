@@ -50,7 +50,7 @@ var SESSION = {
 	*/
 	updatePageInfo: async function() {
 		try {
-			const res = await UTIL.request(URL.base+URL.history+"?page=999", null, null);
+			var res = await UTIL.request(URL.base+URL.history+"?page=999", null, null);
 			var htmlDOM = parser.parseFromString(res, "text/html");
 			//class="btn_next" 없으면 마지막페이지
 			sessionStorage.setItem("lastPageNum", 999);
@@ -64,7 +64,7 @@ var SESSION = {
 			
 			//class="btn_prev" 없으면 첫페이지
 			sessionStorage.setItem("lastPageCnt", 1);
-			const res2 = await UTIL.request(URL.base+URL.history+"?page="+sessionStorage.getItem("lastPageNum"), null, null);
+			var res2 = await UTIL.request(URL.base+URL.history+"?page="+sessionStorage.getItem("lastPageNum"), null, null);
 			var htmlDOM2 = parser.parseFromString(res2, "text/html");
 			if($(htmlDOM2).find(".btn_next").length == 0) {
 				sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
@@ -73,7 +73,7 @@ var SESSION = {
 			var maxOrderSeq = await DB.getMaxOnIdx("store_order","order_seq");
 			sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
 			
-			var mainCnt = await UTIL.request(URL.LIBRARY_BASE+"/items/main/count/", null, { isResultJson: true });
+			var mainCnt = await UTIL.request(URL.LIBRARY_BASE+"items/main/count/", null, { isResultJson: true });
 			sessionStorage.setItem("unitCnt", mainCnt.unit_total_count+100);
 		}
 		catch(e) {

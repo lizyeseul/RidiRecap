@@ -12,7 +12,7 @@ function InitPage() {
   async function checkLogin() {
     localStorage.removeItem("copyRidi");
     setIsCheckingLogin(true);
-    const res = await UTIL.request(URL.base + URL.auth, null, {
+    var res = await UTIL.request(URL.base + URL.auth, null, {
       isResultJson: true
     });
     var auth = res.auth || {};

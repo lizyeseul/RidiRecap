@@ -441,7 +441,7 @@ https://library-api.ridibooks.com/items/main/?offset=0&limit=500&order_type=purc
     }
 }
 
-총 권수 검색
+총 구매한 권수 검색
 TODO 연재중인 작품의 경우 update 체크가능
 https://library-api.ridibooks.com/items/search/6800074/count?order_type=purchase_date&order_by=desc&t=1752737885959
 

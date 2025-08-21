@@ -18,6 +18,12 @@ var UTIL = {
 		return "number" === typeof object;
 	},
 	
+	toString: function(v) {
+		if(UTIL.isNumber(v)) {
+			return v.toString();
+		}
+		return v;
+	},
 	toNumber: function(s) {
 		if(UTIL.isString(s)) {
 			s = s.replace(/[\,]/g, "");
