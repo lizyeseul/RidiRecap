@@ -73,8 +73,8 @@ var SESSION = {
 			var maxOrderSeq = await DB.getMaxOnIdx("store_order","order_seq");
 			sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
 			
-			var res2 = await UTIL.request(URL.LIBRARY_BASE+"/items/main/count/", null, { isResultJson: true });
-			sessionStorage.setItem("libCnt", res2.unit_total_count+100);
+			var mainCnt = await UTIL.request(URL.LIBRARY_BASE+"/items/main/count/", null, { isResultJson: true });
+			sessionStorage.setItem("unitCnt", mainCnt.unit_total_count+100);
 		}
 		catch(e) {
 			console.error("updateLastPageInfo 오류:", e);

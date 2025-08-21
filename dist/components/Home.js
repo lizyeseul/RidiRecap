@@ -8,8 +8,10 @@ const {
   useEffect
 } = React;
 import Order from "./Order.js";
+import Book from "./Book.js";
 import DB from "../../scripts/connect_db.js";
 import SESSION from "../../scripts/session.js";
+
 function Home() {
   const history = useHistory();
   const {
@@ -32,9 +34,15 @@ function Home() {
     path: path
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => history.push(`${url}/order`)
-  }, "order")), /*#__PURE__*/React.createElement(Route, {
+  }, "order"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => history.push(`${url}/book`)
+  }, "book")), /*#__PURE__*/React.createElement(Route, {
     exact: true,
     path: `${path}/order`
-  }, /*#__PURE__*/React.createElement(Order, null))));
+  }, /*#__PURE__*/React.createElement(Order, null)), /*#__PURE__*/React.createElement(Route, {
+    exact: true,
+    path: `${path}/book`
+  }, /*#__PURE__*/React.createElement(Book, null))));
 }
+
 export default Home;
