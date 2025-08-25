@@ -1,22 +1,42 @@
-const { useState } = React;
+const { useState, useEffect } = React;
 
 import SYNC_BOOK from "../../scripts/sync/sync_book.js";
 import DB from "../../scripts/connect_db.js";
 
 function Book() {
 	const [isSync, setIsSync] = useState(false);
-	const [bookInfo, setBookInfo] = useState([]);
-	function BookInfoRow({bookInfo}) {
+	const [unitInfo, setUnitInfo] = useState([]);
+	const [isUnitAllChecked, setIsUnitAllChecked] = useState(false);
+	const [checkedListById, setCheckedListById] = useState([]);
+	const onCheckUnit = (id) => {
+		setCheckedListById((prev) => (checkedListById.includes(id)) ? prev.filter((el) => el !== id) : [...prev, id]);
+		console.log(checkedListById);
+	}
+	function onCheckUnitAll() {
+		setIsUnitAllChecked(!isUnitAllChecked);
+		setCheckedListById((isUnitAllChecked) ? [] : unitInfo.map((b)=>{return b.unit_id}));
+		console.log(checkedListById);
+	}
+	function UnitInfoRow({unitInfo}) {
 		return (
-			<li>
-				{bookInfo.unit_id}: {bookInfo.unit_title}
-			</li>
+			<tr>
+				<td>
+					<input	name={unitInfo.unit_id} type="checkbox"
+							onChange={() => onCheckUnit(unitInfo.unit_id)}
+							checked={checkedListById.includes(unitInfo.unit_id)}/>
+				</td>
+				<td>{unitInfo.unit_id}</td>
+				<td>{unitInfo.unit_title}</td>
+				<td>{unitInfo.total_cnt}{unitInfo.unit}</td>
+			</tr>
 		)
 	}
 	async function findLibList() {
 		setIsSync(true);
 		var tempList = await DB.getValueByIdx("store_unit", "unit_id", { direction: "prev"});
-		setBookInfo(tempList);
+		setUnitInfo(tempList.filter((u) => {
+			return u.is_adult_only === false;
+		}));
 		setIsSync(false);
 	}
 	
@@ -25,27 +45,43 @@ function Book() {
 		await SYNC_BOOK.updateLib();
 		setIsSync(false);
 	}
+	async function updateUnitDetail() {
+		setIsSync(true);
+		await SYNC_BOOK.updateUnitDetail();
+		setIsSync(false);
+	}
 	async function updateBook() {
 		setIsSync(true);
-		await SYNC_BOOK.updateBook();
+		await SYNC_BOOK.updateBook(checkedListById);
 		setIsSync(false);
 	}
 	return (
 		<div>
-			<span>{isSync? 'sync: ' : 'end'}</span><br/>
+			<span>{isSync? 'sync' : 'end'}</span><br/>
 			<div>
-				<button onClick={updateLib} disabled={isSync}>책 목록 update</button>
+				<button onClick={updateLib} disabled={isSync}>unit 목록 update</button>
+				<button onClick={updateUnitDetail} disabled={isSync}>unit 상세 update</button>
 				<button onClick={updateBook} disabled={isSync}>책 상세 update</button>
 				<button onClick={findLibList} disabled={isSync}>목록 조회</button>
 			</div>
 			<hr/>
-			<ul>
+			<table>
+				<tr>
+					<td>
+						<input	type="checkbox"
+								onChange={() => onCheckUnitAll()}
+								checked={isUnitAllChecked}/>
+					</td>
+					<td>unit_id</td>
+					<td>제목</td>
+					<td>화 수</td>
+				</tr>
 			{
-				bookInfo.map((o) => (
-					<BookInfoRow bookInfo={o}/>
+				unitInfo.map((o) => (
+					<UnitInfoRow unitInfo={o}/>
 				))
 			}
-			</ul>
+			</table>
 		</div>
 	);
 }
