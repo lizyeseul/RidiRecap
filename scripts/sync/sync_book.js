@@ -68,6 +68,7 @@ var SYNC_BOOK = {
 									unitInfo.unit = b0.series.property.unit;
 								}
 							}
+							unitInfo.last_update_unit = new Date();
 							unitInfo = {...unitInfo, ...b0.property};
 							DB.updateData("store_unit", unitId, unitInfo, "update");
 						}
@@ -86,9 +87,9 @@ var SYNC_BOOK = {
 				var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:[unitId]}, { isResultJson: true });
 				await unitListRes.units.forEach(async function(e) {
 					var startOffset = 0;
-					var limit = 5;
-	//				var totalCnt = e.total_count;
-					var totalCnt = 5;
+					var limit = 100;
+					var totalCnt = e.total_count;
+//					var totalCnt = 5;
 					
 					for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
 						var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
@@ -122,12 +123,14 @@ var SYNC_BOOK = {
 							DB.updateData("store_unit", unitId, unitInfo, "update");
 						}
 						
-						var map = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toString(obj.id), obj]));
+						var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toString(obj.b_id), obj]));
+						console.log(purchaseMap);
 						var mergedList = bookInfosRes.map(item => {
 							item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
-							var other = map.get(item.key);
+							var other = purchaseMap.get(item.id);
 							return other ? {...item, ...other} : item;
 						});
+						console.log(mergedList);
 						mergedList.forEach(async function(bookInfo) {
 							await SYNC_BOOK.upsertBookInfo(unitId, bookInfo);
 						});

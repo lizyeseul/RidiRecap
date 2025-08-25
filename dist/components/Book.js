@@ -10,10 +10,12 @@ function Book() {
   const [unitInfo, setUnitInfo] = useState([]);
   const [isUnitAllChecked, setIsUnitAllChecked] = useState(false);
   const [checkedListById, setCheckedListById] = useState([]);
+  useEffect(() => {
+    findLibList();
+  }, []);
 
   const onCheckUnit = id => {
     setCheckedListById(prev => checkedListById.includes(id) ? prev.filter(el => el !== id) : [...prev, id]);
-    console.log(checkedListById);
   };
 
   function onCheckUnitAll() {
@@ -21,7 +23,6 @@ function Book() {
     setCheckedListById(isUnitAllChecked ? [] : unitInfo.map(b => {
       return b.unit_id;
     }));
-    console.log(checkedListById);
   }
 
   function UnitInfoRow({
