@@ -12,7 +12,6 @@ import SESSION from "../../scripts/session.js";
 import Order from "./Order.js";
 import Book from "./Book.js";
 import Purchase from "./Purchase.js";
-
 function Home() {
   const history = useHistory();
   const {
@@ -52,5 +51,4 @@ function Home() {
     path: `${path}/purchase`
   }, /*#__PURE__*/React.createElement(Purchase, null))));
 }
-
 export default Home;

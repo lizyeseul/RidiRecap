@@ -27,54 +27,60 @@ var SYNC_BOOK = {
 			console.error("updateLib 오류:", e);
 		}
 	},
+	runWithConcurrencyLimit: async function(tasks, limit) {
+		const results = [];
+		let running = [];
+		for (const task of tasks) {
+			const p = task().finally(() => {
+				running = running.filter(r => r !== p);
+			});
+			results.push(p);
+			running.push(p);
+			// 동시 실행 개수 초과 시 하나 끝날 때까지 대기
+			if (running.length >= limit) {
+				await Promise.race(running);
+			}
+		}
+		return Promise.all(results);
+	},
 	updateUnitDetail: async function() {
 		try {
 			var checkedListById = await DB.getValueByIdx("store_unit", "unit_id", { direction: "prev"});
-			await checkedListById.forEach(async function(u) {
-				var unitId = u.unit_id;
-				var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:[unitId]}, { isResultJson: true });
-				await unitListRes.units.forEach(async function(e) {
-					var startOffset = 0;
-					var limit = 1;
-					var totalCnt = 1;
-					
-					for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
-						var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
-						var items = booksRes.items;
-						var bookIds = [];
-						items.forEach(function(obj) {
-							bookIds.push(obj.b_ids[obj.b_ids.length-1]);
-						});
-						var bookInfosRes = await UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true });
-						
-						if(offset==startOffset) {
-							var b0 = bookInfosRes[0];
-							var unitInfo = {
-								unit_id: unitId,
-								total_cnt: totalCnt,
-								
-								is_webtoon: b0.file.is_webtoon,
-								publisher: b0.publisher
-							}
-							if(UTIL.isNotEmpty(b0.series)) {
-								unitInfo.series_id = b0.series.id;
-								if(UTIL.isNotEmpty(b0.series.property)) {
-									unitInfo.is_completed = b0.series.property.is_completed;	//update 가능성
-									unitInfo.is_serial = b0.series.property.is_serial;
-									unitInfo.is_serial_complete = b0.series.property.is_serial_complete;	//update 가능성
-									unitInfo.opened_last_volume_id = b0.series.property.opened_last_volume_id;	//update 가능성
-									unitInfo.title = b0.series.property.title;
-									unitInfo.total_book_count = b0.series.property.total_book_count;	//update 가능성
-									unitInfo.unit = b0.series.property.unit;
-								}
-							}
-							unitInfo.last_update_unit = new Date();
-							unitInfo = {...unitInfo, ...b0.property};
-							DB.updateData("store_unit", unitId, unitInfo, "update");
-						}
+			checkedListById = checkedListById.map((u) => u.unit_id);
+			var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:checkedListById}, { isResultJson: true });
+
+			async function processUnit(e) {
+			// for(var e of unitListRes.units) {
+				var unitId = UTIL.toString(e.id);
+				var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset=0&limit=1&order_type=unit_order&order_by=asc", null, { isResultJson: true });
+				var items = booksRes.items;
+				var bookIds = items.map((obj) => obj.b_ids[obj.b_ids.length - 1]);
+				var bookInfosRes = await UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true });
+				var b0 = bookInfosRes[0];
+				var unitInfo = {
+					unit_id: unitId,
+					total_cnt: e.total_count,
+					is_webtoon: b0.file.is_webtoon,
+					publisher: b0.publisher,
+					last_update_unit: new Date()
+				}
+				if(UTIL.isNotEmpty(b0.series)) {
+					unitInfo.series_id = b0.series.id;
+					if(UTIL.isNotEmpty(b0.series.property)) {
+						unitInfo.is_completed = b0.series.property.is_completed;	//update 가능성
+						unitInfo.is_serial = b0.series.property.is_serial;
+						unitInfo.is_serial_complete = b0.series.property.is_serial_complete;	//update 가능성
+						unitInfo.opened_last_volume_id = b0.series.property.opened_last_volume_id;	//update 가능성
+						unitInfo.title = b0.series.property.title;
+						unitInfo.total_book_count = b0.series.property.total_book_count;	//update 가능성
+						unitInfo.unit = b0.series.property.unit;
 					}
-				});
-			});
+				}
+				unitInfo = {...unitInfo, ...b0.property};
+				DB.updateData("store_unit", unitId, unitInfo, "update");
+			};
+			const tasks = unitListRes.units.map((e) => () => processUnit(e));
+			await SYNC_BOOK.runWithConcurrencyLimit(tasks, 10);
 			return true;
 		}
 		catch(e) {
@@ -83,58 +89,60 @@ var SYNC_BOOK = {
 	},
 	updateBook: async function(checkedListById) {
 		try {
-			await checkedListById.forEach(async function(unitId) {
-				var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:[unitId]}, { isResultJson: true });
-				await unitListRes.units.forEach(async function(e) {
-					var startOffset = 0;
-					var limit = 100;
-					var totalCnt = e.total_count;
-//					var totalCnt = 5;
+			var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:checkedListById}, { isResultJson: true });
+			for(var e of unitListRes.units) {
+				var startOffset = 0;
+				var limit = 100;
+				var totalCnt = e.total_count;
+				// var totalCnt = 20;
+				for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
+					var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
+					var items = booksRes.items;
+					var bookIds = [];
+					items.forEach(function(obj) {
+						bookIds.push(obj.b_ids[obj.b_ids.length-1]);
+					});
+					var [bookInfosRes, bookPurchaseInfosRes] = await Promise.all([
+						UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true }),
+						UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true })
+					])
 					
-					for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
-						var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
-						var items = booksRes.items;
-						var bookIds = [];
-						items.forEach(function(obj) {
-							bookIds.push(obj.b_ids[obj.b_ids.length-1]);
-						});
-						var bookInfosRes = await UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true });
-						var bookPurchaseInfosRes = await UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true });
-						
-						if(offset==startOffset) {
-							var b0 = bookInfosRes[0];
-							var unitInfo = {
-								unit_id: unitId,
-								total_cnt: e.total_count,
-								
-								series_id: b0.series.id,
-								is_completed: b0.series.property.is_completed,	//update 가능성
-								is_serial: b0.series.property.is_serial,
-								is_serial_complete: b0.series.property.is_serial_complete,	//update 가능성
-								opened_last_volume_id: b0.series.property.opened_last_volume_id,	//update 가능성
-								title: b0.series.property.title,
-								total_book_count: b0.series.property.total_book_count,	//update 가능성
-								unit: b0.series.property.unit,
-								
-								is_webtoon: b0.file.is_webtoon,
-								publisher: b0.publisher
-							}
-							unitInfo = {...unitInfo, ...b0.property};
-							DB.updateData("store_unit", unitId, unitInfo, "update");
+					/*
+					//updateUnitDetail() 으로 대체됨
+					if(offset==startOffset) {
+						var b0 = bookInfosRes[0];
+						var unitInfo = {
+							unit_id: unitId,
+							total_cnt: e.total_count,
+							
+							series_id: b0.series.id,
+							is_completed: b0.series.property.is_completed,	//update 가능성
+							is_serial: b0.series.property.is_serial,
+							is_serial_complete: b0.series.property.is_serial_complete,	//update 가능성
+							opened_last_volume_id: b0.series.property.opened_last_volume_id,	//update 가능성
+							title: b0.series.property.title,
+							total_book_count: b0.series.property.total_book_count,	//update 가능성
+							unit: b0.series.property.unit,
+							
+							is_webtoon: b0.file.is_webtoon,
+							publisher: b0.publisher
 						}
-						
-						var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toString(obj.b_id), obj]));
-						var mergedList = bookInfosRes.map(item => {
-							item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
-							var other = purchaseMap.get(item.id);
-							return other ? {...item, ...other} : item;
-						});
-						mergedList.forEach(async function(bookInfo) {
-							await SYNC_BOOK.upsertBookInfo(unitId, bookInfo);
-						});
+						unitInfo = {...unitInfo, ...b0.property};
+						DB.updateData("store_unit", unitId, unitInfo, "update");
 					}
-				});
-			});
+					*/
+					
+					var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toString(obj.b_id), obj]));
+					var mergedList = bookInfosRes.map(item => {
+						item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
+						var other = purchaseMap.get(item.id);
+						return other ? {...item, ...other} : item;
+					});
+					mergedList.forEach(function(bookInfo) {
+						SYNC_BOOK.upsertBookInfo(e.id, bookInfo);
+					});
+				}
+			}
 			return true;
 		}
 		catch(e) {
