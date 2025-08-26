@@ -16,13 +16,21 @@
     "pay_way": "리디포인트",
     "reward_ridipoint": 0
 }*/
-class order {
+export default class orderClass {
 	//서비스 만드는 게 목적이면 이런거는 나중에 해도 되는데 사실 온전한 서비스 만드려면 어느정도 뼈대를 잡아야 하는데 이런거는 준비과정이 너무 길고 고민도 오래걸리고 뭐가 적절한지 판단할 지식도 없고 아아악
 	constructor(data) {
 		var me = this;
-		Object.keys(data).forEach(function(key) {
-			me[key] = data[key];
-		})
+		if(UTIL.isString(data)) {
+			data = JSON.parse(data);
+		}
+		if(!UTIL.isArray(data) && UTIL.isObject(data)) {
+			Object.keys(data).forEach(function(key) {
+				me[key] = data[key];
+			})
+		}
+		else {
+//			console.debug("type err")
+		}
 	}
 	
 	order_no;
@@ -36,7 +44,7 @@ class order {
 
 		order_dttm: "(Date) 주문시각, yymmdd HH:mm",
 		book_list: [{
-			[book_id]: "(int) book_id: (int) book단위 구매금액"
+			'[book_id]': "(int) book_id: (int) book단위 구매금액"
 		}],
 		
 		amt_cash: "(int) 리디캐시 사용액",
@@ -66,7 +74,6 @@ class order {
 		return true;
 	}
 }
-export {order as C_order};
 //function p(c) {
 //	const s = c.schema;
 //	Object.entries(s).forEach(([f,d]) => {

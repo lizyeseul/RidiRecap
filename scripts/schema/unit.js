@@ -15,18 +15,6 @@
     "total_book_count": 1315,
     "unit": "화",
     "is_webtoon": false,
-    "property": {
-        "is_adult_only": false,
-        "is_magazine": false,
-        "is_new_book": false,
-        "is_novel": false,
-        "is_open": true,
-        "is_somedeal": false,
-        "is_trial": false,
-        "is_wait_free": false,
-        "use_free_serial_schedule": false,
-        "preview_rate": 0
-    },
     "publisher": {
         "id": 425,
         "name": "문피아",
@@ -45,12 +33,20 @@
     "use_free_serial_schedule": false,
     "preview_rate": 0
 }*/
-class unit {
+export default class unitClass {
 	constructor(data) {
 		var me = this;
-		Object.keys(data).forEach(function(key) {
-			me[key] = data[key];
-		})
+		if(UTIL.isString(data)) {
+			data = JSON.parse(data);
+		}
+		if(!UTIL.isArray(data) && UTIL.isObject(data)) {
+			Object.keys(data).forEach(function(key) {
+				me[key] = data[key];
+			})
+		}
+		else {
+//			console.debug("type err")
+		}
 	}
 	
 	unit_id;

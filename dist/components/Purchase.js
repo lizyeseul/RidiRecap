@@ -26,7 +26,9 @@ function Purchase() {
     setTempData(JSON.stringify(r));
   }
 
-  async function syncPurchase() {}
+  async function syncPurchase() {
+    SYNC_PURCHASE.syncPurchase();
+  }
 
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: findData

@@ -21,7 +21,7 @@ function Purchase() {
 		setTempData(JSON.stringify(r));
 	}
 	async function syncPurchase() {
-		
+		SYNC_PURCHASE.syncPurchase();
 	}
 	return (
 		<div>

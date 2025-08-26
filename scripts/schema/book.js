@@ -1,9 +1,17 @@
-class book {
+export default class bookClass {
 	constructor(data) {
 		var me = this;
-		Object.keys(data).forEach(function(key) {
-			me[key] = data[key];
-		})
+		if(UTIL.isString(data)) {
+			data = JSON.parse(data);
+		}
+		if(!UTIL.isArray(data) && UTIL.isObject(data)) {
+			Object.keys(data).forEach(function(key) {
+				me[key] = data[key];
+			})
+		}
+		else {
+//			console.debug("type err")
+		}
 	}
 	
 	unit_id;
