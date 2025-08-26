@@ -1,5 +1,21 @@
-import DB from "../../scripts/connect_db.js";
-
+/*{
+    "order_no": "2025082585724013",
+    "order_dttm": "2025-08-25T14:48:00.000Z",
+    "order_dt": "20250825",
+    "order_seq": 3366,
+    "total_amt": 100,
+    "last_update_dttm": "2025-08-26T01:54:31.029Z",
+    "book_list": {
+        "5211000569": 100
+    },
+    "amt_total": 100,
+    "amt_discount_cupon": 0,
+    "amt_cash": 0,
+    "amt_point": 100,
+    "amt_pg": 0,
+    "pay_way": "리디포인트",
+    "reward_ridipoint": 0
+}*/
 class order {
 	//서비스 만드는 게 목적이면 이런거는 나중에 해도 되는데 사실 온전한 서비스 만드려면 어느정도 뼈대를 잡아야 하는데 이런거는 준비과정이 너무 길고 고민도 오래걸리고 뭐가 적절한지 판단할 지식도 없고 아아악
 	constructor(data) {

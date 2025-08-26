@@ -1,3 +1,50 @@
+/*{
+    "unit_id": "3396974",
+    "unit_count": 978,
+    "unit_title": "서브 남주가 파업하면 생기는 일",
+    "unit_type": "series",
+    "unit_type_int": 2,
+    "last_update_unit": "2025-08-25T06:30:33.000Z",
+    "last_update_dttm": "2025-08-25T08:21:41.915Z",
+    "series_id": "425193499",
+    "is_completed": false,
+    "is_serial": true,
+    "is_serial_complete": false,
+    "opened_last_volume_id": "425563231",
+    "title": "서브 남주가 파업하면 생기는 일",
+    "total_book_count": 1315,
+    "unit": "화",
+    "is_webtoon": false,
+    "property": {
+        "is_adult_only": false,
+        "is_magazine": false,
+        "is_new_book": false,
+        "is_novel": false,
+        "is_open": true,
+        "is_somedeal": false,
+        "is_trial": false,
+        "is_wait_free": false,
+        "use_free_serial_schedule": false,
+        "preview_rate": 0
+    },
+    "publisher": {
+        "id": 425,
+        "name": "문피아",
+        "cp_name": "문피아_E/P"
+    },
+    "service_type": "none",
+    "total_cnt": 1042,
+    "is_adult_only": false,
+    "is_magazine": false,
+    "is_new_book": false,
+    "is_novel": false,
+    "is_open": true,
+    "is_somedeal": false,
+    "is_trial": false,
+    "is_wait_free": false,
+    "use_free_serial_schedule": false,
+    "preview_rate": 0
+}*/
 class unit {
 	constructor(data) {
 		var me = this;

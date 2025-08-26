@@ -124,13 +124,11 @@ var SYNC_BOOK = {
 						}
 						
 						var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toString(obj.b_id), obj]));
-						console.log(purchaseMap);
 						var mergedList = bookInfosRes.map(item => {
 							item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
 							var other = purchaseMap.get(item.id);
 							return other ? {...item, ...other} : item;
 						});
-						console.log(mergedList);
 						mergedList.forEach(async function(bookInfo) {
 							await SYNC_BOOK.upsertBookInfo(unitId, bookInfo);
 						});
