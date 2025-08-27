@@ -30,7 +30,7 @@ function Book() {
 				</td>
 				<td>{unitInfo.unit_id}</td>
 				<td>{unitInfo.unit_title}</td>
-				<td>{unitInfo.total_cnt}{unitInfo.unit}</td>
+				<td>{unitInfo.total_cnt}</td>
 			</tr>
 		)
 	}
@@ -38,7 +38,7 @@ function Book() {
 		setIsSync(true);
 		var tempList = await DB.getValueByIdx("store_unit", "unit_id", { direction: "prev"});
 		setUnitInfo(tempList.filter((u) => {
-			return u.is_adult_only === false;
+			return u.property.is_adult_only === false;
 		}));
 		setIsSync(false);
 	}

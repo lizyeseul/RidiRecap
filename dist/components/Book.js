@@ -4,6 +4,7 @@ const {
 } = React;
 import SYNC_BOOK from "../../scripts/sync/sync_book.js";
 import DB from "../../scripts/connect_db.js";
+
 function Book() {
   const [isSync, setIsSync] = useState(false);
   const [unitInfo, setUnitInfo] = useState([]);
@@ -12,15 +13,18 @@ function Book() {
   useEffect(() => {
     findLibList();
   }, []);
+
   const onCheckUnit = id => {
     setCheckedListById(prev => checkedListById.includes(id) ? prev.filter(el => el !== id) : [...prev, id]);
   };
+
   function onCheckUnitAll() {
     setIsUnitAllChecked(!isUnitAllChecked);
     setCheckedListById(isUnitAllChecked ? [] : unitInfo.map(b => {
       return b.unit_id;
     }));
   }
+
   function UnitInfoRow({
     unitInfo
   }) {
@@ -29,33 +33,38 @@ function Book() {
       type: "checkbox",
       onChange: () => onCheckUnit(unitInfo.unit_id),
       checked: checkedListById.includes(unitInfo.unit_id)
-    })), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_id), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_title), /*#__PURE__*/React.createElement("td", null, unitInfo.total_cnt, unitInfo.unit));
+    })), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_id), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_title), /*#__PURE__*/React.createElement("td", null, unitInfo.total_cnt));
   }
+
   async function findLibList() {
     setIsSync(true);
     var tempList = await DB.getValueByIdx("store_unit", "unit_id", {
       direction: "prev"
     });
     setUnitInfo(tempList.filter(u => {
-      return u.is_adult_only === false;
+      return u.property.is_adult_only === false;
     }));
     setIsSync(false);
   }
+
   async function updateLib() {
     setIsSync(true);
     await SYNC_BOOK.updateLib();
     setIsSync(false);
   }
+
   async function updateUnitDetail() {
     setIsSync(true);
     await SYNC_BOOK.updateUnitDetail();
     setIsSync(false);
   }
+
   async function updateBook() {
     setIsSync(true);
     await SYNC_BOOK.updateBook(checkedListById);
     setIsSync(false);
   }
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
     disabled: isSync
@@ -76,4 +85,5 @@ function Book() {
     unitInfo: o
   }))));
 }
+
 export default Book;
