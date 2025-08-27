@@ -98,6 +98,22 @@ var UTIL = {
 			sendResponse({ success: false, error: err.toString() });
 		});
 	},
+	runWithConcurrencyLimit: async function(tasks, limit) {
+		const results = [];
+		let running = [];
+		for (const task of tasks) {
+			const p = task().finally(() => {
+				running = running.filter(r => r !== p);
+			});
+			results.push(p);
+			running.push(p);
+			// 동시 실행 개수 초과 시 하나 끝날 때까지 대기
+			if (running.length >= limit) {
+				await Promise.race(running);
+			}
+		}
+		return Promise.all(results);
+	},
 	
 	findNextTdByThTxt: function(bodyE, thTxt) {
 		return $(bodyE).find("th").filter(function() {return $(this).text().trim() === thTxt;}).next("td");

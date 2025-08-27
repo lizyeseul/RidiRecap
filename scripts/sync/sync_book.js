@@ -27,22 +27,6 @@ var SYNC_BOOK = {
 			console.error("updateLib 오류:", e);
 		}
 	},
-	runWithConcurrencyLimit: async function(tasks, limit) {
-		const results = [];
-		let running = [];
-		for (const task of tasks) {
-			const p = task().finally(() => {
-				running = running.filter(r => r !== p);
-			});
-			results.push(p);
-			running.push(p);
-			// 동시 실행 개수 초과 시 하나 끝날 때까지 대기
-			if (running.length >= limit) {
-				await Promise.race(running);
-			}
-		}
-		return Promise.all(results);
-	},
 	updateUnitDetail: async function() {
 		try {
 			var checkedListById = await DB.getValueByIdx("store_unit", "unit_id", { direction: "prev"});
@@ -50,7 +34,6 @@ var SYNC_BOOK = {
 			var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:checkedListById}, { isResultJson: true });
 
 			async function processUnit(e) {
-			// for(var e of unitListRes.units) {
 				var unitId = UTIL.toString(e.id);
 				var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset=0&limit=1&order_type=unit_order&order_by=asc", null, { isResultJson: true });
 				var items = booksRes.items;
@@ -80,7 +63,7 @@ var SYNC_BOOK = {
 				DB.updateData("store_unit", unitId, unitInfo, "update");
 			};
 			const tasks = unitListRes.units.map((e) => () => processUnit(e));
-			await SYNC_BOOK.runWithConcurrencyLimit(tasks, 10);
+			await UTIL.runWithConcurrencyLimit(tasks, 10);
 			return true;
 		}
 		catch(e) {
