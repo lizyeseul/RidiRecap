@@ -33,7 +33,7 @@ function Book() {
       type: "checkbox",
       onChange: () => onCheckUnit(unitInfo.unit_id),
       checked: checkedListById.includes(unitInfo.unit_id)
-    })), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_id), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_title), /*#__PURE__*/React.createElement("td", null, unitInfo.total_cnt));
+    })), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_id), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_title), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_type));
   }
 
   async function findLibList() {
@@ -42,6 +42,10 @@ function Book() {
       direction: "prev"
     });
     setUnitInfo(tempList.filter(u => {
+	return true;
+      u.property = u.property || {
+        is_adult_only: true
+      };
       return u.property.is_adult_only === false;
     }));
     setIsSync(false);
@@ -81,7 +85,7 @@ function Book() {
     type: "checkbox",
     onChange: () => onCheckUnitAll(),
     checked: isUnitAllChecked
-  })), /*#__PURE__*/React.createElement("td", null, "unit_id"), /*#__PURE__*/React.createElement("td", null, "\uC81C\uBAA9"), /*#__PURE__*/React.createElement("td", null, "\uD654 \uC218")), unitInfo.map(o => /*#__PURE__*/React.createElement(UnitInfoRow, {
+  })), /*#__PURE__*/React.createElement("td", null, "unit_id"), /*#__PURE__*/React.createElement("td", null, "\uC81C\uBAA9"), /*#__PURE__*/React.createElement("td", null, "unit\uC885\uB958")), unitInfo.map(o => /*#__PURE__*/React.createElement(UnitInfoRow, {
     unitInfo: o
   }))));
 }

@@ -30,7 +30,7 @@ function Book() {
 				</td>
 				<td>{unitInfo.unit_id}</td>
 				<td>{unitInfo.unit_title}</td>
-				<td>{unitInfo.total_cnt}</td>
+				<td>{unitInfo.unit_type}</td>
 			</tr>
 		)
 	}
@@ -38,6 +38,8 @@ function Book() {
 		setIsSync(true);
 		var tempList = await DB.getValueByIdx("store_unit", "unit_id", { direction: "prev"});
 		setUnitInfo(tempList.filter((u) => {
+			return true;
+			u.property = u.property || {is_adult_only:true};
 			return u.property.is_adult_only === false;
 		}));
 		setIsSync(false);
@@ -77,7 +79,7 @@ function Book() {
 					</td>
 					<td>unit_id</td>
 					<td>제목</td>
-					<td>화 수</td>
+					<td>unit종류</td>
 				</tr>
 			{
 				unitInfo.map((o) => (

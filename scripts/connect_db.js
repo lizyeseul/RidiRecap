@@ -14,7 +14,6 @@ var DB = {
 			if(!dbConnect.objectStoreNames.contains("store_order")) {
 				os = dbConnect.createObjectStore("store_order", {autoIncrement: false});
 				os.createIndex("order_no", "order_no", {unique: true});
-				os.createIndex("order_dt", "order_dt", {unique: false});
 				os.createIndex("order_seq", "order_seq", {unique: true});
 			}
 			if(!dbConnect.objectStoreNames.contains("store_unit")) {

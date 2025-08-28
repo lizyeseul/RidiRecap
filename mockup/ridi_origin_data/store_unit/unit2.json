@@ -1,0 +1,154 @@
+{
+    "b_id": "1746024040",
+    "service_type": "normal",
+    "is_ridiselect": false,
+    "purchase_date": "2024-10-21T22:32:44+09:00",
+    "expire_date": "9999-12-31T23:59:59+09:00",
+    "remain_time": "",
+    "unit_id": "3223107",
+    "unit_count": 149,
+    "unit_title": "킹스메이커 ~Triple Crown~ [완전판]",
+    "unit_type": "series",
+    "unit_type_int": 2,
+    "last_update_dttm": "2025-08-28T01:08:44.616Z",
+    "id": "1746013666",
+    "title": {
+        "main": "킹스메이커 ~Triple Crown~ [완전판] 1화"
+    },
+    "thumbnail": {
+        "small": "https://img.ridicdn.net/cover/1746013666/small#1",
+        "large": "https://img.ridicdn.net/cover/1746013666/large#1",
+        "xxlarge": "https://img.ridicdn.net/cover/1746013666/xxlarge#1"
+    },
+    "serial_thumbnail": {
+        "small": "https://img.ridicdn.net/thumbnail/1746013666/small",
+        "large": "https://img.ridicdn.net/thumbnail/1746013666/large",
+        "xxlarge": "https://img.ridicdn.net/thumbnail/1746013666/xxlarge"
+    },
+    "authors": [
+        {
+            "id": 110329,
+            "name": "강지영",
+            "role": "comic_author"
+        },
+        {
+            "id": 110330,
+            "name": "하가",
+            "role": "comic_author"
+        }
+    ],
+    "categories": [
+        {
+            "id": 4251,
+            "name": "BL 웹툰",
+            "genre": "comic",
+            "sub_genre": "bl_webtoon",
+            "is_series_category": true,
+            "ancestor_ids": [
+                4250,
+                0
+            ]
+        }
+    ],
+    "price_info": {
+        "buy": {
+            "regular_price": 500,
+            "price": 500,
+            "discount_percentage": 0
+        },
+        "rent": {
+            "regular_price": 300,
+            "price": 0,
+            "rent_days": 3,
+            "discount_percentage": 100
+        }
+    },
+    "series": {
+        "id": "1746013666",
+        "volume": 1,
+        "property": {
+            "is_comic_hd": false,
+            "is_completed": true,
+            "is_serial": true,
+            "is_serial_complete": true,
+            "is_wait_free": false,
+            "last_volume_id": "1746024336",
+            "opened_book_count": 150,
+            "opened_last_volume_id": "1746024336",
+            "title": "킹스메이커 ~Triple Crown~ [완전판]",
+            "total_book_count": 150,
+            "unit": "화",
+            "next_books": {
+                "1746013667": {
+                    "b_id": "1746013667",
+                    "is_opened": true,
+                    "use_free_serial_schedule": false
+                }
+            }
+        },
+        "price_info": {
+            "buy": {
+                "total_book_count": 150,
+                "free_book_count": 1,
+                "regular_price": 74500,
+                "price": 74500,
+                "discount_percentage": 0
+            },
+            "rent": {
+                "total_book_count": 150,
+                "free_book_count": 5,
+                "regular_price": 43500,
+                "rent_price": 43500,
+                "discount_percentage": 0,
+                "rent_days": 3
+            }
+        }
+    },
+    "file": {
+        "size": 4671,
+        "is_comic_hd": false,
+        "is_drm_free": false,
+        "is_webtoon": true,
+        "variants": [
+            {
+                "quality": "recommended",
+                "size": 4671
+            }
+        ],
+        "format": "webtoon",
+        "is_comic": true,
+        "is_manga": false,
+        "page_count": 39
+    },
+    "property": {
+        "is_adult_only": true,
+        "is_magazine": false,
+        "is_new_book": false,
+        "is_novel": false,
+        "is_open": true,
+        "is_somedeal": false,
+        "is_trial": false,
+        "is_wait_free": false,
+        "use_free_serial_schedule": false,
+        "preview_rate": 0
+    },
+    "publish": {
+        "ebook_publish": "2020-09-08T00:00:00+09:00",
+        "ridibooks_publish": "2020-09-11T00:02:42+09:00",
+        "ridibooks_register": "2020-09-08T15:12:02+09:00"
+    },
+    "publisher": {
+        "id": 1746,
+        "name": "㈜재담미디어",
+        "cp_name": "재담미디어_JPG"
+    },
+    "support": {
+        "android": true,
+        "ios": true,
+        "paper": false,
+        "mac": false,
+        "windows": false,
+        "web_viewer": true
+    },
+    "total_cnt": 150
+}

@@ -6,13 +6,14 @@ var SYNC_BOOK = {
 	updateLib: async function() {
 		try {
 			var unitCnt = sessionStorage.getItem("unitCnt") || "500";
-			var res = await UTIL.request(URL.LIBRARY_BASE+"items/main/?offset=0&limit="+10, null, { isResultJson: true });
+			var res = await UTIL.request(URL.LIBRARY_BASE+"items/main/?offset=0&limit="+unitCnt, null, { isResultJson: true });
 			
 			var items = res.items;
 			items.forEach(function(unit) {
 				unit.unit_id = UTIL.toString(unit.unit_id);
 				DB.updateData("store_unit", unit.unit_id, unit, "update");
 			});
+			await SYNC_BOOK.updateUnitDetail();
 			return true;
 		}
 		catch(e) {
@@ -51,10 +52,10 @@ var SYNC_BOOK = {
 			var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:checkedListById}, { isResultJson: true });
 			for(var e of unitListRes.units) {
 				var startOffset = 0;
-//				var limit = 100;
-//				var totalCnt = e.total_count;
-				var limit = 10;
-				 var totalCnt = 20;
+				var limit = 100;
+				var totalCnt = e.total_count;
+//				var limit = 10;
+//				var totalCnt = 20;
 				for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
 					var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
 					var items = booksRes.items;
@@ -75,7 +76,7 @@ var SYNC_BOOK = {
 					});
 					mergedList.forEach(function(bookInfo) {
 						bookInfo.book_id = UTIL.toString(bookInfo.id);
-						bookInfo.unit_id = e.id;
+						bookInfo.unit_id = UTIL.toString(e.id);
 						DB.updateData("store_book", bookInfo.book_id, bookInfo, "update");
 					});
 				}

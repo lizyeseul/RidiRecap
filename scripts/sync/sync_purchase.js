@@ -4,7 +4,7 @@ import purchaseClass from "../../scripts/schema/purchase.js";
 var SYNC_PURCHASE = {
 	syncPurchase: async function() {
 //		var orderList = await DB.getValueByIdx("store_order", "order_no", null);
-		var orderList = await DB.getUniqueValue("store_order", "order_no", "2025041866111106");
+		var orderList = await DB.getUniqueValue("store_order", "order_no", "2025082283483105");
 		orderList = [orderList];
 		for(var orderItem of orderList) {
 			var bookList = orderItem.book_list;
@@ -15,6 +15,7 @@ var SYNC_PURCHASE = {
 				var purchaseItem = new purchaseClass();
 				purchaseItem.setRawClass(orderItem, unitData, bookData);
 				console.log(purchaseItem)
+				console.log(purchaseItem.order.dataForPurchase)
 			}
 		}
 	}
