@@ -6,9 +6,9 @@
 	"icons": {
 		"16": "images/favicon16.png"
 	},
-	"action":{
+	"sidebar_action": {
 		"default_title":"ri",
-		"default_popup": "html/index.html"
+		"default_panel": "html/index.html"
 	},
 	"permissions": ["sidePanel", "webRequest"],
 	"host_permissions": [
