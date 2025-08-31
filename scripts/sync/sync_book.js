@@ -49,6 +49,7 @@ var SYNC_BOOK = {
 	},
 	updateBook: async function(checkedListById) {
 		try {
+			if(UTIL.isEmpty(checkedListById)) return;
 			var unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids:checkedListById}, { isResultJson: true });
 			for(var e of unitListRes.units) {
 				var startOffset = 0;

@@ -1,14 +1,27 @@
 import DB from "../../scripts/connect_db.js";
 var SYNC_ORDER = {
 	syncOrder: async function(fromPage, toPage, setIngPageLabel) {
-		setIngPageLabel(fromPage*15-14, toPage*15,fromPage*15-14);
-		for(var pageIdx=fromPage; pageIdx<=toPage; pageIdx++) {
-			var orderNoList = await this.parseHistoryListPage(pageIdx, false);
-			for(var i=0; i<orderNoList.length; i++) {
-				setIngPageLabel(fromPage*15-14, toPage*15, pageIdx*15-14+i);
-				await this.parseHistoryDetailPage(orderNoList[i]);
-			}
+		const pageTasks = [];
+		for (let pageIdx = fromPage; pageIdx <= toPage; pageIdx++) {
+			pageTasks.push(async () => {
+				const orderNoList = await this.parseHistoryListPage(pageIdx, false);
+				return { pageIdx, orderNoList };
+			});
 		}
+
+		// 1. 페이지를 병렬로 요청하여 모든 주문번호 수집
+		const pageResults = await UTIL.runWithConcurrencyLimit(pageTasks, 5);
+		pageResults.sort((a, b) => a.pageIdx - b.pageIdx);
+		const allOrderNoList = pageResults.flatMap(res => res.orderNoList);
+
+		// 2. 주문 상세 병렬 처리 + 진행 상황 라벨 유지
+		let processedCount = 0; // 전역 카운터
+		const orderTasks = allOrderNoList.map(orderNo => async () => {
+			await this.parseHistoryDetailPage(orderNo);
+			processedCount++;
+			setIngPageLabel(fromPage * 15 - 14, toPage * 15, fromPage * 15 - 14 + processedCount - 1);
+		});
+		await UTIL.runWithConcurrencyLimit(orderTasks, 15);
 	},
 	/*
 	param pageIdx 크롤링할 결제내역 페이지 번호

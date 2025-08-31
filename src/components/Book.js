@@ -65,7 +65,7 @@ function Book() {
 			<span>{isSync? 'sync' : 'end'}</span><br/>
 			<div>
 				<button onClick={updateLib} disabled={isSync}>unit 목록 update</button>
-				<button onClick={updateUnitDetail} disabled={isSync}>unit 상세 update</button>
+				<button onClick={updateUnitDetail} disabled={true}>unit 상세 update</button>
 				<button onClick={updateBook} disabled={isSync}>책 상세 update</button>
 				<button onClick={findLibList} disabled={isSync}>목록 조회</button>
 			</div>
