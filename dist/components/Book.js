@@ -63,13 +63,13 @@ function Book() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
     disabled: isSync
-  }, "unit \uBAA9\uB85D update"), /*#__PURE__*/React.createElement("button", {
+  }, "unit"), /*#__PURE__*/React.createElement("button", {
     onClick: updateUnitDetail,
     disabled: true
   }, "unit \uC0C1\uC138 update"), /*#__PURE__*/React.createElement("button", {
     onClick: updateBook,
     disabled: isSync
-  }, "\uCC45 \uC0C1\uC138 update"), /*#__PURE__*/React.createElement("button", {
+  }, "book"), /*#__PURE__*/React.createElement("button", {
     onClick: findLibList,
     disabled: isSync
   }, "\uBAA9\uB85D \uC870\uD68C")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {

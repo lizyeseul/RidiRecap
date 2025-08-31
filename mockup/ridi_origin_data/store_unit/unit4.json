@@ -1,21 +1,46 @@
 {
+    "unit_id": "3577153",
+    "unit_count": 8,
+    "unit_title": "리셋팅 레이디",
+    "unit_type": "shelf",
+    "unit_type_int": 4,
+    "last_update_unit": "2025-08-26T14:29:10.060Z",
+    "last_update_dttm": "2025-08-31T04:36:43.548Z",
+    "total_cnt": 16,
+    "is_webtoon": false,
+    "publisher": {
+        "id": 2822,
+        "name": "로즈엔",
+        "cp_name": "김승연(차서진)_개인"
+    },
+    "series_id": "2822000210",
+    "is_completed": false,
+    "is_serial": false,
+    "is_serial_complete": false,
+    "opened_last_volume_id": "",
+    "title": {
+        "main": "리셋팅 레이디 1권",
+        "prefix": "[e북]"
+    },
+    "total_book_count": 8,
+    "unit": "권",
+    "is_adult_only": false,
+    "is_magazine": false,
+    "is_new_book": false,
+    "is_novel": false,
+    "is_open": false,
+    "is_somedeal": false,
+    "is_trial": false,
+    "is_wait_free": false,
+    "use_free_serial_schedule": false,
+    "preview_rate": 0,
     "b_id": "3885010878",
     "service_type": "normal",
     "is_ridiselect": false,
     "purchase_date": "2024-12-19T09:56:53+09:00",
     "expire_date": "9999-12-31T23:59:59+09:00",
     "remain_time": "",
-    "unit_id": "3577153",
-    "unit_count": 8,
-    "unit_title": "리셋팅 레이디",
-    "unit_type": "shelf",
-    "unit_type_int": 4,
-    "last_update_dttm": "2025-08-28T01:08:44.727Z",
     "id": "2822000210",
-    "title": {
-        "main": "리셋팅 레이디 1권",
-        "prefix": "[e북]"
-    },
     "thumbnail": {
         "small": "https://img.ridicdn.net/cover/2822000210/small#1",
         "large": "https://img.ridicdn.net/cover/2822000210/large#1",
@@ -117,11 +142,6 @@
         "ridibooks_publish": "2017-11-14T18:00:06+09:00",
         "ridibooks_register": "2017-11-09T11:29:03+09:00"
     },
-    "publisher": {
-        "id": 2822,
-        "name": "로즈엔",
-        "cp_name": "김승연(차서진)_개인"
-    },
     "support": {
         "android": true,
         "ios": true,
@@ -129,6 +149,5 @@
         "mac": true,
         "windows": true,
         "web_viewer": false
-    },
-    "total_cnt": 16
+    }
 }

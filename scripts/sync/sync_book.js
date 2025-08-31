@@ -13,7 +13,7 @@ var SYNC_BOOK = {
 				unit.unit_id = UTIL.toString(unit.unit_id);
 				DB.updateData("store_unit", unit.unit_id, unit, "update");
 			});
-			await SYNC_BOOK.updateUnitDetail();
+			// await SYNC_BOOK.updateUnitDetail();
 			return true;
 		}
 		catch(e) {
@@ -30,7 +30,7 @@ var SYNC_BOOK = {
 				var unitId = UTIL.toString(e.id);
 				var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset=0&limit=1&order_type=unit_order&order_by=asc", null, { isResultJson: true });
 				var items = booksRes.items;
-				var bookIds = items.map((obj) => obj.b_ids[obj.b_ids.length - 1]);
+				var bookIds = [...new Set(items.flatMap(obj => obj.b_ids))];
 				var bookInfosRes = await UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true });
 				var unitInfo = {
 					unit_id: unitId,
@@ -60,10 +60,7 @@ var SYNC_BOOK = {
 				for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
 					var booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+e.id+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
 					var items = booksRes.items;
-					var bookIds = [];
-					items.forEach(function(obj) {
-						bookIds.push(obj.b_ids[obj.b_ids.length-1]);
-					});
+					var bookIds = [...new Set(items.flatMap(obj => obj.b_ids))];
 					var [bookInfosRes, bookPurchaseInfosRes] = await Promise.all([
 						UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true }),
 						UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true })
