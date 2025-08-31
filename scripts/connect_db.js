@@ -60,7 +60,8 @@ var DB = {
 		var keyRange = options.range || null;
 		var limit = options.limit || -1;
 		var direction = options.direction || "next";
-	
+		var filter = options.filter || null;
+
 		return new Promise((resolve, reject) => {
 			var store = this.getObjectStore(tbNm,"readonly");
 			var index = store.index(idxNm);
@@ -71,7 +72,16 @@ var DB = {
 			cursorReq.onsuccess = (e) => {
 				var cursor = e.target.result;
 				if (cursor) {
-					results.push(cursor.value);
+					var includeFlag = true;
+					if(filter) {
+						for (const key in filter) {
+							if (cursor.value[key] !== filter[key]) {
+								includeFlag = false;
+								break;
+							}
+						}
+					}
+					if (includeFlag) results.push(cursor.value);
 					if(limit != -1 && results.length >= limit) {
 						resolve(results);
 						return;

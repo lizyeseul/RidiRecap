@@ -60,6 +60,11 @@ function Book() {
     await SYNC_BOOK.updateBook(checkedListById);
     setIsSync(false);
   }
+  async function updateBook2() {
+    setIsSync(true);
+    await SYNC_BOOK.updateBook2();
+    setIsSync(false);
+  }
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
     disabled: isSync
@@ -70,6 +75,9 @@ function Book() {
     onClick: updateBook,
     disabled: isSync
   }, "book"), /*#__PURE__*/React.createElement("button", {
+    onClick: updateBook2,
+    disabled: isSync
+  }, "order \uAE30\uC900 book"), /*#__PURE__*/React.createElement("button", {
     onClick: findLibList,
     disabled: isSync
   }, "\uBAA9\uB85D \uC870\uD68C")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {

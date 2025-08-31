@@ -60,6 +60,11 @@ function Book() {
 		await SYNC_BOOK.updateBook(checkedListById);
 		setIsSync(false);
 	}
+	async function updateBook2() {
+		setIsSync(true);
+		await SYNC_BOOK.updateBook2();
+		setIsSync(false);
+	}
 	return (
 		<div>
 			<span>{isSync? 'sync' : 'end'}</span><br/>
@@ -67,6 +72,7 @@ function Book() {
 				<button onClick={updateLib} disabled={isSync}>unit</button>
 				<button onClick={updateUnitDetail} disabled={true}>unit 상세 update</button>
 				<button onClick={updateBook} disabled={isSync}>book</button>
+				<button onClick={updateBook2} disabled={isSync}>order 기준 book</button>
 				<button onClick={findLibList} disabled={isSync}>목록 조회</button>
 			</div>
 			<hr/>
