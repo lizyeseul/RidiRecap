@@ -30,7 +30,7 @@ function Book() {
 				</td>
 				<td>{unitInfo.unit_id}</td>
 				<td>{unitInfo.unit_title}</td>
-				<td>{unitInfo.total_cnt}{unitInfo.unit}</td>
+				<td>{unitInfo.unit_type}</td>
 			</tr>
 		)
 	}
@@ -38,7 +38,9 @@ function Book() {
 		setIsSync(true);
 		var tempList = await DB.getValueByIdx("store_unit", "unit_id", { direction: "prev"});
 		setUnitInfo(tempList.filter((u) => {
-			return u.is_adult_only === false;
+			return true;
+			u.property = u.property || {is_adult_only:true};
+			return u.property.is_adult_only === false;
 		}));
 		setIsSync(false);
 	}
@@ -58,13 +60,19 @@ function Book() {
 		await SYNC_BOOK.updateBook(checkedListById);
 		setIsSync(false);
 	}
+	async function updateBook2() {
+		setIsSync(true);
+		await SYNC_BOOK.updateBook2();
+		setIsSync(false);
+	}
 	return (
 		<div>
 			<span>{isSync? 'sync' : 'end'}</span><br/>
 			<div>
-				<button onClick={updateLib} disabled={isSync}>unit 목록 update</button>
-				<button onClick={updateUnitDetail} disabled={isSync}>unit 상세 update</button>
-				<button onClick={updateBook} disabled={isSync}>책 상세 update</button>
+				<button onClick={updateLib} disabled={isSync}>unit</button>
+				<button onClick={updateUnitDetail} disabled={true}>unit 상세 update</button>
+				<button onClick={updateBook} disabled={isSync}>book</button>
+				<button onClick={updateBook2} disabled={isSync}>order 기준 book</button>
 				<button onClick={findLibList} disabled={isSync}>목록 조회</button>
 			</div>
 			<hr/>
@@ -77,7 +85,7 @@ function Book() {
 					</td>
 					<td>unit_id</td>
 					<td>제목</td>
-					<td>화 수</td>
+					<td>unit종류</td>
 				</tr>
 			{
 				unitInfo.map((o) => (

@@ -43,14 +43,14 @@ function Order() {
 	}
 	async function findRecentOrder() {
 		setIsSync(true);
-		var tempList = await DB.getValueByIdx("store_order", "order_seq", { direction: "prev", limit: 15 });
+		var tempList = await DB.getValueByIdx("store_order", "order_seq", { direction: "prev", limit: 100 });
 		setOrderInfo(tempList);
 		setIsSync(false);
 	}
 	function OrderInfoRow({orderInfo}) {
 		return (
 			<li>
-				{orderInfo.order_no} : {orderInfo.order_dt}, {orderInfo.total_amt}
+				{orderInfo.order_no} : {moment(orderInfo.order_dttm).format("YYYYMMDD")}, {orderInfo.total_amt}
 			</li>
 		)
 	}
@@ -63,9 +63,9 @@ function Order() {
 				<input type="number"	name="fromPage"	value={fromPage}	onChange={(e) => setFromPage(e.target.value)}/>
 				<input type="number"	name="toPage"	value={toPage}		onChange={(e) => setToPage(e.target.value)}/>
 				<button onClick={syncOrder} disabled={isSync}>주문 동기화</button>
-				<button onClick={syncOrderList} disabled={isSync}>sync order</button>
-				<button onClick={syncOrderDetail} disabled={isSync}>sync order detail</button>
-				<button onClick={findRecentOrder} disabled={isSync}>조회(15개)</button>
+				<button onClick={syncOrderList} disabled={true}>sync order</button>
+				<button onClick={syncOrderDetail} disabled={true}>sync order detail</button>
+				<button onClick={findRecentOrder} disabled={isSync}>조회(100개)</button>
 			</div>
 			<hr/>
 			<ul>

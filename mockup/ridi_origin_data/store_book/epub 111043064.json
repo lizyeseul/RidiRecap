@@ -1,0 +1,86 @@
+[
+  {
+    "id": "111043064",
+    "title": {
+      "main": "리셋팅 레이디 세트",
+      "prefix": "[e북]"
+    },
+    "thumbnail": {
+      "small": "https://img.ridicdn.net/cover/111043064/small#1",
+      "large": "https://img.ridicdn.net/cover/111043064/large#1",
+      "xxlarge": "https://img.ridicdn.net/cover/111043064/xxlarge#1"
+    },
+    "authors": [
+      {
+        "id": 79402,
+        "name": "차서진",
+        "role": "author"
+      }
+    ],
+    "categories": [
+      {
+        "id": 6002,
+        "name": "서양풍 로판",
+        "genre": "romance_fantasy",
+        "sub_genre": "romance_fantasy",
+        "is_series_category": true,
+        "ancestor_ids": [6000, 0]
+      }
+    ],
+    "price_info": {
+      "buy": {
+        "regular_price": 11950,
+        "price": 11950,
+        "discount_percentage": 0
+      }
+    },
+    "setbook": {
+      "member_books_count": 8
+    },
+    "file": {
+      "size": 232,
+      "is_comic_hd": false,
+      "is_drm_free": false,
+      "is_webtoon": false,
+      "variants": [
+        {
+          "quality": "recommended",
+          "size": 232
+        }
+      ],
+      "is_comic": false,
+      "is_manga": false
+    },
+    "property": {
+      "is_adult_only": false,
+      "is_magazine": false,
+      "is_new_book": false,
+      "is_novel": false,
+      "is_open": false,
+      "is_somedeal": false,
+      "is_trial": false,
+      "is_wait_free": false,
+      "review_display_id": "3885003833",
+      "use_free_serial_schedule": false,
+      "preview_rate": 0
+    },
+    "publish": {
+      "ebook_publish": "2021-03-18T00:00:00+09:00",
+      "ridibooks_publish": "2022-12-20T00:11:02+09:00",
+      "ridibooks_register": "2022-12-15T21:41:41+09:00"
+    },
+    "publisher": {
+      "id": 111,
+      "name": "델피뉴",
+      "cp_name": "리디"
+    },
+    "support": {
+      "android": true,
+      "ios": true,
+      "paper": true,
+      "mac": true,
+      "windows": true,
+      "web_viewer": false
+    }
+  }
+]

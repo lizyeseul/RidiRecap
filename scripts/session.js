@@ -2,6 +2,7 @@ import DB from "../../scripts/connect_db.js"
 var SESSION = {
 	setRidiGlobalVal: async function() {
 		try {
+			document.cookie = "user_device_type=Pc; path=/; Domain=.ridibooks.com";
 			localStorage.removeItem("copyRidi");
 			const res = await UTIL.request(URL.base+URL.history+"?page=999", null, null);
 			var htmlDOM = parser.parseFromString(res, "text/html");

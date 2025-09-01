@@ -42,7 +42,7 @@ function Order() {
     setIsSync(true);
     var tempList = await DB.getValueByIdx("store_order", "order_seq", {
       direction: "prev",
-      limit: 15
+      limit: 100
     });
     setOrderInfo(tempList);
     setIsSync(false);
@@ -50,7 +50,7 @@ function Order() {
   function OrderInfoRow({
     orderInfo
   }) {
-    return /*#__PURE__*/React.createElement("li", null, orderInfo.order_no, " : ", orderInfo.order_dt, ", ", orderInfo.total_amt);
+    return /*#__PURE__*/React.createElement("li", null, orderInfo.order_no, " : ", moment(orderInfo.order_dttm).format("YYYYMMDD"), ", ", orderInfo.total_amt);
   }
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "lastPageNum: ", lastPageNum), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, "maxOrderSeq: ", maxOrderSeq), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", null, isSync ? 'sync: ' + ingPage : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
     type: "number",
@@ -67,14 +67,14 @@ function Order() {
     disabled: isSync
   }, "\uC8FC\uBB38 \uB3D9\uAE30\uD654"), /*#__PURE__*/React.createElement("button", {
     onClick: syncOrderList,
-    disabled: isSync
+    disabled: true
   }, "sync order"), /*#__PURE__*/React.createElement("button", {
     onClick: syncOrderDetail,
-    disabled: isSync
+    disabled: true
   }, "sync order detail"), /*#__PURE__*/React.createElement("button", {
     onClick: findRecentOrder,
     disabled: isSync
-  }, "\uC870\uD68C(15\uAC1C)")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("ul", null, orderInfo.map(o => /*#__PURE__*/React.createElement(OrderInfoRow, {
+  }, "\uC870\uD68C(100\uAC1C)")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("ul", null, orderInfo.map(o => /*#__PURE__*/React.createElement(OrderInfoRow, {
     orderInfo: o
   }))));
 }

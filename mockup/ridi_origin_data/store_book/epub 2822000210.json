@@ -1,0 +1,126 @@
+[
+  {
+    "id": "2822000211",
+    "title": {
+      "main": "리셋팅 레이디 2권",
+      "prefix": "[e북]"
+    },
+    "thumbnail": {
+      "small": "https://img.ridicdn.net/cover/2822000211/small#1",
+      "large": "https://img.ridicdn.net/cover/2822000211/large#1",
+      "xxlarge": "https://img.ridicdn.net/cover/2822000211/xxlarge#1"
+    },
+    "authors": [
+      {
+        "id": 79402,
+        "name": "차서진",
+        "role": "author"
+      }
+    ],
+    "categories": [
+      {
+        "id": 6002,
+        "name": "서양풍 로판",
+        "genre": "romance_fantasy",
+        "sub_genre": "romance_fantasy",
+        "is_series_category": true,
+        "ancestor_ids": [6000, 0]
+      }
+    ],
+    "price_info": {
+      "buy": {
+        "regular_price": 3800,
+        "price": 3800,
+        "discount_percentage": 0
+      }
+    },
+    "series": {
+      "id": "2822000210",
+      "volume": 2,
+      "property": {
+        "is_comic_hd": false,
+        "is_completed": false,
+        "is_serial": false,
+        "is_serial_complete": false,
+        "is_wait_free": false,
+        "last_volume_id": "2822000216",
+        "opened_book_count": 0,
+        "opened_last_volume_id": "",
+        "title": "리셋팅 레이디",
+        "total_book_count": 8,
+        "unit": "권",
+        "prev_books": {
+          "1508004621": {
+            "b_id": "1508004621",
+            "is_opened": false,
+            "use_free_serial_schedule": false
+          },
+          "2822000210": {
+            "b_id": "2822000210",
+            "is_opened": false,
+            "use_free_serial_schedule": false
+          }
+        },
+        "next_books": {
+          "1508004623": {
+            "b_id": "1508004623",
+            "is_opened": false,
+            "use_free_serial_schedule": false
+          },
+          "2822000212": {
+            "b_id": "2822000212",
+            "is_opened": false,
+            "use_free_serial_schedule": false
+          }
+        }
+      }
+    },
+    "file": {
+      "size": 2927,
+      "is_comic_hd": false,
+      "is_drm_free": false,
+      "is_webtoon": false,
+      "variants": [
+        {
+          "quality": "recommended",
+          "size": 2927
+        }
+      ],
+      "format": "epub",
+      "is_comic": false,
+      "is_manga": false,
+      "character_count": 151711
+    },
+    "property": {
+      "is_adult_only": false,
+      "is_magazine": false,
+      "is_new_book": false,
+      "is_novel": false,
+      "is_open": false,
+      "is_somedeal": false,
+      "is_trial": false,
+      "is_wait_free": false,
+      "review_display_id": "2822000210",
+      "use_free_serial_schedule": false,
+      "preview_rate": 0
+    },
+    "publish": {
+      "ebook_publish": "2017-11-14T00:00:00+09:00",
+      "ridibooks_publish": "2017-11-14T18:00:05+09:00",
+      "ridibooks_register": "2017-11-09T11:29:03+09:00"
+    },
+    "publisher": {
+      "id": 2822,
+      "name": "로즈엔",
+      "cp_name": "김승연(차서진)_개인"
+    },
+    "support": {
+      "android": true,
+      "ios": true,
+      "paper": true,
+      "mac": true,
+      "windows": true,
+      "web_viewer": false
+    }
+  }
+]

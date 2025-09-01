@@ -114,10 +114,6 @@ var UTIL = {
 		}
 		return Promise.all(results);
 	},
-	
-	findNextTdByThTxt: function(bodyE, thTxt) {
-		return $(bodyE).find("th").filter(function() {return $(this).text().trim() === thTxt;}).next("td");
-	},
 
 	jsObjectToJson: function(str) {
 		return str

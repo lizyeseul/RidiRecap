@@ -29,7 +29,7 @@ function Book() {
       type: "checkbox",
       onChange: () => onCheckUnit(unitInfo.unit_id),
       checked: checkedListById.includes(unitInfo.unit_id)
-    })), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_id), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_title), /*#__PURE__*/React.createElement("td", null, unitInfo.total_cnt, unitInfo.unit));
+    })), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_id), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_title), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_type));
   }
   async function findLibList() {
     setIsSync(true);
@@ -37,7 +37,11 @@ function Book() {
       direction: "prev"
     });
     setUnitInfo(tempList.filter(u => {
-      return u.is_adult_only === false;
+      return true;
+      u.property = u.property || {
+        is_adult_only: true
+      };
+      return u.property.is_adult_only === false;
     }));
     setIsSync(false);
   }
@@ -56,23 +60,31 @@ function Book() {
     await SYNC_BOOK.updateBook(checkedListById);
     setIsSync(false);
   }
+  async function updateBook2() {
+    setIsSync(true);
+    await SYNC_BOOK.updateBook2();
+    setIsSync(false);
+  }
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
     disabled: isSync
-  }, "unit \uBAA9\uB85D update"), /*#__PURE__*/React.createElement("button", {
+  }, "unit"), /*#__PURE__*/React.createElement("button", {
     onClick: updateUnitDetail,
-    disabled: isSync
+    disabled: true
   }, "unit \uC0C1\uC138 update"), /*#__PURE__*/React.createElement("button", {
     onClick: updateBook,
     disabled: isSync
-  }, "\uCC45 \uC0C1\uC138 update"), /*#__PURE__*/React.createElement("button", {
+  }, "book"), /*#__PURE__*/React.createElement("button", {
+    onClick: updateBook2,
+    disabled: isSync
+  }, "order \uAE30\uC900 book"), /*#__PURE__*/React.createElement("button", {
     onClick: findLibList,
     disabled: isSync
   }, "\uBAA9\uB85D \uC870\uD68C")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
     onChange: () => onCheckUnitAll(),
     checked: isUnitAllChecked
-  })), /*#__PURE__*/React.createElement("td", null, "unit_id"), /*#__PURE__*/React.createElement("td", null, "\uC81C\uBAA9"), /*#__PURE__*/React.createElement("td", null, "\uD654 \uC218")), unitInfo.map(o => /*#__PURE__*/React.createElement(UnitInfoRow, {
+  })), /*#__PURE__*/React.createElement("td", null, "unit_id"), /*#__PURE__*/React.createElement("td", null, "\uC81C\uBAA9"), /*#__PURE__*/React.createElement("td", null, "unit\uC885\uB958")), unitInfo.map(o => /*#__PURE__*/React.createElement(UnitInfoRow, {
     unitInfo: o
   }))));
 }
