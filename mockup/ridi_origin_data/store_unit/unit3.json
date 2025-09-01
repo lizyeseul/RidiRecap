@@ -1,0 +1,112 @@
+{
+    "unit_id": "3091493",
+    "unit_count": 1,
+    "unit_title": "가상공간에서 아르바이트",
+    "unit_type": "book",
+    "unit_type_int": 3,
+    "last_update_unit": "2025-08-26T14:29:09.730Z",
+    "last_update_dttm": "2025-08-31T04:36:43.442Z",
+    "total_cnt": 1,
+    "is_webtoon": false,
+    "publisher": {
+        "id": 945,
+        "name": "블릿",
+        "cp_name": "블루마운틴소프트_E/P"
+    },
+    "is_adult_only": true,
+    "is_magazine": false,
+    "is_new_book": false,
+    "is_novel": true,
+    "is_open": true,
+    "is_somedeal": false,
+    "is_trial": false,
+    "is_wait_free": false,
+    "use_free_serial_schedule": false,
+    "preview_rate": 10,
+    "preview_max_characters": 19252,
+    "b_id": "945056417",
+    "service_type": "normal",
+    "is_ridiselect": false,
+    "purchase_date": "2025-06-03T11:42:31+09:00",
+    "expire_date": "9999-12-31T23:59:59+09:00",
+    "remain_time": "",
+    "id": "945056417",
+    "title": {
+        "main": "가상공간에서 아르바이트",
+        "prefix": "[e북]"
+    },
+    "thumbnail": {
+        "small": "https://img.ridicdn.net/cover/945056417/small#1",
+        "large": "https://img.ridicdn.net/cover/945056417/large#1",
+        "xxlarge": "https://img.ridicdn.net/cover/945056417/xxlarge#1"
+    },
+    "authors": [
+        {
+            "id": 108873,
+            "name": "새벽밤바람",
+            "role": "author"
+        }
+    ],
+    "categories": [
+        {
+            "id": 4101,
+            "name": "현대물",
+            "genre": "romance",
+            "sub_genre": "bl_novel",
+            "is_series_category": true,
+            "ancestor_ids": [
+                4100,
+                0
+            ]
+        }
+    ],
+    "price_info": {
+        "buy": {
+            "regular_price": 4000,
+            "price": 4000,
+            "discount_percentage": 0
+        }
+    },
+    "file": {
+        "size": 1771,
+        "is_comic_hd": false,
+        "is_drm_free": false,
+        "is_webtoon": false,
+        "variants": [
+            {
+                "quality": "recommended",
+                "size": 1771
+            }
+        ],
+        "format": "epub",
+        "is_comic": false,
+        "is_manga": false,
+        "character_count": 192521
+    },
+    "property": {
+        "is_adult_only": true,
+        "is_magazine": false,
+        "is_new_book": false,
+        "is_novel": true,
+        "is_open": true,
+        "is_somedeal": false,
+        "is_trial": false,
+        "is_wait_free": false,
+        "use_free_serial_schedule": false,
+        "preview_rate": 10,
+        "preview_max_characters": 19252
+    },
+    "publish": {
+        "ebook_publish": "2020-07-08T00:00:00+09:00",
+        "ridibooks_publish": "2020-07-08T07:01:09+09:00",
+        "ridibooks_register": "2020-06-25T14:55:16+09:00"
+    },
+    "support": {
+        "android": true,
+        "ios": true,
+        "paper": true,
+        "mac": true,
+        "windows": true,
+        "web_viewer": false
+    }
+}

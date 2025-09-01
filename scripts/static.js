@@ -1,19 +1,14 @@
-var GD = {
-	"lastPageNum": 999,	//결제내역 마지막 페이지 번호
-	"lastPageCnt": 15,	//결제내역 마지막 페이지의 목록 아이템 수
-	
-	"webViewerBaseUrl": '//view.ridibooks.com/books/',
-	"isLogin": false
-};
-var URL = {
+const URL = {
 	"base": "https://ridibooks.com",
 	
 	"account": "/account/myridi",
 	"history": "/order/history",
 	"auth": '/api/global/auth-variables',
 	
-	"LIBRARY_BASE": "https://library-api.ridibooks.com"
+	"LIBRARY_BASE": "https://library-api.ridibooks.com/",
+	"BOOK_API_BASE": "https://book-api.ridibooks.com/"
 };
+const parser = new DOMParser();
 //            e.Z = {
 //                ACCOUNT_BASE_URL: "https://account.ridibooks.com/",
 //                API_BASE_URL: "https://api.ridibooks.com/",
@@ -37,11 +32,3 @@ var URL = {
 //                STORE_BASE_URL: "https://ridibooks.com/",
 //                VIEWER_API_BASE_URL: "https://ridibooks.com/"
 //            }
-var DB = {
-	name: "RIDI TEST",
-	version: 1,
-};
-const parser = new DOMParser();
-
-var historyDOM;
-var copyRidi = {};

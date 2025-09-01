@@ -1,0 +1,153 @@
+{
+	"id": "3010017279",
+	"title": {
+		"main": "[솔트] 복수가 끝나지 않아 1화"
+	},
+	"thumbnail": {
+		"small": "https://img.ridicdn.net/cover/3010017279/small#1",
+		"large": "https://img.ridicdn.net/cover/3010017279/large#1",
+		"xxlarge": "https://img.ridicdn.net/cover/3010017279/xxlarge#1"
+	},
+	"authors": [
+		{
+			"id": 122701,
+			"name": "토키하 카네나리",
+			"role": "comic_author"
+		}
+	],
+	"categories": [
+		{
+			"id": 4251,
+			"name": "BL 웹툰",
+			"genre": "comic",
+			"sub_genre": "bl_webtoon",
+			"is_series_category": true,
+			"ancestor_ids": [
+				4250,
+				0
+			]
+		}
+	],
+	"price_info": {
+		"buy": {
+			"regular_price": 700,
+			"price": 700,
+			"discount_percentage": 0
+		},
+		"rent": {
+			"regular_price": 0,
+			"price": 0,
+			"rent_days": 3,
+			"discount_percentage": 0
+		}
+	},
+	"series": {
+		"id": "3010017279",
+		"volume": 1,
+		"property": {
+			"is_comic_hd": false,
+			"is_completed": true,
+			"is_serial": true,
+			"is_serial_complete": true,
+			"is_wait_free": false,
+			"last_volume_id": "3010017295",
+			"opened_book_count": 16,
+			"opened_last_volume_id": "3010017295",
+			"title": "[솔트] 복수가 끝나지 않아",
+			"total_book_count": 17,
+			"unit": "화",
+			"next_books": {
+				"3010017280": {
+					"b_id": "3010017280",
+					"is_opened": true,
+					"use_free_serial_schedule": false
+				}
+			}
+		},
+		"price_info": {
+			"buy": {
+				"total_book_count": 16,
+				"free_book_count": 0,
+				"regular_price": 11200,
+				"price": 11200,
+				"discount_percentage": 0
+			},
+			"rent": {
+				"total_book_count": 16,
+				"free_book_count": 2,
+				"regular_price": 4200,
+				"rent_price": 4200,
+				"discount_percentage": 0,
+				"rent_days": 3
+			}
+		}
+	},
+	"file": {
+		"size": 17815,
+		"is_comic_hd": false,
+		"is_drm_free": false,
+		"is_webtoon": false,
+		"variants": [
+			{
+				"quality": "recommended",
+				"size": 17815
+			},
+			{
+				"quality": "original",
+				"size": 44550
+			}
+		],
+		"format": "bom",
+		"is_comic": true,
+		"is_manga": true,
+		"page_count": 29
+	},
+	"property": {
+		"is_adult_only": true,
+		"is_magazine": false,
+		"is_new_book": false,
+		"is_novel": false,
+		"is_open": true,
+		"is_somedeal": false,
+		"is_trial": false,
+		"is_wait_free": false,
+		"use_free_serial_schedule": false,
+		"preview_rate": 0
+	},
+	"publish": {
+		"ebook_publish": "2024-10-02T00:00:00+09:00",
+		"ridibooks_publish": "2024-10-02T06:30:00+09:00",
+		"ridibooks_register": "2024-09-24T09:46:55+09:00"
+	},
+	"publisher": {
+		"id": 3010,
+		"name": "솔트",
+		"cp_name": "와이앤케이미디어_E/P/J"
+	},
+	"support": {
+		"android": true,
+		"ios": true,
+		"paper": true,
+		"mac": true,
+		"windows": true,
+		"web_viewer": true
+	},
+	"service_type": "rent",
+	"b_id": "3010017279",
+	"display_order": 1,
+	"display_title": "[솔트] 복수가 끝나지 않아",
+	"display_type": "series",
+	"display_unit_id": 6711657,
+	"expire_date": "2025-02-01T14:31:09+09:00",
+	"hidden": false,
+	"is_deleted": false,
+	"purchase_date": "2025-01-29T14:31:09+09:00",
+	"remain_time": "대여 만료",
+	"search_order": 1,
+	"search_title": "[솔트] 복수가 끝나지 않아",
+	"search_type": "series",
+	"search_unit_id": 6711657,
+	"book_id": "3010017279",
+	"unit_id": "6711657",
+	"last_update_dttm": "2025-08-28T02:17:09.637Z"
+}

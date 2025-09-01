@@ -1,9 +1,17 @@
-class unit {
+export default class unitClass {
 	constructor(data) {
 		var me = this;
-		Object.keys(data).forEach(function(key) {
-			me[key] = data[key];
-		})
+		if(UTIL.isString(data)) {
+			data = JSON.parse(data);
+		}
+		if(!UTIL.isArray(data) && UTIL.isObject(data)) {
+			Object.keys(data).forEach(function(key) {
+				me[key] = data[key];
+			})
+		}
+		else {
+//			console.debug("type err")
+		}
 	}
 	
 	unit_id;
@@ -44,6 +52,18 @@ class unit {
 			"cp_name": "박정연(대대원)_개인_IAP_익시드"
 		},
 		last_update_dttm: "(Date) 데이터 마지막 업데이트 시각"
+	}
+	
+	get dataForPurchase() {
+		return {
+			unit_id: this.unit_id,
+			unit_title: this.unit_title,
+			unit_total_cnt: this.total_cnt,	//공개된 화 수
+			unit_count: this.unit_count,	//현재 구매한 화 수
+			
+			thumbnail: this.thumbnail,
+			property: this.property
+		}
 	}
 	
 	get jsonObj() {
