@@ -5,21 +5,14 @@ import DB from "../../scripts/connect_db.js";
 
 function Order() {
 	const [lastPageNum, setLastPageNum] = useState(sessionStorage.getItem("lastPageNum"));
-	const [maxOrderSeq, setMaxOrderSeq] = useState(sessionStorage.getItem("maxOrderSeq"));
 	const [fromPage, setFromPage] = useState(1);
 	const [toPage, setToPage] = useState(lastPageNum);
 	const [isSync, setIsSync] = useState(false);
 	const [ingPage, setIngPage] = useState(null);
 	
-	function setIngPageLabel(from, to, cur) {
-		var start = cur - from + 1;
-		var end = to - from + 1;
-		setIngPage(start + "/" + end);
-	}
-	
 	const [orderInfo, setOrderInfo] = useState([]);
 	
-	async function syncOrder() {
+	async function syncOrderPart() {
 		setIsSync(true);
 		var from = UTIL.toNumber(fromPage);
 		var to = UTIL.toNumber(toPage);
@@ -28,17 +21,20 @@ function Order() {
 			from = to;
 			to = temp;
 		}
-		await SYNC_ORDER.syncOrder(from, to, setIngPageLabel);
+		if(UTIL.isEmpty(from) || UTIL.isEmpty(to)) {
+			alert("from or to 입력 필수");
+		}
+		await SYNC_ORDER.syncOrder(from, to, setIngPage);
 		setIsSync(false);
 	}
-	async function syncOrderList() {
+	async function syncOrderAll() {
 		setIsSync(true);
-		await SYNC_ORDER.syncOrderList(fromPage, toPage, setIngPage);
+		await SYNC_ORDER.syncOrder(1, sessionStorage.getItem("lastPageNum"), setIngPage);
 		setIsSync(false);
 	}
-	async function syncOrderDetail() {
+	async function syncOrderRecent() {
 		setIsSync(true);
-		await SYNC_ORDER.syncOrderDetail(fromPage, toPage, setIngPage);
+		await SYNC_ORDER.syncOrderRecent(setIngPage);
 		setIsSync(false);
 	}
 	async function findRecentOrder() {
@@ -56,15 +52,18 @@ function Order() {
 	}
 	return (
 		<div>
-			<span>lastPageNum: {lastPageNum}</span><br/>
-			<span>maxOrderSeq: {maxOrderSeq}</span><br/>
-			<span>{isSync? 'sync: '+ingPage : 'end'}</span><br/>
+			<span>{isSync? 'sync '+ingPage : 'end'}</span><br/>
 			<div>
+				<button onClick={syncOrderAll} disabled={isSync}>결제내역 전체 동기화</button>
+				<button onClick={syncOrderRecent} disabled={isSync}>결제내역 업데이트</button>
+			</div>
+			<hr/>
+			<div>
+				<span>dev</span><br/>
+				<span>lastPageNum: {lastPageNum}</span><br/>
 				<input type="number"	name="fromPage"	value={fromPage}	onChange={(e) => setFromPage(e.target.value)}/>
 				<input type="number"	name="toPage"	value={toPage}		onChange={(e) => setToPage(e.target.value)}/>
-				<button onClick={syncOrder} disabled={isSync}>주문 동기화</button>
-				<button onClick={syncOrderList} disabled={true}>sync order</button>
-				<button onClick={syncOrderDetail} disabled={true}>sync order detail</button>
+				<button onClick={syncOrderPart} disabled={isSync}>결제내역 일부 동기화</button>
 				<button onClick={findRecentOrder} disabled={isSync}>조회(100개)</button>
 			</div>
 			<hr/>

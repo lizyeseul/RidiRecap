@@ -71,9 +71,6 @@ var SESSION = {
 				sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
 			}
 			
-			var maxOrderSeq = await DB.getMaxOnIdx("store_order","order_seq");
-			sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
-			
 			var mainCnt = await UTIL.request(URL.LIBRARY_BASE+"items/main/count/", null, { isResultJson: true });
 			sessionStorage.setItem("unitCnt", mainCnt.unit_total_count+100);
 		}

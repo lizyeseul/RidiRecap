@@ -4,10 +4,10 @@ const DB_INFO = {
 };
 var dbConnect;
 var DB = {
-	initDB: function() {
+	initDB: async function() {
 		var request = indexedDB.open(DB_INFO.name, DB_INFO.version);
-		request.onerror = (e) => { console.log("err") };
-		request.onsuccess = (e) => { dbConnect = e.target.result; }
+		request.onerror = (e) => { console.log("initDB onerror") };
+		request.onsuccess = (e) => { dbConnect = e.target.result; };
 		request.onupgradeneeded = (e) => {
 			dbConnect = e.target.result;
 			var os;
@@ -38,10 +38,11 @@ var DB = {
 	},
 	getObjectStore: function(store_nm, mode) {
 		//TODO transaction oncomplete dbConnect.close 추가
-		//TODO transaction 끊겼을 때 재연결하는 로직 필요
 		if(!dbConnect) {
-			console.error("DB 연결이 되어 있지 않습니다.");
-			return Promise.reject("DB 연결이 되어 있지 않습니다.");
+			var request = indexedDB.open(DB_INFO.name, DB_INFO.version);
+			request.onsuccess = (e) => { dbConnect = e.target.result; };
+			console.error("DB 연결이 되어 있지 않습니다.");	//TEST
+			// return Promise.reject("DB 연결이 되어 있지 않습니다.");
 		}
 		return dbConnect.transaction(store_nm, mode).objectStore(store_nm);
 	},
@@ -95,24 +96,24 @@ var DB = {
 			cursorReq.onerror = (e) => {console.error("커서 요청 오류-getValueByIdx: "+e.target.error)};
 		});
 	},
-	getMaxOnIdx: function(tbNm, idxNm) {
-		return new Promise((resolve, reject) => {
-			var store = DB.getObjectStore(tbNm,"readonly");
-			var index = store.index(idxNm);
+	// getMaxOnIdx: function(tbNm, idxNm) {
+	// 	return new Promise((resolve, reject) => {
+	// 		var store = DB.getObjectStore(tbNm,"readonly");
+	// 		var index = store.index(idxNm);
 			
-			var cursorReq = index.openCursor(null, "prev");
-			cursorReq.onsuccess = (e) => {
-				var cursor = e.target.result;
-				if(cursor) {
-					resolve(cursor.value[idxNm]);
-				}
-				else {
-					resolve(null);
-				}
-			}
-			cursorReq.onerror = (e) => {console.error("커서 요청 오류-getMaxOnIdx: "+e.target.error)};
-		});
-	},
+	// 		var cursorReq = index.openCursor(null, "prev");
+	// 		cursorReq.onsuccess = (e) => {
+	// 			var cursor = e.target.result;
+	// 			if(cursor) {
+	// 				resolve(cursor.value[idxNm]);
+	// 			}
+	// 			else {
+	// 				resolve(null);
+	// 			}
+	// 		}
+	// 		cursorReq.onerror = (e) => {console.error("커서 요청 오류-getMaxOnIdx: "+e.target.error)};
+	// 	});
+	// },
 
 	/**
 	@param mode string 'reset':기존 value 무시하고 data로 set, 'update':기존 value에 data assign

@@ -1,27 +1,43 @@
 import DB from "../../scripts/connect_db.js";
 var SYNC_ORDER = {
-	syncOrder: async function(fromPage, toPage, setIngPageLabel) {
+	syncOrderRecent: async function(setIngPage) {
+		let maxOrderSeq = await DB.getValueByIdx("store_order","order_seq", {direction: "prev", limit: 1});
+		if(UTIL.isEmpty(maxOrderSeq[0])) return;
+
+		maxOrderSeq = maxOrderSeq[0].order_seq;
+		let lastPageNum = UTIL.toNumber(sessionStorage.getItem("lastPageNum"));
+		let lastPageCnt = UTIL.toNumber(sessionStorage.getItem("lastPageCnt"));
+		let lastOrderSeq = (lastPageNum-1) * 15 + lastPageCnt;
+		if(maxOrderSeq >= lastOrderSeq) return;
+
+		await SYNC_ORDER.syncOrder(1, Math.floor(((lastOrderSeq-maxOrderSeq)+14) / 15), setIngPage);
+	},
+	syncOrder: async function(fromPage, toPage, setIngPage) {
 		const pageTasks = [];
+		let processedCount = 0; // 전역 카운터
+		setIngPage("stage 1/2 : "+UTIL.toString(processedCount)+"/"+UTIL.toString(toPage - fromPage + 1));
 		for (let pageIdx = fromPage; pageIdx <= toPage; pageIdx++) {
 			pageTasks.push(async () => {
 				const orderNoList = await this.parseHistoryListPage(pageIdx, false);
+				setIngPage("stage 1/2 : "+UTIL.toString(processedCount++)+"/"+UTIL.toString(toPage - fromPage + 1));
 				return { pageIdx, orderNoList };
 			});
 		}
 
 		// 1. 페이지를 병렬로 요청하여 모든 주문번호 수집
-		const pageResults = await UTIL.runWithConcurrencyLimit(pageTasks, 5);
+		const pageResults = await UTIL.runWithConcurrencyLimit(pageTasks, 20);
 		pageResults.sort((a, b) => a.pageIdx - b.pageIdx);
 		const allOrderNoList = pageResults.flatMap(res => res.orderNoList);
 
 		// 2. 주문 상세 병렬 처리 + 진행 상황 라벨 유지
-		let processedCount = 0; // 전역 카운터
+		processedCount = 0;
+		let endPage = "/"+UTIL.toString((toPage * 15) - (fromPage * 15 - 14) + 1);
+		setIngPage("stage 2/2 : "+UTIL.toString(processedCount)+endPage);
 		const orderTasks = allOrderNoList.map(orderNo => async () => {
 			await this.parseHistoryDetailPage(orderNo);
-			processedCount++;
-			setIngPageLabel(fromPage * 15 - 14, toPage * 15, fromPage * 15 - 14 + processedCount - 1);
+			setIngPage("stage 2/2 : "+UTIL.toString(processedCount++)+endPage);
 		});
-		await UTIL.runWithConcurrencyLimit(orderTasks, 15);
+		await UTIL.runWithConcurrencyLimit(orderTasks, 50);
 	},
 	/*
 	param pageIdx 크롤링할 결제내역 페이지 번호
@@ -39,7 +55,7 @@ var SYNC_ORDER = {
 				orderItemList = $(sectionElement).find(".buy_history_table tbody tr.js_rui_detail_link");
 			}
 			else {
-				//TODO 테스트 전, PC/모바일 세팅 방법 모르겠음
+				//모바일 결제내역 화면 버전, 미개발상태
 				orderItemList = $(sectionElement).find(".buy_list_wrap li.list_item a");
 			}
 			var orderNoList = [];
@@ -77,8 +93,6 @@ var SYNC_ORDER = {
 				
 				DB.updateData("store_order", orderNo, orderValue, "reset");
 			}
-			var maxOrderSeq = await DB.getMaxOnIdx("store_order","order_seq");
-			sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
 			
 			return orderNoList;
 		}
@@ -135,43 +149,6 @@ var SYNC_ORDER = {
 	},
 	getAmt: function(bodyE, thLabel) {
 		return UTIL.getNumber(SYNC_ORDER.findNextTdByThTxt(bodyE, thLabel).find("span.museo_sans").text());
-	},
-	syncOrderList: async function(fromPage, toPage, setIngPage) {
-		for(var pageIdx=fromPage; pageIdx<=toPage; pageIdx++) {
-			setIngPage((pageIdx-fromPage) + "/" + (toPage-fromPage));
-			await this.parseHistoryListPage(pageIdx, false);
-			/*
-			var isContinue = 
-			if(orderSeq <= maxOrderSeq && !isTest) {
-				var maxOrderSeq = await getMaxOnIdx("store_order","order_seq");
-				sessionStorage.setItem("maxOrderSeq", maxOrderSeq || -1);
-				return false;
-			}
-			if(!isContinue) {
-				break;
-			}
-			*/
-		}
-	},
-	/*
-	결제내역 화면 전체 반복하면서 저장
-	*/
-	syncOrderDetail: async function(fromSeq, toSeq, setIngPage) {
-		/*
-		var maxOrderSeq = UTIL.toNumber(sessionStorage.getItem("maxOrderSeq")) || -1;
-		if(maxOrderSeq < 0) {
-			$("#parse_log")[0].innerText = "no order detail to sync";
-			return;
-		}
-		*/
-	//	for(var i=maxOrderSeq; i>=1; i--) {	//TODO yslee 개수가 많아서 분할하든 비동기로 바꾸든 해야할 듯, 15개 동시에 쏘고 리턴 모아서 처리 가능한가?
-		for(var i=fromSeq; i<=toSeq; i++) {
-			setIngPage((i-fromSeq) + "/" + (toSeq-fromSeq));
-			var orderItem = await DB.getUniqueValue("store_order", "order_seq", i);
-			if(UTIL.isNotEmpty(orderItem)) {
-				await this.parseHistoryDetailPage(orderItem.order_no);
-			}
-		}
 	}
 };
 export default SYNC_ORDER;
