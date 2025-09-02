@@ -8,11 +8,11 @@ function Book() {
 	const [unitInfo, setUnitInfo] = useState([]);
 	const [isUnitAllChecked, setIsUnitAllChecked] = useState(false);
 	const [checkedListById, setCheckedListById] = useState([]);
-	
+
 	useEffect(() => {
 		findLibList()
 	}, []);
-	
+
 	const onCheckUnit = (id) => {
 		setCheckedListById((prev) => (checkedListById.includes(id)) ? prev.filter((el) => el !== id) : [...prev, id]);
 	}
@@ -44,17 +44,17 @@ function Book() {
 		}));
 		setIsSync(false);
 	}
-	
+
 	async function updateLib() {
 		setIsSync(true);
 		await SYNC_BOOK.updateLib();
 		setIsSync(false);
 	}
-	async function updateUnitDetail() {
-		setIsSync(true);
-		await SYNC_BOOK.updateUnitDetail();
-		setIsSync(false);
-	}
+	// async function updateUnitDetail() {
+	// 	setIsSync(true);
+	// 	await SYNC_BOOK.updateUnitDetail();
+	// 	setIsSync(false);
+	// }
 	async function updateBook() {
 		setIsSync(true);
 		await SYNC_BOOK.updateBook(checkedListById);
@@ -69,10 +69,10 @@ function Book() {
 		<div>
 			<span>{isSync? 'sync' : 'end'}</span><br/>
 			<div>
-				<button onClick={updateLib} disabled={isSync}>unit</button>
-				<button onClick={updateUnitDetail} disabled={true}>unit 상세 update</button>
-				<button onClick={updateBook} disabled={isSync}>book</button>
-				<button onClick={updateBook2} disabled={isSync}>order 기준 book</button>
+				<button onClick={updateLib} disabled={isSync}>unit lib</button>
+				{/* <button onClick={updateUnitDetail} disabled={true}>unit 상세 update</button> */}
+				<button onClick={updateBook} disabled={isSync}>unit 기준 전체book</button>
+				<button onClick={updateBook2} disabled={isSync}>order 기준 book/* unit_id 0 인 놈들*/</button>
 				<button onClick={findLibList} disabled={isSync}>목록 조회</button>
 			</div>
 			<hr/>

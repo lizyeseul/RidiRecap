@@ -4,6 +4,7 @@ const {
 } = React;
 import SYNC_BOOK from "../../scripts/sync/sync_book.js";
 import DB from "../../scripts/connect_db.js";
+
 function Book() {
   const [isSync, setIsSync] = useState(false);
   const [unitInfo, setUnitInfo] = useState([]);
@@ -12,15 +13,18 @@ function Book() {
   useEffect(() => {
     findLibList();
   }, []);
+
   const onCheckUnit = id => {
     setCheckedListById(prev => checkedListById.includes(id) ? prev.filter(el => el !== id) : [...prev, id]);
   };
+
   function onCheckUnitAll() {
     setIsUnitAllChecked(!isUnitAllChecked);
     setCheckedListById(isUnitAllChecked ? [] : unitInfo.map(b => {
       return b.unit_id;
     }));
   }
+
   function UnitInfoRow({
     unitInfo
   }) {
@@ -31,6 +35,7 @@ function Book() {
       checked: checkedListById.includes(unitInfo.unit_id)
     })), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_id), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_title), /*#__PURE__*/React.createElement("td", null, unitInfo.unit_type));
   }
+
   async function findLibList() {
     setIsSync(true);
     var tempList = await DB.getValueByIdx("store_unit", "unit_id", {
@@ -45,39 +50,40 @@ function Book() {
     }));
     setIsSync(false);
   }
+
   async function updateLib() {
     setIsSync(true);
     await SYNC_BOOK.updateLib();
     setIsSync(false);
-  }
-  async function updateUnitDetail() {
-    setIsSync(true);
-    await SYNC_BOOK.updateUnitDetail();
-    setIsSync(false);
-  }
+  } // async function updateUnitDetail() {
+  // 	setIsSync(true);
+  // 	await SYNC_BOOK.updateUnitDetail();
+  // 	setIsSync(false);
+  // }
+
+
   async function updateBook() {
     setIsSync(true);
     await SYNC_BOOK.updateBook(checkedListById);
     setIsSync(false);
   }
+
   async function updateBook2() {
     setIsSync(true);
     await SYNC_BOOK.updateBook2();
     setIsSync(false);
   }
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
     disabled: isSync
-  }, "unit"), /*#__PURE__*/React.createElement("button", {
-    onClick: updateUnitDetail,
-    disabled: true
-  }, "unit \uC0C1\uC138 update"), /*#__PURE__*/React.createElement("button", {
+  }, "unit lib"), /*#__PURE__*/React.createElement("button", {
     onClick: updateBook,
     disabled: isSync
-  }, "book"), /*#__PURE__*/React.createElement("button", {
+  }, "unit \uAE30\uC900 \uC804\uCCB4book"), /*#__PURE__*/React.createElement("button", {
     onClick: updateBook2,
     disabled: isSync
-  }, "order \uAE30\uC900 book"), /*#__PURE__*/React.createElement("button", {
+  }, "order \uAE30\uC900 book/* unit_id 0 \uC778 \uB188\uB4E4*/"), /*#__PURE__*/React.createElement("button", {
     onClick: findLibList,
     disabled: isSync
   }, "\uBAA9\uB85D \uC870\uD68C")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {
@@ -88,4 +94,5 @@ function Book() {
     unitInfo: o
   }))));
 }
+
 export default Book;

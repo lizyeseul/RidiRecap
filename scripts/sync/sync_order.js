@@ -33,6 +33,7 @@ var SYNC_ORDER = {
 		if(maxOrderSeq >= lastOrderSeq) return;
 
 		await SYNC_ORDER.syncOrder(1, Math.floor(((lastOrderSeq-maxOrderSeq)+14) / 15), setIngPage);
+		//TODO store_order에서 order_seq maxOrderSeq 보다 큰 것들 가져와서 book_list안에 있는 book_id기준으로 store_book정보 업데이트
 	},
 	syncOrder: async function(fromPage, toPage, setIngPage) {
 		const pageTasks = [];
@@ -87,13 +88,13 @@ var SYNC_ORDER = {
 			for(var i=0; i<orderItemList.length; i++) {
 				var orderItem = orderItemList[i];
 				var orderValue = {};
-		
+
 				//주문번호
 				var orderNo = orderItem.getAttribute(attr);
 				orderNo = orderNo.replace(URL.history+"/","");
 				orderValue.order_no = orderNo;
 				orderNoList.push(orderNo);
-				
+
 				//주문시간
 				var tdList = $(orderItem).find("td");
 				var orderDttm = tdList[0].innerText;
@@ -102,21 +103,21 @@ var SYNC_ORDER = {
 //				var tmStr = orderDttm.match(/\d{2}:\d{2}/).toString();
 //				orderValue.order_dttm = moment(dtStr+" "+tmStr, "YYYY.MM.DD HH:mm").toDate();
 //				orderValue.order_dt = dtStr.replaceAll(".","");
-				
+
 				//주문 seq
 				var curPage = UTIL.toNumber(pageIdx);
 				var midPageCnt = 15 * Math.max(0, lastPageNum - curPage -1);
 				var orderSeq = (midPageCnt + lastPageCnt + ((lastPageNum!=curPage)?15:0) - i);
 				orderValue.order_seq = orderSeq;
-				
+
 				//총 결제금액
 				var totalAmtStr = $(orderItem).find(".main_value span")[0].innerText;
 				var totalAmt = UTIL.getNumber(totalAmtStr);
 				orderValue.total_amt = totalAmt;
-				
+
 				DB.updateData("store_order", orderNo, orderValue, "reset");
 			}
-			
+
 			return orderNoList;
 		}
 		catch(e) {
@@ -131,7 +132,7 @@ var SYNC_ORDER = {
 			var res = await UTIL.request(URL.base+URL.history+"/"+orderNo, null, null);
 			var htmlDOM = parser.parseFromString(res, "text/html");
 			var sectionElement = $(htmlDOM).find(".buy_history_detail_table");
-			
+
 			var bookIdList = {};
 			//책 목록
 			var bookTd = SYNC_ORDER.findNextTdByThTxt(sectionElement, "구분");
@@ -140,15 +141,15 @@ var SYNC_ORDER = {
 				//책 ID
 				var bookE = $(this).find("a");
 				var bookId = bookE.attr("href").replace("/books/","");
-				
+
 				//구매금액
 				var priceStr = $(this).find(".price").text();
 				var price = UTIL.getNumber(priceStr);
-				
-				bookIdList[bookId] = price;
+
+				bookIdList[bookId] = price || 0;
 				SYNC_ORDER.ensureBookById(bookId);
 			});
-			
+
 			var orderHeaderItem = {book_list: bookIdList};
 			//금액관련
 			orderHeaderItem.amt_total = SYNC_ORDER.getAmt(sectionElement, "주문 금액");
@@ -159,7 +160,7 @@ var SYNC_ORDER = {
 			orderHeaderItem.reward_ridipoint = SYNC_ORDER.getAmt(sectionElement, "적립 리디포인트");
 
 			orderHeaderItem.pay_way = SYNC_ORDER.findNextTdByThTxt(sectionElement, "결제 수단").text();
-	
+
 			DB.updateData("store_order", orderNo, orderHeaderItem, "update");
 			return true;
 		}
@@ -167,7 +168,7 @@ var SYNC_ORDER = {
 			console.error("parseHistoryDetailPage 오류:", e);
 		}
 	},
-	
+
 	findNextTdByThTxt: function(bodyE, thTxt) {
 		return $(bodyE).find("th").filter(function() {return $(this).text().trim() === thTxt;}).next("td");
 	},

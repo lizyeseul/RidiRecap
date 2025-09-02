@@ -1,14 +1,14 @@
 const {
   useState
 } = React;
-import SYNC_ORDER from "../../scripts/sync/sync_order.js";
 import DB from "../../scripts/connect_db.js";
 import SESSION from "../../scripts/session.js";
+import SYNC_ORDER from "../../scripts/sync/sync_order.js";
+import SYNC_BOOK from "../../scripts/sync/sync_book.js";
 
 function Setting() {
   const [isSync, setIsSync] = useState(false);
   const [ingPage, setIngPage] = useState(null);
-  const [orderInfo, setOrderInfo] = useState([]);
 
   async function syncOrderAll() {
     setIsSync(true);
@@ -22,20 +22,16 @@ function Setting() {
     setIsSync(false);
   }
 
-  async function findRecentOrder() {
+  async function syncLib() {
     setIsSync(true);
-    var tempList = await DB.getValueByIdx("store_order", "order_seq", {
-      direction: "prev",
-      limit: 100
-    });
-    setOrderInfo(tempList);
+    await SYNC_BOOK.updateLib();
     setIsSync(false);
   }
 
-  function OrderInfoRow({
-    orderInfo
-  }) {
-    return /*#__PURE__*/React.createElement("li", null, orderInfo.order_no, " : ", moment(orderInfo.order_dttm).format("YYYYMMDD"), ", ", orderInfo.total_amt);
+  async function syncBookAllByUnit() {
+    setIsSync(true);
+    await SYNC_BOOK.syncBookAllByUnit();
+    setIsSync(false);
   }
 
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
@@ -47,15 +43,16 @@ function Setting() {
   }, "\uCD08\uAE30\uAC12 \uC138\uD305"), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("span", null, isSync ? 'sync ' + ingPage : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: syncOrderAll,
     disabled: isSync
-  }, "\uACB0\uC81C\uB0B4\uC5ED \uC804\uCCB4 \uB3D9\uAE30\uD654"), /*#__PURE__*/React.createElement("button", {
+  }, "\uACB0\uC81C\uB0B4\uC5ED \uC804\uCCB4"), /*#__PURE__*/React.createElement("button", {
     onClick: syncOrderRecent,
     disabled: isSync
-  }, "\uACB0\uC81C\uB0B4\uC5ED \uC5C5\uB370\uC774\uD2B8"), /*#__PURE__*/React.createElement("button", {
-    onClick: findRecentOrder,
+  }, "\uACB0\uC81C\uB0B4\uC5ED")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "\uCC45 \uC815\uBCF4 \uC5C5\uB370\uC774\uD2B8"), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("button", {
+    onClick: syncLib,
     disabled: isSync
-  }, "\uC870\uD68C(100\uAC1C)")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("ul", null, orderInfo.map(o => /*#__PURE__*/React.createElement(OrderInfoRow, {
-    orderInfo: o
-  }))));
+  }, "\uC11C\uC7AC \uBAA9\uB85D"), /*#__PURE__*/React.createElement("button", {
+    onClick: syncBookAllByUnit,
+    disabled: isSync
+  }, "\uD45C\uC9C0 \uAE30\uC900")));
 }
 
 export default Setting;
