@@ -7,7 +7,7 @@ var SYNC_BOOK = {
 		try {
 			var unitCnt = sessionStorage.getItem("unitCnt") || "500";
 			var res = await UTIL.request(URL.LIBRARY_BASE+"items/main/?offset=0&limit="+unitCnt, null, { isResultJson: true });
-			
+
 			var items = res.items;
 			items.forEach(function(unit) {
 				unit.unit_id = UTIL.toNumber(unit.unit_id);
@@ -65,7 +65,7 @@ var SYNC_BOOK = {
 						UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true }),
 						UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true })
 					])
-					
+
 					var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toNumber(obj.b_id), obj]));
 					var mergedList = bookInfosRes.map(item => {
 						item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
@@ -90,8 +90,7 @@ var SYNC_BOOK = {
 			async function saveEmptyBook() {
 				var orderList = await DB.getValueByIdx("store_order", "order_no", null);
 				for(var orderItem of orderList) {
-					var bookList = orderItem.book_list;
-					for(var bookId of Object.keys(bookList)) {
+					for(var bookId of Object.keys(orderItem.book_list)) {
 						var bookData = await DB.getUniqueValue("store_book", "book_id", UTIL.toNumber(bookId));
 						if(UTIL.isEmpty(bookData)) {
 							bookData = {
@@ -116,7 +115,7 @@ var SYNC_BOOK = {
 					UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true }),
 					UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true })
 				])
-				
+
 				var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toNumber(obj.b_id), obj]));
 				var mergedList = bookInfosRes.map(item => {
 					item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
@@ -150,25 +149,25 @@ var SYNC_BOOK = {
 			DB.deleteData("store_book", b.book_id);
 		});
 	}
-//	
+//
 //			series_id: b.series.id,
-//			
+//
 //			title: b.title.main,
 //			thumbnail: b.thumbnail,
 //			authors: b.authors,
 //			categories: b.categories,
-//			
+//
 //			prev_books: b.series.property.prev_books,	//nullable
 //			next_books: b.series.property.next_books,	//nullable
-//		
+//
 //			price_info: b.price_info.buy,
-//			
+//
 //			file_size: b.file.size,
 //			character_count: b.file.character_count,
-//			
+//
 //			publish: b.publish,
-//			
-//			
+//
+//
 //			expire_date: moment(b.expire_date).toDate(),
 //			purchase_date: moment(b.purchase_date).toDate(),
 //			is_deleted: b.is_deleted,

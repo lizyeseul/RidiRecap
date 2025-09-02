@@ -1,5 +1,27 @@
 import DB from "../../scripts/connect_db.js";
 var SYNC_ORDER = {
+	/**
+	 * store_order에 있는 book_id중에서 store_book에 없는 데이터 껍데기 생성
+	 */
+	ensureAllBook: async function() {
+		var orderList = await DB.getValueByIdx("store_order", "order_no", null);
+		for(var orderItem of orderList) {
+			for(var bookId of Object.keys(orderItem.book_list)) {
+				SYNC_ORDER.ensureBookById(bookId);
+			}
+		}
+	},
+	/**
+	 * book_id기준 store_book에 없는 데이터 껍데기 생성
+	 * @param {number|string} book_id
+	 */
+	ensureBookById: async function(bookId) {
+		bookId = UTIL.toNumber(bookId);
+		let bookCnt = await DB.getCountByIdx("store_book", "book_id", {range: bookId});
+		if(bookCnt === 0) {
+			DB.updateData("store_book", bookId, { book_id: bookId, unit_id: 0 }, "update");
+		}
+	},
 	syncOrderRecent: async function(setIngPage) {
 		let maxOrderSeq = await DB.getValueByIdx("store_order","order_seq", {direction: "prev", limit: 1});
 		if(UTIL.isEmpty(maxOrderSeq[0])) return;
@@ -39,9 +61,10 @@ var SYNC_ORDER = {
 		});
 		await UTIL.runWithConcurrencyLimit(orderTasks, 50);
 	},
-	/*
-	param pageIdx 크롤링할 결제내역 페이지 번호
-	*/
+	/**
+	 * 특정 결제내역 페이지 목록 크롤링, store_order의 헤더정보
+	 * @param {number} pageIdx 크롤링할 결제내역 페이지 번호
+	 */
 	parseHistoryListPage: async function(pageIdx) {
 		try {
 			var res = await UTIL.request(URL.base+URL.history+"?page="+pageIdx, null, null);
@@ -123,6 +146,7 @@ var SYNC_ORDER = {
 				var price = UTIL.getNumber(priceStr);
 				
 				bookIdList[bookId] = price;
+				SYNC_ORDER.ensureBookById(bookId);
 			});
 			
 			var orderHeaderItem = {book_list: bookIdList};

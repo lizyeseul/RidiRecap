@@ -55,10 +55,24 @@ var DB = {
 			.catch(reject);
 		});
 	},
+	/**
+	 * 데이터 조회
+	 * @param {string} tbNm store명
+	 * @param {string} idxNm key명
+	 * @param {object} options 
+	 *  {
+	 * 	keyRange: 검색할 값 x
+	 * 	rangeOption: "only" = x, "lowerBound" >= x, "upperBound" <= x
+	 * 	limit: 개수
+	 * 	direction: "next" asc, "prev" desc, "nextunique" distinct asc, "prevunique" distinct desc
+	 * 	filter: object, 일치하는 값만 반환
+	 *  }
+	 * @returns array
+	 */
 	getValueByIdx: function(tbNm, idxNm, options) {
 		options = options || {};
-		var rangeOption = options.rangeOption || "only";
 		var keyRange = options.range || null;
+		var rangeOption = options.rangeOption || "only";
 		var limit = options.limit || -1;
 		var direction = options.direction || "next";
 		var filter = options.filter || null;
@@ -94,6 +108,35 @@ var DB = {
 				}
 			};
 			cursorReq.onerror = (e) => {console.error("커서 요청 오류-getValueByIdx: "+e.target.error)};
+		});
+	},
+	/**
+	 * 개수 count
+	 * @param {string} tbNm store명
+	 * @param {string} idxNm key명
+	 * @param {object} options 
+	 *  {
+	 * 	keyRange: 검색할 값 x
+	 * 	rangeOption: "only" = x, "lowerBound" >= x, "upperBound" <= x
+	 *  }
+	 * @returns number cnt
+	 */
+	getCountByIdx: function(tbNm, idxNm, options) {
+		options = options || {};
+		var keyRange = options.range || null;
+		var rangeOption = options.rangeOption || "only";
+
+		return new Promise((resolve, reject) => {
+			var store = this.getObjectStore(tbNm,"readonly");
+			var index = store.index(idxNm);
+	
+			var results = [];
+			var queryParam = (keyRange) ? IDBKeyRange[rangeOption](keyRange) : null;
+			var cursorReq = index.count(queryParam);
+			cursorReq.onsuccess = (e) => {
+				resolve(cursorReq.result);
+			};
+			cursorReq.onerror = (e) => {console.error("커서 요청 오류-getCountByIdx: "+e.target.error)};
 		});
 	},
 	// getMaxOnIdx: function(tbNm, idxNm) {
