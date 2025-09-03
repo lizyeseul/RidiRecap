@@ -26,18 +26,13 @@ var SYNC_BOOK = {
 	 */
 	syncBookAllByUnit: async function() {
 		let unitList = await DB.getValueByIdx("store_unit", "unit_id", null);
-		await SYNC_BOOK.syncBookByUnitId(unitList.map((u) => UTIL.toString(u.unit_id)));
+		await SYNC_BOOK.syncBookByUnitId(unitList.map((u) => UTIL.toString(u.unit_id)));	//TODO end 기준이 네트워크 조회 끝날 때로 되어 있는 듯, db insert까지로 확인 필요
 	},
-	/**
-	 * TODO
-	 */
-	syncBook: async function() {
+	syncBookRecent: async function() {
 		//store_unit select all 해서 가져온 unit_id 기준으로 전체 book목록 update > 1분정도 소요
 		//store_book 중에서 unit_id 0 인 것들 select해서 book_id 기준으로 update
 
 		//sync order할 떄 is update flag값 넣어놓고 flag Y인 것만 추출해서 해당 unit_id 기준으로 book 업데이트
-
-		//TODO 작가가 바뀌면 book_id가 바뀔까 아니면 book_id는 같은데 정보가 업데이트될까.. > book_id 같다고 가정하고 개발, 이런 케이스 발견되면 뭐.. 안타깝게 됐네요
 	},
 	/**
 	 * unit_id 목록 기준으로 book 업데이트
@@ -123,9 +118,17 @@ var SYNC_BOOK = {
 	},
 	updateBook2: async function() {
 		try {
+			const limit = 10; //TEST
 			await SYNC_ORDER.ensureAllBook();
-			var bookIdList = await DB.getValueByIdx("store_book", "book_id", {filter: {unit_id: 0}});
-			await SYNC_BOOK.syncBookByBookId([...new Set(bookIdList.flatMap(obj => UTIL.toString(obj.book_id)))], null);
+			let bookIdList = await DB.getValueByIdx("store_book", "book_id", {filter: {unit_id: 0}});;
+			for(let i=0; i<limit; i++) {
+				await SYNC_ORDER.ensureAllBook();
+				await SYNC_BOOK.syncBookByBookId([...new Set(bookIdList.flatMap(obj => UTIL.toString(obj.book_id)))], null);
+				bookIdList = await DB.getValueByIdx("store_book", "book_id", {filter: {unit_id: 0}});;
+				if(bookIdList.length == 0) {
+					break; //TEST
+				}
+			}
 		}
 		catch(e) {
 			console.error("updateBook 오류:", e);

@@ -28,7 +28,7 @@ function Setting() {
 	}
 	async function syncBookAllByUnit() {
 		setIsSync(true);
-		await SYNC_BOOK.syncBookByUnitId();
+		await SYNC_BOOK.syncBookAllByUnit();
 		setIsSync(false);
 	}
 	return (

@@ -1,0 +1,137 @@
+{
+	"id": "3885003833",
+	"title": {
+		"main": "리셋팅 레이디 1권",
+		"prefix": "[e북]"
+	},
+	"thumbnail": {
+		"small": "https://img.ridicdn.net/cover/3885003833/small#1",
+		"large": "https://img.ridicdn.net/cover/3885003833/large#1",
+		"xxlarge": "https://img.ridicdn.net/cover/3885003833/xxlarge#1"
+	},
+	"authors": [
+		{
+			"id": 79402,
+			"name": "차서진",
+			"role": "author"
+		}
+	],
+	"categories": [
+		{
+			"id": 6002,
+			"name": "서양풍 로판",
+			"genre": "romance_fantasy",
+			"sub_genre": "romance_fantasy",
+			"is_series_category": true,
+			"ancestor_ids": [
+				6000,
+				0
+			]
+		}
+	],
+	"price_info": {
+		"buy": {
+			"regular_price": 3700,
+			"price": 3700,
+			"discount_percentage": 0
+		}
+	},
+	"series": {
+		"id": "3885003833",
+		"volume": 1,
+		"property": {
+			"is_comic_hd": false,
+			"is_completed": true,
+			"is_serial": false,
+			"is_serial_complete": true,
+			"is_wait_free": false,
+			"last_volume_id": "3885010878",
+			"opened_book_count": 8,
+			"opened_last_volume_id": "3885010878",
+			"title": "리셋팅 레이디",
+			"total_book_count": 8,
+			"unit": "권",
+			"next_books": {
+				"3885003834": {
+					"b_id": "3885003834",
+					"is_opened": true,
+					"use_free_serial_schedule": false
+				}
+			}
+		},
+		"price_info": {
+			"buy": {
+				"total_book_count": 8,
+				"free_book_count": 0,
+				"regular_price": 23900,
+				"price": 23900,
+				"discount_percentage": 0
+			}
+		}
+	},
+	"file": {
+		"size": 1696,
+		"is_comic_hd": false,
+		"is_drm_free": false,
+		"is_webtoon": false,
+		"variants": [
+			{
+				"quality": "recommended",
+				"size": 1696
+			}
+		],
+		"format": "epub",
+		"is_comic": false,
+		"is_manga": false,
+		"character_count": 140389
+	},
+	"property": {
+		"is_adult_only": false,
+		"is_magazine": false,
+		"is_new_book": false,
+		"is_novel": false,
+		"is_open": true,
+		"is_somedeal": false,
+		"is_trial": false,
+		"is_wait_free": false,
+		"use_free_serial_schedule": false,
+		"preview_rate": 10,
+		"preview_max_characters": 14038
+	},
+	"publish": {
+		"ebook_publish": "2021-03-18T00:00:00+09:00",
+		"ridibooks_publish": "2021-03-18T07:00:43+09:00",
+		"ridibooks_register": "2021-03-12T15:37:09+09:00"
+	},
+	"publisher": {
+		"id": 3885,
+		"name": "델피뉴",
+		"cp_name": "주식회사 테라핀_E/P/J"
+	},
+	"support": {
+		"android": true,
+		"ios": true,
+		"paper": true,
+		"mac": true,
+		"windows": true,
+		"web_viewer": false
+	},
+	"service_type": "normal",
+	"b_id": "3885003833",
+	"display_order": 2,
+	"display_title": "리셋팅 레이디",
+	"display_type": "shelf",
+	"display_unit_id": 3577153,
+	"expire_date": "9999-12-31T23:59:59+09:00",
+	"hidden": false,
+	"is_deleted": false,
+	"purchase_date": "2024-12-19T09:56:53+09:00",
+	"remain_time": "",
+	"search_order": 1,
+	"search_title": "리셋팅 레이디",
+	"search_type": "series",
+	"search_unit_id": 3567055,
+	"book_id": 3885003833,
+	"unit_id": 3577153,
+	"last_update_dttm": "2025-09-03T05:35:10.847Z"
+}
