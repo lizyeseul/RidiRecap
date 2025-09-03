@@ -86,13 +86,17 @@ var SYNC_BOOK = {
 			var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toNumber(obj.b_id), obj]));
 			var mergedList = bookInfosRes.map(item => {
 				item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
-				var other = purchaseMap.get(item.id);
+				var other = purchaseMap.get(UTIL.toNumber(item.id));
 				return other ? {...item, ...other} : item;
 			});
 			mergedList.forEach(async function(bookInfo) {
 				let bookId = UTIL.toNumber(bookInfo.id);
 				if(UTIL.isEmpty(unitId)) {
-					if(UTIL.isEmpty(bookInfo.property.review_display_id)) {
+					let tempUnitId = bookInfo.display_unit_id || bookInfo.search_unit_id;
+					if(UTIL.isNotEmpty(tempUnitId)) {
+						unitId = UTIL.toNumber(tempUnitId);
+					}
+					else if(UTIL.isEmpty(bookInfo.property.review_display_id)) {
 						unitId = -1;
 					}
 					else {
