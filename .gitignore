@@ -3,3 +3,6 @@
 .vscode
 .vscode/tasks.json
 manifest.json
+mockup/temp1.js
+mockup/temp2.js
+.gitignore
