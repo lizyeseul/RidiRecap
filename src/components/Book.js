@@ -1,6 +1,7 @@
 const { useState, useEffect } = React;
 
 import SYNC_BOOK from "../../scripts/sync/sync_book.js";
+import SYNC_ORDER from "../../scripts/sync/sync_order.js";
 import DB from "../../scripts/connect_db.js";
 
 function Book() {
@@ -50,11 +51,6 @@ function Book() {
 		await SYNC_BOOK.updateLib();
 		setIsSync(false);
 	}
-	// async function updateUnitDetail() {
-	// 	setIsSync(true);
-	// 	await SYNC_BOOK.updateUnitDetail();
-	// 	setIsSync(false);
-	// }
 	async function updateBook() {
 		setIsSync(true);
 		await SYNC_BOOK.updateBook(checkedListById);
@@ -65,14 +61,19 @@ function Book() {
 		await SYNC_BOOK.updateBook2();
 		setIsSync(false);
 	}
+	async function ensureAllBook() {
+		setIsSync(true);
+		await SYNC_ORDER.ensureAllBook();
+		setIsSync(false);
+	}
 	return (
 		<div>
 			<span>{isSync? 'sync' : 'end'}</span><br/>
 			<div>
 				<button onClick={updateLib} disabled={isSync}>unit lib</button>
-				{/* <button onClick={updateUnitDetail} disabled={true}>unit 상세 update</button> */}
 				<button onClick={updateBook} disabled={isSync}>unit 기준 전체book</button>
-				<button onClick={updateBook2} disabled={isSync}>order 기준 book/* unit_id 0 인 놈들*/</button>
+				<button onClick={updateBook2} disabled={isSync}>order 기준 book</button>{/* unit_id 0 인 놈들*/}
+				<button onClick={ensureAllBook} disabled={isSync}>order에만 있는 book</button>
 				<button onClick={findLibList} disabled={isSync}>목록 조회</button>
 			</div>
 			<hr/>

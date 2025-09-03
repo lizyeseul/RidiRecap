@@ -7,7 +7,7 @@ var SYNC_ORDER = {
 		var orderList = await DB.getValueByIdx("store_order", "order_no", null);
 		for(var orderItem of orderList) {
 			for(var bookId of Object.keys(orderItem.book_list)) {
-				SYNC_ORDER.ensureBookById(bookId);
+				await SYNC_ORDER.ensureBookById(bookId);
 			}
 		}
 	},
@@ -19,7 +19,7 @@ var SYNC_ORDER = {
 		bookId = UTIL.toNumber(bookId);
 		let bookCnt = await DB.getCountByIdx("store_book", "book_id", {range: bookId});
 		if(bookCnt === 0) {
-			DB.updateData("store_book", bookId, { book_id: bookId, unit_id: 0 }, "update");
+			await DB.updateData("store_book", bookId, { book_id: bookId, unit_id: 0 }, "update");
 		}
 	},
 	syncOrderRecent: async function(setIngPage) {

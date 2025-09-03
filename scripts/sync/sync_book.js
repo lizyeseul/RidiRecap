@@ -92,10 +92,15 @@ var SYNC_BOOK = {
 			mergedList.forEach(async function(bookInfo) {
 				let bookId = UTIL.toNumber(bookInfo.id);
 				if(UTIL.isEmpty(unitId)) {
-					let displayBookId = UTIL.toNumber(bookInfo.property.review_display_id);
-					let displayData = await DB.getUniqueValue("store_book", "book_id", displayBookId);
-					SYNC_ORDER.ensureBookById(displayBookId);
-					unitId = UTIL.toNumber(displayData.unit_id) || 0;
+					if(UTIL.isEmpty(bookInfo.property.review_display_id)) {
+						unitId = -1;
+					}
+					else {
+						let displayBookId = UTIL.toNumber(bookInfo.property.review_display_id);
+						let displayData = await DB.getUniqueValue("store_book", "book_id", displayBookId) || {};
+						await SYNC_ORDER.ensureBookById(displayBookId);
+						unitId = UTIL.isEmpty(displayData) ? -1 : UTIL.toNumber(displayData.unit_id) || 0;
+					}
 				}
 				bookInfo.book_id = bookId;
 				bookInfo.unit_id = unitId;
@@ -106,41 +111,7 @@ var SYNC_BOOK = {
 	updateBook: async function(checkedListById) {
 		try {
 			if(UTIL.isEmpty(checkedListById)) return;
-			SYNC_BOOK.syncBookByUnitId(checkedListById.map((u) => UTIL.toString(u)));
-			return;
-			let unitListRes = await UTIL.request(URL.LIBRARY_BASE+"books/units", {unit_ids: checkedListById.map((u) => UTIL.toString(u))}, { isResultJson: true });
-			const bookTasks = [];
-			for(let e of unitListRes.units) {
-				let startOffset = 0;
-				let limit = 100;
-				let totalCnt = e.total_count;
-				let unitId = e.id;
-				for(let offset=startOffset; offset<totalCnt; offset=offset+limit) {
-					bookTasks.push(async () => {
-						let booksRes = await UTIL.request(URL.LIBRARY_BASE+"books/units/"+unitId+"/order?offset="+UTIL.toString(offset)+"&limit="+UTIL.toString(limit)+"&order_type=unit_order&order_by=asc", null, { isResultJson: true });
-						let items = booksRes.items;
-						let bookIds = [...new Set(items.flatMap(obj => UTIL.toString(obj.b_ids)))];
-						let [bookInfosRes, bookPurchaseInfosRes] = await Promise.all([
-							UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true }),
-							UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true })
-						])
-
-						let purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toNumber(obj.b_id), obj]));
-						let mergedList = bookInfosRes.map(item => {
-							item.service_type = "none"; //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
-							let other = purchaseMap.get(item.id);
-							return other ? {...item, ...other} : item;
-						});
-						mergedList.forEach(function(bookInfo) {
-							bookInfo.book_id = UTIL.toNumber(bookInfo.id);
-							bookInfo.unit_id = UTIL.toNumber(unitId);
-							DB.updateData("store_book", bookInfo.book_id, bookInfo, "update");
-						});
-					});
-				}
-			}
-			await UTIL.runWithConcurrencyLimit(bookTasks, 20);
-			return true;
+			await SYNC_BOOK.syncBookByUnitId(checkedListById.map((u) => UTIL.toString(u)));
 		}
 		catch(e) {
 			console.error("updateBook 오류:", e);
@@ -149,40 +120,8 @@ var SYNC_BOOK = {
 	updateBook2: async function() {
 		try {
 			await SYNC_ORDER.ensureAllBook();
-
 			var bookIdList = await DB.getValueByIdx("store_book", "book_id", {filter: {unit_id: 0}});
-			await SYNC_BOOK.syncBookByBookId([...new Set(bookIdList.flatMap(obj => UTIL.toString(obj.book_id)))],null);
-			return;
-
-			var startOffset = 0;
-			var limit = 100;
-			var totalCnt = bookIdList.length;
-			for(var offset=startOffset; offset<totalCnt; offset=offset+limit) {
-				var bookIds = bookIdList.slice(offset, offset + limit);
-				bookIds = [...new Set(bookIds.flatMap(obj => UTIL.toString(obj.book_id)))];
-				var [bookInfosRes, bookPurchaseInfosRes] = await Promise.all([
-					UTIL.request(URL.BOOK_API_BASE+"books?b_ids="+bookIds.join(","), null, { isResultJson: true }),
-					UTIL.request(URL.LIBRARY_BASE+"items", {b_ids: bookIds}, { isResultJson: true })
-				])
-
-				var purchaseMap = new Map(bookPurchaseInfosRes.items.map(obj => [UTIL.toNumber(obj.b_id), obj]));
-				var mergedList = bookInfosRes.map(item => {
-					item.service_type = "none" //미구매표시용으로 insert때만 기본값, 환불생각하면 그냥 기본값?
-					var other = purchaseMap.get(item.id);
-					return other ? {...item, ...other} : item;
-				});
-				mergedList.forEach(async function(bookInfo) {
-					var bookId = UTIL.toNumber(bookInfo.id);
-					var tempBookId = UTIL.toNumber(bookInfo.property.review_display_id);
-					var displayData = await DB.getUniqueValue("store_book", "book_id", tempBookId);
-					SYNC_ORDER.ensureBookById(tempBookId);
-
-					bookInfo.book_id = bookId;
-					bookInfo.unit_id = UTIL.toNumber(displayData.unit_id) || 0;
-
-					DB.updateData("store_book", bookInfo.book_id, bookInfo, "update");
-				});
-			}
+			await SYNC_BOOK.syncBookByBookId([...new Set(bookIdList.flatMap(obj => UTIL.toString(obj.book_id)))], null);
 		}
 		catch(e) {
 			console.error("updateBook 오류:", e);

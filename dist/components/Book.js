@@ -3,6 +3,7 @@ const {
   useEffect
 } = React;
 import SYNC_BOOK from "../../scripts/sync/sync_book.js";
+import SYNC_ORDER from "../../scripts/sync/sync_order.js";
 import DB from "../../scripts/connect_db.js";
 
 function Book() {
@@ -73,6 +74,11 @@ function Book() {
     await SYNC_BOOK.updateBook2();
     setIsSync(false);
   }
+	async function ensureAllBook() {
+		setIsSync(true);
+		await SYNC_ORDER.ensureAllBook();
+		setIsSync(false);
+	}
 
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
@@ -83,7 +89,10 @@ function Book() {
   }, "unit \uAE30\uC900 \uC804\uCCB4book"), /*#__PURE__*/React.createElement("button", {
     onClick: updateBook2,
     disabled: isSync
-  }, "order \uAE30\uC900 book/* unit_id 0 \uC778 \uB188\uB4E4*/"), /*#__PURE__*/React.createElement("button", {
+  }, "order \uAE30\uC900 book"), /*#__PURE__*/React.createElement("button", {
+    onClick: ensureAllBook,
+    disabled: isSync
+  }, "test"), /*#__PURE__*/React.createElement("button", {
     onClick: findLibList,
     disabled: isSync
   }, "\uBAA9\uB85D \uC870\uD68C")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {
