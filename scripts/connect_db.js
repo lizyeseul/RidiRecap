@@ -59,7 +59,7 @@ var DB = {
 	 * 데이터 조회
 	 * @param {string} tbNm store명
 	 * @param {string} idxNm key명
-	 * @param {object} options 
+	 * @param {object} options
 	 *  {
 	 * 	keyRange: 검색할 값 x
 	 * 	rangeOption: "only" = x, "lowerBound" >= x, "upperBound" <= x
@@ -76,11 +76,13 @@ var DB = {
 		var limit = options.limit || -1;
 		var direction = options.direction || "next";
 		var filter = options.filter || null;
+		var existsFilter = options.existsFilter || null;
+		var notExistsFilter = options.notExistsFilter || null;
 
 		return new Promise((resolve, reject) => {
 			var store = this.getObjectStore(tbNm,"readonly");
 			var index = store.index(idxNm);
-	
+
 			var results = [];
 			var queryParam = (keyRange) ? IDBKeyRange[rangeOption](keyRange) : null;
 			var cursorReq = index.openCursor(queryParam, direction);
@@ -91,6 +93,22 @@ var DB = {
 					if(filter) {
 						for (const key in filter) {
 							if (cursor.value[key] !== filter[key]) {
+								includeFlag = false;
+								break;
+							}
+						}
+					}
+					if(existsFilter) {
+						for (const key in existsFilter) {
+							if(!cursor.value.hasOwnProperty(filter[key])) {
+								includeFlag = false;
+								break;
+							}
+						}
+					}
+					if(notExistsFilter) {
+						for (const key in notExistsFilter) {
+							if(cursor.value.hasOwnProperty(filter[key])) {
 								includeFlag = false;
 								break;
 							}
@@ -114,7 +132,7 @@ var DB = {
 	 * 개수 count
 	 * @param {string} tbNm store명
 	 * @param {string} idxNm key명
-	 * @param {object} options 
+	 * @param {object} options
 	 *  {
 	 * 	keyRange: 검색할 값 x
 	 * 	rangeOption: "only" = x, "lowerBound" >= x, "upperBound" <= x
@@ -129,7 +147,7 @@ var DB = {
 		return new Promise((resolve, reject) => {
 			var store = this.getObjectStore(tbNm,"readonly");
 			var index = store.index(idxNm);
-	
+
 			var results = [];
 			var queryParam = (keyRange) ? IDBKeyRange[rangeOption](keyRange) : null;
 			var cursorReq = index.count(queryParam);
@@ -143,7 +161,7 @@ var DB = {
 	// 	return new Promise((resolve, reject) => {
 	// 		var store = DB.getObjectStore(tbNm,"readonly");
 	// 		var index = store.index(idxNm);
-			
+
 	// 		var cursorReq = index.openCursor(null, "prev");
 	// 		cursorReq.onsuccess = (e) => {
 	// 			var cursor = e.target.result;

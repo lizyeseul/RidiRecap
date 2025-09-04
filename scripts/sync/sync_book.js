@@ -98,7 +98,7 @@ var SYNC_BOOK = {
 						let displayBookId = UTIL.toNumber(bookInfo.property.review_display_id);
 						let displayData = await DB.getUniqueValue("store_book", "book_id", displayBookId) || {};
 						await SYNC_ORDER.ensureBookById(displayBookId);
-						unitId = UTIL.isEmpty(displayData) ? -1 : UTIL.toNumber(displayData.unit_id) || 0;
+						unitId = UTIL.isEmpty(displayData) ? 0 : UTIL.toNumber(displayData.unit_id) || 0;
 					}
 				}
 				bookInfo.book_id = bookId;
