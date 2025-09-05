@@ -81,11 +81,126 @@
 		</div>
 	</div>
 
+
+
+	<!----------------------------------------------위는 PC 아래는 모바일-->
+
+                <section id="page_buy_history">
+                    <div class="module_pagetitle">
+                        <h2 class="pagetitle_text">결제 내역</h2>
+                    </div>
+                    <div class="buy_list_wrap">
+                        <ul class="rui_mobile_list">
+                            <li class="list_item">
+                                <div class="list_table has_detail_link">
+                                    <div class="list_left">
+                                        <p class="header">2021.02.09.   23:52
+
+</p>
+                                        <h4 class="title">이세계의 정령사가 되었다 379화</h4>
+                                        <ul class="additional_info_list">
+                                            <li class="info_item">리디캐시</li>
+                                        </ul>
+                                    </div>
+                                    <div class="list_right">
+                                        <p class="main_value">
+                                            <span class="museo_sans">100</span>
+                                            원
+
+                                        </p>
+                                    </div>
+                                </div>
+                                <a class="detail_link" href="/order/history/2021020985943085">
+                                    <span class="indent_hidden">상세보기</span>
+                                </a>
+                            </li>
+                            <li class="list_item">
+                                <div class="list_table has_detail_link">
+                                    <div class="list_left">
+                                        <p class="header">2021.02.09.   01:57
+
+</p>
+                                        <h4 class="title">문과라도 안 죄송한 이세계로 감 288화</h4>
+                                        <ul class="additional_info_list">
+                                            <li class="info_item">리디캐시</li>
+                                        </ul>
+                                    </div>
+                                    <div class="list_right">
+                                        <p class="main_value">
+                                            <span class="museo_sans">100</span>
+                                            원
+
+                                        </p>
+                                    </div>
+                                </div>
+                                <a class="detail_link" href="/order/history/2021020907031063">
+                                    <span class="indent_hidden">상세보기</span>
+                                </a>
+                            </li>
+                            <li class="list_item">
+                                <div class="list_table has_detail_link">
+                                    <div class="list_left">
+                                        <p class="header">2021.02.08.   18:49
+
+</p>
+                                        <h4 class="title">이세계의 정령사가 되었다 378화</h4>
+                                        <ul class="additional_info_list">
+                                            <li class="info_item">리디캐시</li>
+                                        </ul>
+                                    </div>
+                                    <div class="list_right">
+                                        <p class="main_value">
+                                            <span class="museo_sans">100</span>
+                                            원
+
+                                        </p>
+                                    </div>
+                                </div>
+                                <a class="detail_link" href="/order/history/2021020867758087">
+                                    <span class="indent_hidden">상세보기</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="paging_wrapper">
+                        <div class="module_paging">
+                            <ul class="paging_wrap">
+                                <li class="btn_prev">
+                                    <a href="/order/history?page=92" title="92 페이지">
+                                        <span class="indent_hidden">이전으로</span>
+                                        <span class="icon-arrow_8_left"></span>
+                                    </a>
+                                </li>
+                                <li class="page_list page_list_first">
+                                    <a class="museo_sans" href="/order/history?page=91">91</a>
+                                </li>
+                                <li class="page_list">
+                                    <a class="museo_sans" href="/order/history?page=92">92</a>
+                                </li>
+                                <li class="page_list page_this">
+                                    <a class="museo_sans" href="#">93</a>
+                                </li>
+                                <li class="page_list">
+                                    <a class="museo_sans" href="/order/history?page=94">94</a>
+                                </li>
+                                <li class="page_list page_list_last">
+                                    <a class="museo_sans" href="/order/history?page=95">95</a>
+                                </li>
+                                <li class="btn_next">
+                                    <a href="/order/history?page=94" title="94 페이지">
+                                        <span class="indent_hidden">다음으로</span>
+                                        <span class="icon-arrow_8_right"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
 <script>
 //class="btn_prev" 없으면 첫페이지
 //class="btn_next" 없으면 마지막페이지
 //https://ridibooks.com/order/history?page=999
-//if isEmpty($(".btn_next")) 
+//if isEmpty($(".btn_next"))
   var lastPageNum = $(".page_this a")[0].innerText
 var lastPageCnt = $(".page_this a").length
 
@@ -101,16 +216,16 @@ for(var i=1;i<=lastPageNum;i++){
 	for(var idx = 0; idx<detailTrList.length; idx++) {
 		var link = $(a[idx]).attr("data-href"); // /order/history/2020060206698032
 		var order_no = link;//끝 숫자 추출
-		
+
 		var tdList = $(a[idx]).find("td");
 		for(var td;;) {
 			//TODO order_dttm > toDate 처리
 			var order_dttm = td[0].innerText;
 		}
-		
+
 		//TODO DB에 order_dt key 등록
 		//{"2020060206698032" {"order_no": "2020060206698032", "order_dttm": 2020.06.01. 00:51, "order_dt":"20200601"}}
-		
+
 		//주문 seq
 		var order_seq = (15 - idx+1) + (lastPageNum-curPage-1)*15 + (lastPageNum!=curPage)?15:0 + (lastPageNum!=curPage)?lastPageCnt:0;
 		//add value 2020060206698032 : {"order_seq": order_seq}
@@ -273,6 +388,70 @@ for(var i=1;i<=lastPageNum;i++){
 			<td>소득공제 불가</td>
 		</tr>
 	</tbody>
+	<!----------------------------------------------위는 PC 아래는 모바일-->
+	<div class="detail_info_wrap no_button">
+		<ul class="detail_info_list">
+			<li class="detail_info_item">
+				<span class="title">주문 번호</span>
+				<span class="text museo_sans">2020060103078030</span>
+			</li>
+			<li class="detail_info_item">
+				<span class="title">구분</span>
+				<ul class="book_list">
+					<li class="book">
+						<span class="book_title">
+							<a href="/books/2378009544">문과라도 안 죄송한 이세계로 감 32화</a>
+						</span>
+					</li>
+				</ul>
+			</li>
+			<li class="detail_info_item">
+				<span class="title">주문 금액</span>
+				<span class="text price">
+					<span class="museo_sans">0</span>
+					원
+				</span>
+			</li>
+			<li class="detail_info_item">
+				<span class="title">리디캐시 사용액</span>
+				<span class="text price">
+					<span class="museo_sans">0</span>
+					원
+				</span>
+			</li>
+			<li class="detail_info_item">
+				<div class="main_row">
+					<span class="title">리디포인트 사용액</span>
+					<span class="text price">
+						<span class="museo_sans">0</span>
+						원
+					</span>
+				</div>
+			</li>
+			<li class="detail_info_item">
+				<span class="title">PG 결제 금액</span>
+				<span class="text price">
+					<span class="museo_sans">0</span>
+					원
+				</span>
+			</li>
+			<li class="detail_info_item">
+				<span class="title">결제 수단</span>
+				<span class="text">기다리면 무료</span>
+			</li>
+			<li class="detail_info_item">
+				<span class="title">적립 리디포인트</span>
+				<span class="text">
+					<span class="museo_sans">0</span>
+					원
+				</span>
+			</li>
+			<li class="detail_info_item">
+				<span class="title">문화비 소득공제</span>
+				<span class="text museo_sans">소득공제 불가</span>
+			</li>
+		</ul>
+	</div>
 
 <script>
 //TODO 테이블 update할 떄 mod_dt 정보 utils에서 기본으로 추가
@@ -287,7 +466,7 @@ for(var b in bookList) {
 	var book_id = bookE.attr("href").replace("/books/");
 	bookIdList.append(book_id);
 	book.book_id = book_id;
-	
+
 	var priceE = $(b).find(".price");
 	var price = 0;
 	if(UT.isNotEmpty(priceE)) {
@@ -321,7 +500,7 @@ for(var b in bookInfoResultList) {
 
 
 /*TODO 크롤링된 데이터 돌면서 필요한 형태로 변환
- *주문정보 HD+DT 
+ *주문정보 HD+DT
 for(order_history_dt) {
 	var dtItem = {order_book_key: order_no, book_id, price}
 	var hdItem = get("order_history_hd", order_no)

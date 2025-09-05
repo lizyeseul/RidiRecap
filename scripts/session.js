@@ -15,30 +15,30 @@ var SESSION = {
 					return false;
 				}
 			});
-			
+
 			if(targetStr) {
 				var copyRidi = {};
 				if(UTIL.isEmpty(targetStr)) return;
-				
+
 				var code = targetStr[0].innerText;
 				var match = code.match(/Ridi\.globals\s*=\s*({[\s\S]*?});/);
 				if(match){
 					var jsonLike = match[1];
 					copyRidi.globals = JSON.parse(UTIL.jsObjectToJson(jsonLike));
 				}
-				
+
 				match = code.match(/Ridi\.Auth\s*=\s*([\s\S]*?);/);
 				if(match){
 					var temp = match[1];
 					copyRidi.Auth = (temp == 'true');
 				}
-				
+
 				match = code.match(/Ridi\.Platform\s*=\s*'([\s\S]*?)';/);
 				if(match){
 					var temp = match[1];
 					copyRidi.Platform = temp;
 				}
-	
+
 				localStorage.setItem("copyRidi", JSON.stringify(copyRidi));
 			}
 		}
@@ -59,18 +59,24 @@ var SESSION = {
 				var itemList = $(htmlDOM).find(".page_this a");
 				if(itemList.length > 0) {
 					sessionStorage.setItem("lastPageNum", $(htmlDOM).find(".page_this a")[0].innerText);
-					sessionStorage.setItem("lastPageCnt", $(htmlDOM).find(".js_rui_detail_link").length);
+					// sessionStorage.setItem("lastPageCnt", $(htmlDOM).find(".js_rui_detail_link").length);
 				}
 			}
-			
+
 			//class="btn_prev" 없으면 첫페이지
 			sessionStorage.setItem("lastPageCnt", 1);
 			var res2 = await UTIL.request(URL.base+URL.history+"?page="+sessionStorage.getItem("lastPageNum"), null, null);
 			var htmlDOM2 = parser.parseFromString(res2, "text/html");
 			if($(htmlDOM2).find(".btn_next").length == 0) {
-				sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
+				let copyRidi = JSON.parse(localStorage.getItem("copyRidi"));
+				if(copyRidi.globals.isPc == true) {
+					sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".js_rui_detail_link").length);
+				}
+				else {
+					sessionStorage.setItem("lastPageCnt", $(htmlDOM2).find(".list_item").length);
+				}
 			}
-			
+
 			var mainCnt = await UTIL.request(URL.LIBRARY_BASE+"items/main/count/", null, { isResultJson: true });
 			sessionStorage.setItem("unitCnt", mainCnt.unit_total_count+100);
 		}

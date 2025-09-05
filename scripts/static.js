@@ -1,10 +1,11 @@
 const URL = {
 	"base": "https://ridibooks.com",
-	
+
 	"account": "/account/myridi",
 	"history": "/order/history",
+	"receipt": "/order/receipt",
 	"auth": '/api/global/auth-variables',
-	
+
 	"LIBRARY_BASE": "https://library-api.ridibooks.com/",
 	"BOOK_API_BASE": "https://book-api.ridibooks.com/"
 };
