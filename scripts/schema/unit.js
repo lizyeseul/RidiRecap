@@ -13,63 +13,41 @@ export default class unitClass {
 //			console.debug("type err")
 		}
 	}
-	
+
 	unit_id;
-	
+
 	static schema = {
-		unit_id: "unit 식별번호", //key, index, unique
-		
-		unit_count: "현재 공개된 화수",	//삭제된? 화가 있을 때 count될지는 모르겠음 그런 불미스러운일이 일어날수가 있나
+		unit_id: "(number) unit 식별번호", //key, index, unique
+
+		b_id: "가장 최신화 book_id",
+		expire_date: "(Datetime_str) 만료 시각",
+		purchase_date: "(Datetime_str) 구매 시각",
+		remain_time: "남은 시간 라벨",
+		service_type: "normal(구매)|rent(대여), 구매유형",	//대여 만료도 rent
+
+		unit_count: "(number) 현재 구매한 화수",	//삭제된 화가 있을 때 count될지는 모르겠음
 		unit_title: "작품명",
 		unit_type: "series|book|shelf, 의미는 모름, 1은 뭘까",
-		unit_type_int: "(int) 2(series)|3(book)|4(shelf), 의미는 모름",
-		
-		series_id: "시리즈 첫번째 book_id",
-		is_completed: "(Boolean) 완결여부",
-		is_serial: "(Boolean) ",
-		is_serial_complete: "(Boolean) ",
-		is_webtoon: "(Boolean) 웹툰여부",
-		
-		opened_last_volume_id: "(int) unit_count랑 같은 정보",
-		total_book_count: "(int) 공개 전 에피 포함 전체 화수",
-		unit: "단위 ex)화, 권",
-		property: {
-			is_adult_only: false,
-			is_magazine: false,
-			is_new_book: true,
-			is_novel: false,
-			is_open: true,
-			is_somedeal: false,
-			is_trial: false,
-			is_wait_free: false,
-			review_display_id: "5211000001",
-			use_free_serial_schedule: false,
-			preview_rate: 0
-		},
-		publisher: {
-			"id": 5211,
-			"name": "익시드",
-			"cp_name": "박정연(대대원)_개인_IAP_익시드"
-		},
-		last_update_dttm: "(Date) 데이터 마지막 업데이트 시각"
+		unit_type_int: "(number) 2(series)|3(book)|4(shelf), 의미는 모름",
+
+		last_update_dttm: "(Datetime) 데이터 마지막 업데이트 시각"
 	}
-	
+
 	get dataForPurchase() {
 		return {
 			unit_id: this.unit_id,
 			unit_title: this.unit_title,
-			unit_total_cnt: this.total_cnt,	//공개된 화 수
 			unit_count: this.unit_count,	//현재 구매한 화 수
-			
-			thumbnail: this.thumbnail,
-			property: this.property
+			unit_type: this.unit_type,
+
+			unit_last_update_dttm: this.last_update_dttm
 		}
 	}
-	
+
 	get jsonObj() {
 		return JSON.parse(JSON.stringify(this));
 	}
-	
+
 	validate() {
 		return true;
 	}

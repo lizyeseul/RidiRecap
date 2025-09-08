@@ -34,6 +34,11 @@ var DB = {
 				os.createIndex("is_completed", "is_completed", {unique: false});
 				os.createIndex("service_type", "service_type", {unique: false});
 			}
+			// if(!dbConnect.objectStoreNames.contains("store_lib")) {
+			// 	os = dbConnect.createObjectStore("store_lib", {autoIncrement: true});
+			// 	os.createIndex("unit_id", "unit_id", {unique: false});
+			// 	os.createIndex("is_completed", "is_completed", {unique: false});
+			// }
 		}
 	},
 	getObjectStore: function(store_nm, mode) {
