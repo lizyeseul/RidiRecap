@@ -2800,6 +2800,6 @@ export const categoryFlatInfo = {
 	}
 };
 
-export function getCtgrNm(id) {
+export default function getCtgrNm(id) {
 	return this.categoryFlatInfo.get(UTIL.toString(id)).title;
 };
