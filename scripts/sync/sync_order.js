@@ -139,10 +139,10 @@ var SYNC_ORDER = {
 		//주문시간
 		let tdList = $(orderItem).find("td");
 		let orderDttm = tdList[0].innerText;
-		orderValue.order_dttm = moment(UTIL.toString(UTIL.getNumber(orderDttm)), "YYYYMMDDHHmm").toDate();
+		orderValue.order_dttm = dayjs(UTIL.toString(UTIL.getNumber(orderDttm)), "YYYYMMDDHHmm").toDate();
 //				let dtStr = orderDttm.match(/\d{4}\.\d{2}\.\d{2}/).toString();
 //				let tmStr = orderDttm.match(/\d{2}:\d{2}/).toString();
-//				orderValue.order_dttm = moment(dtStr+" "+tmStr, "YYYY.MM.DD HH:mm").toDate();
+//				orderValue.order_dttm = dayjs(dtStr+" "+tmStr, "YYYY.MM.DD HH:mm").toDate();
 //				orderValue.order_dt = dtStr.replaceAll(".","");
 
 		//구매/대여 구분
@@ -170,7 +170,7 @@ var SYNC_ORDER = {
 
 		//주문시간
 		let orderDttm = $(orderItem).find("header").first().text();
-		orderValue.order_dttm = moment(UTIL.toString(UTIL.getNumber(orderDttm)), "YYYYMMDDHHmm").toDate();
+		orderValue.order_dttm = dayjs(UTIL.toString(UTIL.getNumber(orderDttm)), "YYYYMMDDHHmm").toDate();
 
 		//구매/대여 구분
 		let orderType = $(orderItem).find("title").first().text();

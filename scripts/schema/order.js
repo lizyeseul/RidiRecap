@@ -61,7 +61,7 @@ export default class orderClass {
 	}
 
 	get order_dt() {
-		return moment(this.order_dttm).format("YYYYMMDD");
+		return dayjs(this.order_dttm).format("YYYYMMDD");
 	}
 
 	get jsonObj() {

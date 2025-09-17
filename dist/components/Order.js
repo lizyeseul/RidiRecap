@@ -56,7 +56,7 @@ function Order() {
   function OrderInfoRow({
     orderInfo
   }) {
-    return /*#__PURE__*/React.createElement("li", null, orderInfo.order_no, " : ", moment(orderInfo.order_dttm).format("YYYYMMDD"), ", ", orderInfo.total_amt);
+    return /*#__PURE__*/React.createElement("li", null, orderInfo.order_no, " : ", dayjs(orderInfo.order_dttm).format("YYYYMMDD"), ", ", orderInfo.total_amt);
   }
 
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync ' + ingPage : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {

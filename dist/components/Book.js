@@ -42,12 +42,13 @@ function Book() {
     var tempList = await DB.getValueByIdx("store_unit", "unit_id", {
       direction: "prev"
     });
+    tempList.sort((a, b) => a.unit_title > b.unit_title ? 1 : -1);
     setUnitInfo(tempList.filter(u => {
       return true;
-      u.property = u.property || {
-        is_adult_only: true
-      };
-      return u.property.is_adult_only === false;
+      // u.property = u.property || {
+      //   is_adult_only: true
+      // };
+      // return u.property.is_adult_only === false;
     }));
     setIsSync(false);
   }
@@ -56,12 +57,7 @@ function Book() {
     setIsSync(true);
     await SYNC_BOOK.updateLib();
     setIsSync(false);
-  } // async function updateUnitDetail() {
-  // 	setIsSync(true);
-  // 	await SYNC_BOOK.updateUnitDetail();
-  // 	setIsSync(false);
-  // }
-
+  }
 
   async function updateBook() {
     setIsSync(true);
@@ -74,11 +70,12 @@ function Book() {
     await SYNC_BOOK.updateBook2();
     setIsSync(false);
   }
-	async function ensureAllBook() {
-		setIsSync(true);
-		await SYNC_ORDER.ensureAllBook();
-		setIsSync(false);
-	}
+
+  async function ensureAllBook() {
+    setIsSync(true);
+    await SYNC_ORDER.ensureAllBook();
+    setIsSync(false);
+  }
 
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, isSync ? 'sync' : 'end'), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: updateLib,
@@ -92,7 +89,7 @@ function Book() {
   }, "order \uAE30\uC900 book"), /*#__PURE__*/React.createElement("button", {
     onClick: ensureAllBook,
     disabled: isSync
-  }, "test"), /*#__PURE__*/React.createElement("button", {
+  }, "order\uC5D0\uB9CC \uC788\uB294 book"), /*#__PURE__*/React.createElement("button", {
     onClick: findLibList,
     disabled: isSync
   }, "\uBAA9\uB85D \uC870\uD68C")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {

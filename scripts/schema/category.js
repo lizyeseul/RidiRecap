@@ -1645,7 +1645,7 @@ const categoryInfo = {
 	]
 };
 
-export const categoryFlatInfo = {
+const categoryFlatInfo = {
 	"100": {
 		"id": 100,
 		"title": "소설",
@@ -2800,6 +2800,6 @@ export const categoryFlatInfo = {
 	}
 };
 
-export default function getCtgrNm(id) {
-	return this.categoryFlatInfo.get(UTIL.toString(id)).title;
-};
+export function getCtgrNm(id) {
+	return categoryFlatInfo[UTIL.toString(id)].title;
+}

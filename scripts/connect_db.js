@@ -190,7 +190,7 @@ var DB = {
 		var cursorRequest = store.openCursor(key);
 		cursorRequest.onsuccess = function(e) {
 			var cursor = e.target.result;
-			data.last_update_dttm = moment().toDate();
+			data.last_update_dttm = dayjs().toDate();
 			if(cursor) {
 				var updateData = data;
 				if(mode == "update") {

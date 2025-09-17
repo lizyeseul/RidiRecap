@@ -91,6 +91,7 @@ var SYNC_BOOK = {
 
 			/**
 			 * TODO is_open이 false인 경우, 리디 상세페이지가 redirect될 가능성이 있음
+			 * 절판의 경우 redirect가 아니라 404
 			 * https://ridibooks.com/books/2378009586
 			 * https://ridibooks.com/books/${book_id}
 			 * 해당 redirect값이 같은 화의 최신 book_id값임
@@ -106,24 +107,25 @@ var SYNC_BOOK = {
 				return other ? {...item, ...other} : item;
 			});
 			mergedList.forEach(async function(bookInfo) {
+				let bookUnitId = unitId; //TEST
 				let bookId = UTIL.toNumber(bookInfo.id);
-				if(UTIL.isEmpty(unitId)) {
+				if(UTIL.isEmpty(bookUnitId)) {
 					let tempUnitId = bookInfo.display_unit_id || bookInfo.search_unit_id;
 					if(UTIL.isNotEmpty(tempUnitId)) {
-						unitId = UTIL.toNumber(tempUnitId);
+						bookUnitId = UTIL.toNumber(tempUnitId);
 					}
 					else if(UTIL.isEmpty(bookInfo.property.review_display_id)) {
-						unitId = -1;
+						bookUnitId = -1;
 					}
 					else {
 						let displayBookId = UTIL.toNumber(bookInfo.property.review_display_id);
 						let displayData = await DB.getUniqueValue("store_book", "book_id", displayBookId) || {};
 						await SYNC_ORDER.ensureBookById(displayBookId);
-						unitId = UTIL.isEmpty(displayData) ? 0 : UTIL.toNumber(displayData.unit_id) || 0;
+						bookUnitId = UTIL.isEmpty(displayData) ? 0 : UTIL.toNumber(displayData.unit_id) || 0;
 					}
 				}
 				bookInfo.book_id = bookId;
-				bookInfo.unit_id = unitId;
+				bookInfo.unit_id = bookUnitId;
 				DB.updateData("store_book", bookInfo.book_id, bookInfo, "update");
 			});
 		}
@@ -148,7 +150,7 @@ var SYNC_BOOK = {
 	 */
 	updateBook2: async function() {
 		try {
-			const limit = 10; //TEST
+			const limit = 1; //TEST
 			await SYNC_ORDER.ensureAllBook();
 			let bookIdList = await DB.getValueByIdx("store_book", "book_id", {filter: {unit_id: 0}});;
 			for(let i=0; i<limit; i++) {

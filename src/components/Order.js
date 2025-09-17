@@ -9,9 +9,9 @@ function Order() {
 	const [toPage, setToPage] = useState(lastPageNum);
 	const [isSync, setIsSync] = useState(false);
 	const [ingPage, setIngPage] = useState(null);
-	
+
 	const [orderInfo, setOrderInfo] = useState([]);
-	
+
 	async function syncOrderPart() {
 		setIsSync(true);
 		var from = UTIL.toNumber(fromPage);
@@ -46,7 +46,7 @@ function Order() {
 	function OrderInfoRow({orderInfo}) {
 		return (
 			<li>
-				{orderInfo.order_no} : {moment(orderInfo.order_dttm).format("YYYYMMDD")}, {orderInfo.total_amt}
+				{orderInfo.order_no} : {dayjs(orderInfo.order_dttm).format("YYYYMMDD")}, {orderInfo.total_amt}
 			</li>
 		)
 	}

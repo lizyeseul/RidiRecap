@@ -5,6 +5,8 @@ const {
 const {
   useHistory
 } = ReactRouterDOM;
+import DB from "../../scripts/connect_db.js";
+import SESSION from "../../scripts/session.js";
 
 function InitPage() {
   const [isLogin, setIsLogin] = useState(false);
@@ -27,7 +29,10 @@ function InitPage() {
   }, []);
   useEffect(() => {
     if (isLogin) {
-      history.push("/Home/Setting");
+      DB.initDB();
+      SESSION.setRidiGlobalVal();
+      SESSION.updatePageInfo();
+      history.push("/Home/Purchase");
     }
   }, [isLogin]);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, isCheckingLogin ? 'checking...' : 'end check'), /*#__PURE__*/React.createElement("button", {

@@ -1,4 +1,4 @@
-import getCtgrNm from "./category.js";
+import {getCtgrNm} from "./category.js";
 
 export default class bookClass {
 	constructor(data) {
@@ -29,7 +29,15 @@ export default class bookClass {
 			author_short: this.g_author_short,
 
 			categories: this.categories,
-			categoryLabel: this.g_category_label
+			category_label: this.g_category_label,
+
+			display_order: this.display_order,
+			display_title: this.display_title,
+			display_unit_id: this.display_unit_id,
+
+			expire_date: this.expire_date,
+
+			category_label: this.g_category_label,
 		}
 	}
 
@@ -58,15 +66,22 @@ export default class bookClass {
 		return this.authors[0].name + (this.authors.length == 1) ? "" : " 외 "+(this.authors.length-1)+"명";
 	}
 
+	/**
+	 * 카테고리1 > 카테고리2
+	 */
 	get g_category_label() {
 		let label = getCtgrNm(this.categories[0].id);
-		for(let c of this.categories.ancestor_ids) {
+		for(let c of this.categories[0].ancestor_ids) {
 			if(c != 0) {
 				label = getCtgrNm(c)+" > "+label;
 			}
 		}
 		return label;
 	}
+
+	// get expire_date() {
+
+	// }
 
 	// get get_file() {
 	// 	var f = this.file;
