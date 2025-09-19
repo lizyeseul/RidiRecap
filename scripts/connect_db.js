@@ -105,7 +105,7 @@ var DB = {
 					}
 					if(existsFilter) {
 						for (const key in existsFilter) {
-							if(!cursor.value.hasOwnProperty(filter[key])) {
+							if(!cursor.value.hasOwnProperty(existsFilter[key])) {
 								includeFlag = false;
 								break;
 							}
@@ -113,7 +113,7 @@ var DB = {
 					}
 					if(notExistsFilter) {
 						for (const key in notExistsFilter) {
-							if(cursor.value.hasOwnProperty(filter[key])) {
+							if(cursor.value.hasOwnProperty(notExistsFilter[key])) {
 								includeFlag = false;
 								break;
 							}
