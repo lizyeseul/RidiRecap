@@ -21,7 +21,6 @@ var SYNC_PURCHASE = {
 
 				let purchaseItem = new purchaseClass();
 				purchaseItem.setRawClass(orderData, unitData, bookData);
-				// console.log(purchaseItem);
 				console.log({...purchaseItem.order.dataForPurchase, ...purchaseItem.unit.dataForPurchase, ...purchaseItem.book.dataForPurchase});
 			}
 		}

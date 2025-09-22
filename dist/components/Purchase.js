@@ -4,26 +4,36 @@ const {
 } = React;
 import DB from "../../scripts/connect_db.js";
 import SYNC_PURCHASE from "../../scripts/sync/sync_purchase.js";
+
 function Purchase() {
   const [tempData, setTempData] = useState();
-  const [selectedStore, setSelectedStore] = useState();
-  const [searchKey, setSearchKey] = useState();
+  const [selectedStore, setSelectedStore] = useState(); // const [searchKey, setSearchKey] = useState();
+
   const [searchValue, setSearchValue] = useState();
   const [searchLimit, setSearchLimit] = useState();
+
   async function findData() {
     var r;
+    let searchKey = "order_no";
+    if (selectedStore == "unit") searchKey = "unit_id";
+    if (selectedStore == "book") searchKey = "book_id";
+
     if (UTIL.isNotEmpty(searchValue)) {
-      r = await DB.getUniqueValue("store_" + selectedStore, searchKey, searchValue);
+      r = await DB.getUniqueValue("store_" + selectedStore, searchKey, UTIL.toNumber(searchValue));
     } else {
       r = await DB.getValueByIdx("store_" + selectedStore, searchKey, {
         limit: searchLimit
       });
     }
+
+    console.log(r);
     setTempData(JSON.stringify(r));
   }
+
   async function syncPurchase() {
     SYNC_PURCHASE.syncPurchase();
   }
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: findData
   }, "\uB370\uC774\uD130 \uC870\uD68C"), /*#__PURE__*/React.createElement("button", {
@@ -43,11 +53,6 @@ function Purchase() {
     value: "book"
   }, "book")), /*#__PURE__*/React.createElement("input", {
     type: "text",
-    name: "storeKey",
-    placeholder: "key",
-    onChange: e => setSearchKey(e.target.value)
-  }), /*#__PURE__*/React.createElement("input", {
-    type: "text",
     name: "storeSearchValue",
     placeholder: "value",
     onChange: e => setSearchValue(e.target.value)
@@ -60,4 +65,5 @@ function Purchase() {
     onClick: syncPurchase
   }, "\uB370\uC774\uD130 \uB3D9\uAE30\uD654")));
 }
+
 export default Purchase;

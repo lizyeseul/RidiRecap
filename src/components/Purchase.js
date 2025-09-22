@@ -5,19 +5,23 @@ import SYNC_PURCHASE from "../../scripts/sync/sync_purchase.js";
 
 function Purchase() {
 	const [tempData, setTempData] = useState();
-	
+
 	const [selectedStore, setSelectedStore] = useState();
-	const [searchKey, setSearchKey] = useState();
+	// const [searchKey, setSearchKey] = useState();
 	const [searchValue, setSearchValue] = useState();
 	const [searchLimit, setSearchLimit] = useState();
 	async function findData() {
 		var r;
+		let searchKey = "order_no";
+		if(selectedStore == "unit") searchKey = "unit_id";
+		if(selectedStore == "book") searchKey = "book_id";
 		if(UTIL.isNotEmpty(searchValue)) {
-			r = await DB.getUniqueValue("store_"+selectedStore, searchKey, searchValue);
+			r = await DB.getUniqueValue("store_"+selectedStore, searchKey, UTIL.toNumber(searchValue));
 		}
 		else {
 			r = await DB.getValueByIdx("store_"+selectedStore, searchKey, { limit: searchLimit });
 		}
+    	console.log(r)
 		setTempData(JSON.stringify(r));
 	}
 	async function syncPurchase() {
@@ -34,9 +38,9 @@ function Purchase() {
 					<option value="unit">unit</option>
 					<option value="book">book</option>
 				</select>
-				<input	type="text"	name="storeKey"
+				{/* <input	type="text"	name="storeKey"
 						placeholder="key"
-						onChange={(e) => setSearchKey(e.target.value)}/>
+						onChange={(e) => setSearchKey(e.target.value)}/> */}
 				<input	type="text"	name="storeSearchValue"
 						placeholder="value"
 						onChange={(e) => setSearchValue(e.target.value)}/>
