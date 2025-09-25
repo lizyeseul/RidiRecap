@@ -6,3 +6,5 @@ manifest.json
 mockup/temp1.js
 mockup/temp2.js
 .gitignore
+/.idea
+/RidiRecap.iml

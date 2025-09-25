@@ -1,7 +1,7 @@
 const { HashRouter: Router, Switch, Route } = ReactRouterDOM;
 
-import InitPage from "./login.js"
-import Home from "./components/Home.js"
+import InitPage from "./login.jsx"
+import Home from "./components/Home.jsx"
 
 function Container() {
 	return (

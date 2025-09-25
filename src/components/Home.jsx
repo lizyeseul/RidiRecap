@@ -4,10 +4,10 @@ const { useEffect } = React;
 import DB from "../../scripts/connect_db.js";
 import SESSION from "../../scripts/session.js";
 
-import Setting from "./Setting.js";
-import Order from "./Order.js";
-import Book from "./Book.js";
-import Purchase from "./Purchase.js";
+import Setting from "./Setting.jsx";
+import Order from "./Order.jsx";
+import Book from "./Book.jsx";
+import Purchase from "./Purchase.jsx";
 
 function Home() {
 	const history = useHistory();
