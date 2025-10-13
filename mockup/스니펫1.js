@@ -29,6 +29,7 @@ new Promise((resolve, reject) => {
         // "series"
         // "price_info"
         // "serial_thumbnail"
+        // "setbook"
    ]
     var notExistsFilter = [
         // "authors"
@@ -79,3 +80,4 @@ new Promise((resolve, reject) => {
 .then((results) => {
     resultList = results;
 });
+;

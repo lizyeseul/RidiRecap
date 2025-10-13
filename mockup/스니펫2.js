@@ -17,30 +17,55 @@ var testFIlterList = resultList
 
     let t2 = {};
     let tit = t.title.main;
-    if(tit.includes("세트")) {
-        t2.ep_n = "세트"
-        // t2.ep_n = "t"
-    }
-    else if(tit.includes("외전")) {
-        //오크지만 찬양해 229화 (외전 1)
-        //서브 남주가 파업하면 생기는 일 233화(외전)
-        //개정판 | 하얀 늑대들 16 (완결)
-        let matches = tit.match(/외전\s*(\d+부 *)*\d+[권화]+/g);
-        if(UTIL.isNotEmpty(matches)) {
-            t2.ep_n = matches[0];
-            // t2.ep_n = "t"
+
+    let processor = [{
+        regex: /^<.+?> (세트)$/,
+        handler: (groupStr) => { const[_, res] = groupStr; return res;}
+    }];
+    function processText(t) {
+        for(const {regex, handler} of processor) {
+            let match = t.title.main.match(regex);
+            // debugger;
+            if(match) {
+                return handler(match);
+            }
         }
+        return "t";
     }
-    else {
-        let matches = tit.match(/(\d+부 *)*\d+[권화]/g); //n부 n권/화
-        if(UTIL.isNotEmpty(matches)) {
-            t2.ep_n = matches[0];
-            // if(tit.includes("외전")) {
-            //     t2.ep_n = "외전 "+t2.ep_n;
-            // }
-            // t2.ep_n = "t"
-        }
-    }
+    t2.ep_n = processText(t);
+    
+    // if(tit.includes("세트")) {
+    //     //case1. 세트
+    //     //1-1. <제목> 세트
+    //     //1-2.[nn%▼] <제목> 세트
+    //     //1-3.[완결세트] 제목
+    //     //소제목에 세트 라는 단어가 포함된 경우가 있어서 고려해야 됨
+    //     t2.ep_n = "세트"
+    //     // t2.ep_n = "t"
+    // }
+    // else if(tit.includes("외전")) {
+    //     //오크지만 찬양해 229화 (외전 1)
+    //     //서브 남주가 파업하면 생기는 일 233화(외전)
+    //     //개정판 | 하얀 늑대들 16 (완결)
+    //     let matches = tit.match(/외전\s*(\d+부 *)*\d+[권화]+/g);
+    //     if(UTIL.isNotEmpty(matches)) {
+    //         t2.ep_n = matches[0];
+    //         t2.ep_n = "t"
+    //     }
+    // }
+    // else {
+    //     let matches = tit.match(/(\d+부 *)*\d+[권화]/g); //n부 n권/화
+    //     if(UTIL.isNotEmpty(matches)) {
+    //         t2.ep_n = matches[0];
+    //         // if(tit.includes("외전")) {
+    //         //     t2.ep_n = "외전 "+t2.ep_n;
+    //         // }
+    //         t2.ep_n = "t"
+    //     }
+    // }
+    // else {
+    //         t2.ep_n = "t"
+    // }
     
     if(t.hasOwnProperty("series")) {
         tit = tit.replaceAll(t.series.property.title, "").trim();
@@ -53,12 +78,16 @@ var testFIlterList = resultList
     
 
     if(t2.ep_n == null) {
-        t2.ep_n = null;
+        return null
     }
 
     t2.main_tit = t.title.main;
     // if(!t.title.hasOwnProperty("sub")) return null
     // t2.t_sub = t.title.sub
+    
+    if(t2.ep_n == 't') {
+        return null
+    }
     return t2;
 
     // return null
@@ -78,6 +107,7 @@ var testDIstinct = [...new Set(
 ]
 .map(item => JSON.parse(item))
 .sort(function(a,b) {
+    if(a == null || b == null) return 0;
     if(a.main_tit < b.main_tit) return -1;
     if(a.main_tit > b.main_tit) return 1;
     return 0;
